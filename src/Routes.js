@@ -11,6 +11,7 @@ function Routes() {
         <Route exact path="/Login" component={Login} />
         <Route exact path="/Signup" component={Signup} />
         <Route exact path="/" component={Main} />
+        <Route exact path="/Home" component={Home} />
       </Switch>
     </Router>
   );
