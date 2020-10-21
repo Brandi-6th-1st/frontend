@@ -21,7 +21,7 @@ export default function Login() {
           <Button>로그인</Button>
           <Join>
             <p>아직 셀러가 아니신가요?</p>
-            <JoinButton>회원가입하기</JoinButton>
+            <JoinButton> 회원가입하기</JoinButton>
           </Join>
         </LoginBox>
       </Content>
@@ -38,6 +38,7 @@ const Container = styled.div`
 const Content = styled.div`
   ${({ theme }) => theme.flex('center', 'center', 'column')}
   padding: 65px 0 50px;
+  height: 100vh;
 `;
 
 const Logo = styled.img`
