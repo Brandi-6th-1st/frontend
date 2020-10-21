@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import DataRefundStatus from './Data/DataRefundStatus';
-import DataSalesStatus from './Data/DataSalesStatus';
-import DataShippingStatus from './Data/DataShippingStatus';
-import { GoGraph, GoListUnordered } from 'react-icons/go';
-import { AiOutlineNotification } from 'react-icons/ai';
+import ProductManage from './Components/ProductManage';
+import RefundManage from './Components/RefundManage';
+import Bookmark from './Components/Bookmark';
+import QnA from './Components/QnA';
+import Notice from './Components/Notice';
+import { GoGraph } from 'react-icons/go';
 
 export default function Home() {
   return (
@@ -16,56 +15,15 @@ export default function Home() {
         <Nav />
         <Section>
           <SalesContainer>
-            <SalesBox>
-              <SalesStatus>
-                {DataShippingStatus.map((Item) => {
-                  return (
-                    <SalesCategory>
-                      <span>{Item.categoryTitle} : </span>
-                      <span>{Item.number}건 </span>
-                    </SalesCategory>
-                  );
-                })}
-              </SalesStatus>
-            </SalesBox>
-            <SalesBox>
-              <SalesStatus>
-                {DataRefundStatus.map((Item) => {
-                  return (
-                    <SalesCategory>
-                      <span>
-                        {Item.categoryTitle}
-                        {Item.categoryTitle.length > 0 && ':'}
-                      </span>
-                      <span>
-                        {Item.number}
-                        {Item.number.length > 0 && '건'}{' '}
-                      </span>
-                    </SalesCategory>
-                  );
-                })}
-              </SalesStatus>
-            </SalesBox>
-            <SalesBox>
-              <SalesStatus>
-                {DataSalesStatus.map((Item) => {
-                  return (
-                    <SalesCategory>
-                      <span>
-                        {Item.categoryTitle}{' '}
-                        {Item.categoryTitle.length > 0 && ':'}
-                      </span>
-                      <span>
-                        {Item.number}
-                        {Item.number.length > 0 && '건'}
-                      </span>
-                    </SalesCategory>
-                  );
-                })}
-              </SalesStatus>
-            </SalesBox>
+            {/* 상품, 배송 상태 차트 컴포넌트 */}
+            <ProductManage />
+            {/* 환불, 반품 상태 차트 컴포넌트 */}
+            <RefundManage />
+            {/* 즐겨찾기, 전체 상품수 등 상태 차트 컴포넌트 */}
+            <Bookmark />
           </SalesContainer>
           <StaticsContainer>
+            {/* 매출 통계 건수 차트 생성하여 컴포넌트 분리 예정 */}
             <StaticsBox>
               <StaticsStatus>
                 <StaticsTitle>
@@ -74,9 +32,12 @@ export default function Home() {
                     매출 통계[최근 30일간의 결제완료된 주문 건수의 합계]
                   </span>
                 </StaticsTitle>
-                <StaticsGraph></StaticsGraph>
+                <StaticsGraph>
+                  <canvas></canvas>
+                </StaticsGraph>
               </StaticsStatus>
             </StaticsBox>
+            {/* 매출 통계 금액 차트 생성하여 컴포넌트 분리 예정 */}
             <StaticsBox>
               <StaticsStatus>
                 <StaticsTitle>
@@ -85,29 +46,17 @@ export default function Home() {
                     매출 통계[최근 30일간의 결제완료된 주문 건수의 합계]
                   </span>
                 </StaticsTitle>
-                <StaticsGraph></StaticsGraph>
+                <StaticsGraph>
+                  <canvas></canvas>
+                </StaticsGraph>
               </StaticsStatus>
             </StaticsBox>
           </StaticsContainer>
           <StaticsContainer>
-            <StaticsBox>
-              <StaticsStatus>
-                <StaticsTitle>
-                  <GoListUnordered />
-                  <span>Q&A 미답변</span>
-                </StaticsTitle>
-                <StaticsGraph></StaticsGraph>
-              </StaticsStatus>
-            </StaticsBox>
-            <StaticsBox>
-              <StaticsStatus>
-                <StaticsTitle>
-                  <AiOutlineNotification />
-                  <span>공지사항</span>
-                </StaticsTitle>
-                <StaticsGraph></StaticsGraph>
-              </StaticsStatus>
-            </StaticsBox>
+            {/* Q&A 차트 컴포넌트 */}
+            <QnA />
+            {/* 공지사항 컴포넌트 */}
+            <Notice />
           </StaticsContainer>
         </Section>
       </Main>
@@ -141,30 +90,6 @@ const Section = styled.div`
 
 const SalesContainer = styled.div`
   display: flex;
-`;
-
-const SalesBox = styled.div`
-  display: inline-block;
-  width: 33.3%;
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-bottom: 22px;
-`;
-
-const SalesStatus = styled.div`
-  background-color: #fff;
-  padding: 15px 20px 0px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-`;
-
-const SalesCategory = styled.div`
-  ${({ theme }) => theme.flex('space-between', '', '')}
-  height:30px;
-
-  span {
-    font-size: 13px;
-  }
 `;
 
 const StaticsContainer = styled.div`
@@ -203,3 +128,14 @@ const StaticsTitle = styled.div`
 const StaticsGraph = styled.div`
   padding: 10px 10px;
 `;
+
+// const SellerNoti = styled.ul`
+//   display: flex;
+//   margin: 0px;
+//   padding: 0px;
+//   border-top: 1px solid #dddddd;
+
+//   li {
+//     font-size: 13px;
+//   }
+// `;
