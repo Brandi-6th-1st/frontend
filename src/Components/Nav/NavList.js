@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import styled, { css } from 'styled-components';
 import SubList from './SubList';
 import { KeyboardArrowLeft, KeyboardArrowDown } from '@styled-icons/material';
@@ -27,13 +27,19 @@ export default function NavList({
   active,
   setSubActive,
   handlePage,
+  sidebarSmall,
 }) {
   const isSubActive = index === subActive;
-  const isPageActive = index === active;
+  const isPageActive = index === active[0];
+  const [isHoverActive, setIsHoverActive] = useState(0);
 
   const toggleSubNav = (index) => {
     // 활성화 된 메뉴를 비활성화, 또는 새로운 메뉴를 활성화
     isSubActive ? setSubActive(0) : setSubActive(index);
+  };
+
+  const handleHover = (index) => {
+    sidebarSmall && setIsHoverActive(index);
   };
 
   return (
@@ -42,22 +48,47 @@ export default function NavList({
         onClick={() => toggleSubNav(index)}
         isPageActive={isPageActive}
         isSubActive={isSubActive}
+        sidebarSmall={sidebarSmall}
+        onMouseEnter={() => handleHover(index)}
+        onMouseLeave={() => handleHover(0)}
+        hoverActive={index === isHoverActive}
       >
         <List>
           {NAV_ICONS[category]}
-          <span>{category}</span>
+          {/* 사이드바 사이즈에 따른 카테고리의 형태 변화 조건문 */}
+          {sidebarSmall ? (
+            <HoverContainer>
+              <CategorySmall active={index === isHoverActive}>
+                <span>{category}</span>
+              </CategorySmall>
+              {subcategory && index === isHoverActive && (
+                <SubList
+                  categoryIdx={index}
+                  handlePage={handlePage}
+                  subcategory={subcategory}
+                  active={active}
+                  sidebarSmall={sidebarSmall}
+                />
+              )}
+            </HoverContainer>
+          ) : (
+            <span>{category}</span>
+          )}
         </List>
-        {subcategory && (
-          <ArrowIcon isSubActive={isSubActive}>
+        {/* 사이드 바가 확장되어 있고 subcategory가 있는 경우에만 우측 화살표 아이콘 등장 */}
+        {!sidebarSmall && subcategory && (
+          <ArrowIcon isSubActive={isSubActive} isPageActive={isPageActive}>
             <KeyboardArrowLeft size={19} />
           </ArrowIcon>
         )}
       </NavElement>
-      {isSubActive && subcategory && (
+      {!sidebarSmall && isSubActive && subcategory && (
         <SubList
           categoryIdx={index}
           handlePage={handlePage}
           subcategory={subcategory}
+          active={active}
+          sidebarSmall={sidebarSmall}
         />
       )}
     </Fragment>
@@ -66,6 +97,7 @@ export default function NavList({
 
 const NavElement = styled.li`
   ${({ theme }) => theme.flex('space-between', 'center', 'row')}
+  position: relative;
   width: 215px;
   height: 40px;
   padding: 10px 15px;
@@ -87,10 +119,22 @@ const NavElement = styled.li`
   &:hover {
     background-color: #2b2b30;
   }
+  ${({ sidebarSmall }) =>
+    sidebarSmall &&
+    css`
+      width: 40px;
+      padding-left: 10px;
+    `}
+  ${({ hoverActive }) =>
+    hoverActive &&
+    css`
+      width: 214px;
+    `}
 `;
 
 const List = styled.div`
   ${({ theme }) => theme.flex('', 'center', 'row')}
+  position: absolute;
   span {
     margin-left: 10px;
     font-size: 14px;
@@ -98,13 +142,33 @@ const List = styled.div`
   }
 `;
 
+const HoverContainer = styled.div`
+  position: relative;
+`;
+
+const CategorySmall = styled.div`
+  ${({ theme }) => theme.flex('', 'center', 'row')}
+  position: relative;
+  top: 0;
+  left: 0;
+  padding-left: 5px;
+  display: ${({ active }) => (active ? 'block' : 'none')};
+`;
+
 const ArrowIcon = styled.span`
+  position: absolute;
+  right: 15px;
   color: #666;
   ${({ isSubActive }) =>
     isSubActive &&
     css`
       transform: rotate(270deg);
       color: #a6a8ae;
+    `};
+  ${({ isPageActive }) =>
+    isPageActive &&
+    css`
+      color: white;
     `};
 `;
 

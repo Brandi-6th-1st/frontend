@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import NavList from './NavList';
-import { KeyboardArrowLeft, KeyboardArrowDown } from '@styled-icons/material';
+import { KeyboardArrowLeft } from '@styled-icons/material';
 import SELLER_NAV from './DataSellerNav';
 import MASTER_NAV from './DataMasterNav';
 
 export default function Nav() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState([0, 0]);
   const [subActive, setSubActive] = useState(0);
+  const [sidebarSmall, setSidebarSmall] = useState(false);
 
-  const handlePage = (category) => {
-    console.log(category);
-    setActive(category);
+  const handlePage = (category, subcategory) => {
+    setActive([category, subcategory]);
     // 페이지 이동 함수 추가
   };
 
   return (
-    <NavContainer>
-      <SideToggler>
+    <NavContainer sidebarSmall={sidebarSmall}>
+      <SideToggler
+        sizeToggle={sidebarSmall}
+        onClick={() => setSidebarSmall(!sidebarSmall)}
+      >
         <KeyboardArrowLeft size={20} />
       </SideToggler>
       <NavBox>
-        {SELLER_NAV.map((el, idx) => (
+        {MASTER_NAV.map((el, idx) => (
           <NavList
             setSubActive={(e) => setSubActive(e)}
             active={active}
@@ -31,6 +34,7 @@ export default function Nav() {
             category={el.category}
             subcategory={el.subcategory}
             handlePage={handlePage}
+            sidebarSmall={sidebarSmall}
           />
         ))}
       </NavBox>
@@ -39,9 +43,15 @@ export default function Nav() {
 }
 
 const NavContainer = styled.div`
+  position: fixed;
   width: 215px;
   height: 100vh;
   background: #35373a;
+  ${({ sidebarSmall }) =>
+    sidebarSmall &&
+    css`
+      width: 40px;
+    `}
 `;
 
 const NavBox = styled.ul`
@@ -57,4 +67,10 @@ const SideToggler = styled.div`
   border-radius: 4px 0 0 4px;
   float: right;
   cursor: pointer;
+  ${({ sizeToggle }) =>
+    sizeToggle &&
+    css`
+      transform: rotate(180deg);
+      border-radius: 0 4px 4px 0;
+    `};
 `;

@@ -10,7 +10,6 @@ export default function Header() {
           <img src="public/Images/logo.png" />
           <KeyboardArrowDown size="16" color="#CCC" />
         </div>
-        <span>staging (staging)</span>
       </Contents>
       <StatusBtn>
         <span>intern_master</span>
@@ -22,6 +21,7 @@ export default function Header() {
 
 const HeaderContainer = styled.div`
   ${({ theme }) => theme.flex('space-between', 'center', 'row')}
+  position: fixed;
   width: 100vw;
   height: 45px;
   background: #873b53;

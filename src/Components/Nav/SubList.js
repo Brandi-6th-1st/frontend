@@ -1,11 +1,32 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 
-export default function SubList({ subcategory, categoryIdx, handlePage }) {
+export default function SubList({
+  active,
+  subcategory,
+  categoryIdx,
+  handlePage,
+  sidebarSmall,
+}) {
+  const [subActive, setSubActive] = useState(
+    active[0] === categoryIdx ? active[1] : 0
+  );
+
+  const goToMenu = (subIdx) => {
+    handlePage(categoryIdx, subIdx);
+    setSubActive(subIdx);
+  };
+
   return (
-    <SubContainer>
-      {subcategory.map((el) => (
-        <Subcategory key={el.id} onClick={() => handlePage(categoryIdx)}>
+    <SubContainer sidebarSmall={sidebarSmall}>
+      {subcategory.map((el, idx) => (
+        <Subcategory
+          index={idx + 1}
+          subActive={subActive}
+          key={el.id}
+          onClick={() => goToMenu(idx + 1)}
+          sidebarSmall={sidebarSmall}
+        >
           {el.title}
         </Subcategory>
       ))}
@@ -15,6 +36,15 @@ export default function SubList({ subcategory, categoryIdx, handlePage }) {
 
 const SubContainer = styled.ul`
   margin: 8px 0;
+  ${({ sidebarSmall }) =>
+    sidebarSmall &&
+    css`
+      background: #35373a;
+      position: absolute;
+      top: 20px;
+      left: 11px;
+      width: 173px;
+    `}
 `;
 
 const Subcategory = styled.li`
@@ -29,4 +59,16 @@ const Subcategory = styled.li`
     color: white;
     background-color: #414247;
   }
+  ${({ index, subActive }) =>
+    index === subActive &&
+    css`
+      color: white;
+      background-color: #414247;
+    `}
+  ${({ sidebarSmall }) =>
+    sidebarSmall &&
+    css`
+      width: 173px;
+      padding-left: 15px;
+    `}
 `;
