@@ -29,8 +29,7 @@ export default function RefundManage() {
 const SalesBox = styled.div`
   display: inline-block;
   width: 33.3%;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 0 15px;
   margin-bottom: 22px;
 `;
 
