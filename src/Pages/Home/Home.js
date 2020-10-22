@@ -242,8 +242,6 @@ const Main = styled.div`
 const Section = styled.div`
   width: 100%;
   padding: 20px 20px;
-  /* nav상태에 따라 마진 크기 변동 예정 */
-  margin-left: 215px;
   border-radius: 0 0 0 4px;
   background-color: #fafafa;
 `;

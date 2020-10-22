@@ -43,7 +43,7 @@ export default function Nav() {
 }
 
 const NavContainer = styled.div`
-  position: fixed;
+  /* position: fixed; */
   width: 215px;
   height: 100vh;
   background: #35373a;
