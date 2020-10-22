@@ -113,6 +113,7 @@ export default function Home() {
         return tooltipText;
       },
     },
+    showInLegend: true,
   };
 
   // 매출 금액 차트에 들어가는 Data 및 차트 Format
@@ -168,6 +169,7 @@ export default function Home() {
         return tooltipText;
       },
     },
+    showInLegend: true,
   };
 
   return (
@@ -235,7 +237,6 @@ export default function Home() {
 
 const Main = styled.div`
   display: flex;
-  background-color: #fafafa;
 `;
 
 const Section = styled.div`
@@ -243,6 +244,8 @@ const Section = styled.div`
   padding: 20px 20px;
   /* nav상태에 따라 마진 크기 변동 예정 */
   margin-left: 215px;
+  border-radius: 0 0 0 4px;
+  background-color: #fafafa;
 `;
 
 const SalesContainer = styled.div`

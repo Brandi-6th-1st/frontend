@@ -30,6 +30,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     height: 100vh;
     width: 100vw;
+    background-color: #34373A;
   }
 
   ol,
