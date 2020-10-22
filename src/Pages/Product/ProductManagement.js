@@ -3,8 +3,14 @@ import styled from 'styled-components';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
+import DatePicker from 'react-datepicker';
+import './datepick.css';
+import { GoListUnordered, GoChevronRight } from 'react-icons/go';
 
 export default function ProductManagement() {
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+
   return (
     <Fragment>
       <Header />
@@ -16,9 +22,21 @@ export default function ProductManagement() {
             <FilterCategoryTitle>
               <FilterTitle>조회 기간</FilterTitle>
               <InquiryperiodBox>
-                <StartPeriod placeholder="클릭해주세요."></StartPeriod>
+                <SelectPeriod
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="클릭해주세요."
+                  shouldCloseOnSelect={false}
+                />
                 <span>~</span>
-                <EndPeriod placeholder="클릭해주세요."></EndPeriod>
+                <SelectPeriod
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="클릭해주세요."
+                  shouldCloseOnSelect={false}
+                />
               </InquiryperiodBox>
             </FilterCategoryTitle>
             <FilterCategoryTitle>
@@ -61,6 +79,28 @@ export default function ProductManagement() {
               <CanclehBtn>취소</CanclehBtn>
             </SearchContainer>
           </FilterContainer>
+
+          <TitleContainer>
+            <RootTitle>
+              <li>
+                <GoListUnordered />
+              </li>
+              <li>
+                상품관리 / 상품 관리 <GoChevronRight />
+              </li>
+              <li>
+                상품관리 관리 <GoChevronRight />
+              </li>
+              <li> 리스트</li>
+            </RootTitle>
+            <LimitRange>
+              <select>
+                <option>10개씩 보기</option>
+                <option>20개씩 보기</option>
+                <option>50개씩 보기</option>
+              </select>
+            </LimitRange>
+          </TitleContainer>
         </Section>
       </Main>
       {/* <Footer /> */}
@@ -90,6 +130,8 @@ const Section = styled.div`
 
 const FilterContainer = styled.div`
   border: 3px solid #eee;
+  background-color: #fff;
+  margin-bottom: 20px;
 `;
 
 const FilterCategoryTitle = styled.div`
@@ -128,7 +170,7 @@ const InquiryperiodBox = styled.div`
   }
 `;
 
-const StartPeriod = styled.input`
+const PeriodBox = styled.input`
   width: 100%;
   display: table-cell;
   padding: 6px 12px;
@@ -139,13 +181,18 @@ const StartPeriod = styled.input`
   }
 `;
 
-const EndPeriod = styled(StartPeriod)``;
+const SelectPeriod = styled(DatePicker)`
+  text-align: center;
+  cursor: pointer;
+`;
 
 const SearchBox = styled(InquiryperiodBox)`
   margin: 0;
 `;
 
-const ProductSearch = styled(StartPeriod)``;
+const ProductSearch = styled(PeriodBox)`
+  cursor: inherit;
+`;
 
 const FilterBtnBox = styled.div`
   width: 33.33333333%;
@@ -170,7 +217,7 @@ const CanclehBtn = styled.button`
   cursor: pointer;
 
   &:hover {
-    /* opacity: 0.6; */
+    background-color: #e6e6e6;
   }
 `;
 
@@ -184,5 +231,35 @@ const SearchBtn = styled.button`
 
   &:hover {
     background-color: #3071a9;
+  }
+`;
+
+const TitleContainer = styled.div`
+  ${({ theme }) => theme.flex('space-between', 'center', '')}
+  padding: 0 10px 0 20px;
+  margin-bottom: 10px;
+  background-color: #eeeeee;
+`;
+
+const RootTitle = styled.ul`
+  display: flex;
+  padding: 8px;
+
+  svg {
+    color: #9b9b9b;
+    vertical-align: top;
+  }
+
+  li {
+    font-size: 13px;
+  }
+`;
+
+const LimitRange = styled.div`
+  height: 100%;
+  select {
+    height: 100%;
+    border-radius: 1px;
+    height: 30px;
   }
 `;
