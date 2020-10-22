@@ -43,7 +43,7 @@ const SalesStatus = styled.div`
 `;
 
 const SalesCategory = styled.div`
-  ${({ theme }) => theme.flex('space-between', '', '')}
+  ${({ theme }) => theme.flex('space-between')}
   height:30px;
 
   span {
