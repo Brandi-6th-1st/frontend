@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
+import Validate from './Validate';
 import styled, { css } from 'styled-components';
-import { ErrorMessage } from '@hookform/error-message';
-import { useForm } from 'react-hook-form';
 import LoginFooter from '../Login/LoginFooter';
 import {
   TiUserOutline,
   TiLockClosedOutline,
-  TiPhoneOutline,
   TiInputCheckedOutline,
   TiSortAlphabeticallyOutline,
 } from 'react-icons/ti';
+import { FiPhoneCall } from 'react-icons/fi';
 import { AiOutlineWarning } from 'react-icons/ai';
 
-export default function Signup() {
-  const { register, errors, watch, handleSubmit } = useForm({ mode: 'all' });
-  const onSubmit = (data) => console.log(data);
+export default function Signup2() {
+  const [values, setValues] = useState({
+    id: '',
+    password: '',
+    rePassword: '',
+  });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
+  };
 
   return (
     <Container>
@@ -24,71 +33,46 @@ export default function Signup() {
         <hr></hr>
         <SignupBox>
           <SubTitle>정보입력</SubTitle>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             <InfoTitle>가입 정보</InfoTitle>
-            <IconInput className={errors.id && 'ErrorInput'}>
-              <TiUserOutline color={errors.id ? '#b94a48' : null} />
+            <IconInput>
+              <TiUserOutline />
               <input
                 name="id"
-                type="text"
+                value={values.id}
                 placeholder="아이디"
-                ref={register({
-                  required: '필수 입력항목 입니다. ',
-                  minLength: {
-                    value: 5,
-                    message: '아이디의 최소 길이는 5글자 입니다.',
-                  },
-                })}
+                className={errors.id && 'errorInput'}
               />
+              {errors.id && <span className="errorMessage">{errors.id}</span>}
             </IconInput>
-            {errors.id && <p>{errors.id.message}</p>}
-            <IconInput className={errors.password && 'ErrorInput'}>
-              <TiLockClosedOutline color={errors.password ? '#b94a48' : null} />
+            <IconInput>
+              <TiLockClosedOutline />
               <input
                 name="password"
+                value={values.password}
                 type="password"
                 placeholder="비밀번호"
-                ref={register({
-                  required: '필수 입력항목 입니다.',
-                  pattern: {
-                    value: /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/,
-                    message:
-                      '비밀번호는 8~20글자의 영문대소문자, 숫자, 특수문자를 조합해야 합니다.',
-                  },
-                })}
               />
             </IconInput>
-            {errors.password && <p>{errors.password.message}</p>}
-            <IconInput className={errors.rePw && 'ErrorInput'}>
-              <TiInputCheckedOutline color={errors.rePw ? '#b94a48' : null} />
+            <IconInput>
+              <TiInputCheckedOutline />
               <input
-                name="rePw"
+                name="rePassword"
+                value={values.rePassword}
                 type="password"
                 placeholder="비밀번호 재입력"
-                ref={register({
-                  validate: (value) =>
-                    value === watch('password') ||
-                    '비밀번호가 일치하지 않습니다',
-                })}
               />
             </IconInput>
-            {errors.rePw && <p>{errors.rePw.message}</p>}
+
             <InfoTitle>
               담당자 정보
-              <ExtraInfo primary> (*실제 샵을 운영하시는 분)</ExtraInfo>
+              <ExtraInfo primary>(*실제 샵을 운영하시는 분)</ExtraInfo>
             </InfoTitle>
-            <IconInput className={errors.phone && 'ErrorInput'}>
-              <TiPhoneOutline color={errors.phone ? '#b94a48' : null} />
-              <input
-                name="phone"
-                type="tell"
-                placeholder="핸드폰번호"
-                ref={register({
-                  required: '필수 입력항목입니다.',
-                })}
-              />
+            <IconInput>
+              <FiPhoneCall />
+              <input name="phone" type="tell" placeholder="핸드폰번호" />
             </IconInput>
-            {errors.phone && <p>{errors.phone.message}</p>}
+
             <ExtraInfo>
               <AiOutlineWarning />
               입점 신청 후 브랜디 담당자가 연락을 드릴 수 있으니 정확한 정보를
@@ -125,46 +109,25 @@ export default function Signup() {
                 뷰티
               </label>
             </IntputRadio>
-            <IconInput className={errors.sellerName && 'ErrorInput'}>
-              <TiSortAlphabeticallyOutline
-                color={errors.sellerName ? '#b94a48' : null}
-              />
-              <input
-                name="sellerName"
-                placeholder="셀러명 (상호)"
-                ref={register({
-                  required: '필수 입력항목입니다.',
-                })}
-              />
+            <IconInput>
+              <TiSortAlphabeticallyOutline />
+              <input name="sellerName" placeholder="셀러명 (상호)" />
             </IconInput>
-            {errors.sellerName && <p>{errors.sellerName.message}</p>}
-            <IconInput className={errors.engSellerName && 'ErrorInput'}>
-              <TiSortAlphabeticallyOutline
-                color={errors.engSellerName ? '#b94a48' : null}
-              />
+
+            <IconInput>
+              <TiSortAlphabeticallyOutline />
               <input
                 name="engSellerName"
                 placeholder="영문 셀러명 (영문상호)"
-                ref={register({
-                  required: '필수 입력항목입니다.',
-                })}
               />
             </IconInput>
-            {errors.engSellerName && <p>{errors.engSellerName.message}</p>}
-            <IconInput className={errors.customerContact && 'ErrorInput'}>
-              <TiPhoneOutline
-                color={errors.customerContact ? '#b94a48' : null}
-              />
-              <input
-                name="customerContact"
-                placeholder="고객센터 전화번호"
-                ref={register({
-                  required: '필수 입력항목입니다.',
-                })}
-              />
+
+            <IconInput>
+              <FiPhoneCall />
+              <input name="customerContact" placeholder="고객센터 전화번호" />
             </IconInput>
-            {errors.customerContact && <p>{errors.customerContact.message}</p>}
-            {/*             
+
+            {/* 
             {SIGNUP_INFO_LIST.map((info) => {
               const { id, name, title, inputList } = info;
               return (
@@ -201,24 +164,24 @@ export default function Signup() {
                 </Fragment>
               );
             })} */}
-            <ButtonGroup>
-              <Button
-                type="submit"
-                value="신청"
-                backgroundColor="#5bc0de"
-                topLeft="4px"
-                bottomLeft="4px"
-              />
-
-              <Button
-                type="submit"
-                value="취소"
-                backgroundColor="#d9534f"
-                topRight="4px"
-                bottomRight="4px"
-              />
-            </ButtonGroup>
           </form>
+          <ButtonGroup>
+            <Button
+              type="submit"
+              value="신청"
+              backgroundColor="#5bc0de"
+              topLeft="4px"
+              bottomLeft="4px"
+            />
+
+            <Button
+              type="submit"
+              value="취소"
+              backgroundColor="#d9534f"
+              topRight="4px"
+              bottomRight="4px"
+            />
+          </ButtonGroup>
         </SignupBox>
       </Content>
       <LoginFooter />
@@ -234,10 +197,8 @@ const Container = styled.div`
 const Content = styled.div`
   ${({ theme }) => theme.flex('center', 'center', 'column')};
   width: 500px;
-  height: auto;
   margin: 0 auto;
   padding: 30px;
-  overflow: auto;
   background-color: #fff;
   hr {
     width: 100%;
@@ -265,7 +226,6 @@ const SignupBox = styled.div`
   width: 100%;
   p {
     margin-left: 5px;
-    margin-bottom: 10px;
     font-size: 12px;
     font-weight: bold;
     color: #b94a48;
@@ -289,7 +249,6 @@ const InfoTitle = styled.div`
   span {
     color: #1e90ff;
     font-size: 14px;
-    vertical-align: center;
   }
 `;
 
@@ -312,15 +271,8 @@ const IconInput = styled.div`
   width: 100%;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
-  svg {
-    width: 18px;
-    height: 18px;
-  }
   input {
     margin-left: 10px;
-  }
-  &.ErrorInput {
-    border: 1px solid #b94a48;
   }
 `;
 
@@ -339,7 +291,7 @@ const IntputRadio = styled.div`
 `;
 
 const ButtonGroup = styled.div`
-  ${({ theme }) => theme.flex('center')}
+  display: flex;
   margin-top: 20px;
 `;
 
@@ -354,76 +306,3 @@ const Button = styled.input`
   text-align: center;
   color: #fff;
 `;
-
-const SIGNUP_SELLER_LIST = [
-  '쇼핑몰',
-  '마켓',
-  '로드샵',
-  '디자이너브랜드',
-  '제너럴브랜드',
-  '내셔널브랜드',
-  '뷰티',
-];
-
-// const SIGNUP_INFO_LIST = [
-//   {
-//     id: 1,
-//     title: '가입 정보',
-//     inputList: [
-//       {
-//         name: 'id',
-//         type: 'text',
-//         icon: <TiUserOutline />,
-//         placeholder: '아이디',
-//       },
-//       {
-//         name: 'password',
-//         type: 'password',
-//         icon: <TiLockClosedOutline />,
-//         placeholder: '비밀번호',
-//       },
-//       {
-//         name: 'rePasswrod',
-//         type: 'password',
-//         icon: <TiInputCheckedOutline />,
-//         placeholder: '비밀번호 재입력',
-//       },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     title: '담당자 정보',
-//     inputList: [
-//       {
-//         name: 'phone',
-//         type: 'text',
-//         icon: <FiPhoneCall />,
-//         placeholder: '핸드폰번호',
-//       },
-//     ],
-//   },
-//   {
-//     id: 3,
-//     title: '셀러 정보',
-//     inputList: [
-//       {
-//         name: 'sellerName',
-//         type: 'text',
-//         icon: <TiSortAlphabeticallyOutline />,
-//         placeholder: '셀러명 (상호)',
-//       },
-//       {
-//         name: 'englishSellerName',
-//         type: 'text',
-//         icon: <TiSortAlphabeticallyOutline />,
-//         placeholder: '영문 셀러명 (영문상호)',
-//       },
-//       {
-//         name: 'customerCenterContact',
-//         type: 'text',
-//         icon: <FiPhoneCall />,
-//         placeholder: '고객센터 전화번호',
-//       },
-//     ],
-//   },
-// ];

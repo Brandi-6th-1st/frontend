@@ -1,32 +1,90 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
 import LoginFooter from './LoginFooter';
+import { Link } from 'react-router-dom';
 
 export default function Login() {
+  const { register, handleSubmit, errors } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+  const handleIdBlur = (e) => {
+    setIdValue(e.target.value);
+  };
+
+  const handlePwBlur = (e) => {
+    setPwValue(e.target.value);
+  };
+
+  const handleLoginButton = () => {
+    if (idValue.length < 5 || pwValue.length < 5) {
+      setValidInput(false);
+    }
+  };
+
   return (
     <Container>
       <Content>
         <Logo alt="브랜디로고" src="/public/Images/logo2.png" />
         <LoginBox>
           <LoginTitle>브랜디 어드민 로그인</LoginTitle>
-          <Input placeholder="셀러 아이디" />
-          <Input placeholder="셀러 비밀번호" />
-          <Check>
-            <Label fontWeight="100">
-              <Checkbox type="checkbox" />
-              아이디/비밀번호 기억하기
-            </Label>
-            <Label color="red">비밀번호를 잊으셨나요?</Label>
-          </Check>
-          <Button>로그인</Button>
-          <Join>
-            <p>아직 셀러가 아니신가요?</p>
-            <JoinButton> 회원가입하기</JoinButton>
-          </Join>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              name="idValue"
+              ref={register({ required: true })}
+              placeholder="셀러 아이디"
+            />
+            {errors.idValue && errors.pwValue && <p>아이디를 입력해주세요</p>}
+
+            <Input
+              name="pwValue"
+              ref={register({ required: true, pattern: /^[A-Za-z]+$/i })}
+              placeholder="셀러 비밀번호"
+            />
+            {errors.pwValue && <p>비밀번호를 입력해주세요</p>}
+            <Button onClick={handleLoginButton}>로그인</Button>
+            <Join>
+              <p>아직 셀러가 아니신가요?</p>
+              <p>
+                <Link to="/Signup">회원가입하기</Link>
+              </p>
+            </Join>
+          </form>
         </LoginBox>
       </Content>
       <LoginFooter />
     </Container>
+
+    // <Container>
+    //   <Content>
+    //     <Logo alt="브랜디로고" src="/public/Images/logo2.png" />
+    //     <LoginBox>
+    //       <LoginTitle>브랜디 어드민 로그인</LoginTitle>
+    //       <form>
+    //         <Input
+    //           name="idValue"
+    //           placeholder="셀러 아이디"
+    //           onBlur={handleIdBlur}
+    //         />
+    //         <Input
+    //           name="pwValue"
+    //           placeholder="셀러 비밀번호"
+    //           onBlur={handlePwBlur}
+    //         />
+    //         {!validInput ? <p>아이디와 비밀번호를 다시 확인해주세요.</p> : null}
+    //       </form>
+    //       <Button onClick={handleLoginButton}>로그인</Button>
+    //       <Join>
+    //         <p>아직 셀러가 아니신가요?</p>
+    //         <JoinButton>
+    //           <Link to="/Signup">회원가입하기</Link>
+    //         </JoinButton>
+    //       </Join>
+    //     </LoginBox>
+    //   </Content>
+    //   <LoginFooter />
+    // </Container>
   );
 }
 
@@ -37,8 +95,13 @@ const Container = styled.div`
 
 const Content = styled.div`
   ${({ theme }) => theme.flex('center', 'center', 'column')}
-  padding: 65px 0 50px;
   height: 100vh;
+  padding: 65px 0 50px;
+  p {
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: bold;
+  }
 `;
 
 const Logo = styled.img`
@@ -99,12 +162,12 @@ const Join = styled.div`
   ${({ theme }) => theme.flex('center', 'center')}
   margin-top: 20px;
   p {
+    margin-right: 5px;
     font-size: 12px;
     font-weight: 100;
+    :nth-child(2) {
+      color: #3c72ff;
+      font-weight: bold;
+    }
   }
-`;
-
-const JoinButton = styled.button`
-  color: #3c72ff;
-  font-size: 12px;
 `;
