@@ -59,6 +59,7 @@ const StaticsTitle = styled.div`
 
 const StaticsContent = styled.div`
   height: 100%;
+
   ul {
     display: flex;
     margin: 0px;

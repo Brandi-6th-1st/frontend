@@ -45,10 +45,7 @@ const SalesCategory = styled.div`
   ${({ theme }) => theme.flex('space-between')}
   height:30px;
 
-  span {
-    font-size: 13px;
-  }
-
+  span,
   b {
     font-size: 13px;
   }

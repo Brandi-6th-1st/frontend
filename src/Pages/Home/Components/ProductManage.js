@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function ProductManage({ data }) {
+export default function ProductManage({ sellerStatus }) {
   return (
     <SalesBox>
       <SalesStatus>
         <SalesCategory>
           <span>상품 준비 : </span>
-          <b>{data && data.product_preparation}건 </b>
+          <b>{sellerStatus && sellerStatus.product_preparation}건 </b>
         </SalesCategory>
         <SalesCategory>
           <span>배송 준비 : </span>
@@ -19,7 +19,7 @@ export default function ProductManage({ data }) {
         </SalesCategory>
         <SalesCategory>
           <span>배송 완료 : </span>
-          <b>{data && data.delivery_completed}건 </b>
+          <b>{sellerStatus && sellerStatus.delivery_completed}건 </b>
         </SalesCategory>
         <SalesCategory>
           <span>구매 확정 : </span>
@@ -33,8 +33,7 @@ export default function ProductManage({ data }) {
 const SalesBox = styled.div`
   display: inline-block;
   width: 33.3%;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 0 15px;
   margin-bottom: 22px;
 `;
 
@@ -46,7 +45,7 @@ const SalesStatus = styled.div`
 `;
 
 const SalesCategory = styled.div`
-  ${({ theme }) => theme.flex('space-between', '', '')}
+  ${({ theme }) => theme.flex('space-between')}
   height:30px;
 
   span {

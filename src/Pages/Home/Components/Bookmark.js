@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Bookmark({ data }) {
+export default function Bookmark({ sellerStatus }) {
   return (
     <SalesBox>
       <SalesStatus>
@@ -11,11 +11,11 @@ export default function Bookmark({ data }) {
         </SalesCategory>
         <SalesCategory>
           <span>전체 상품 수:</span>
-          <b>{data && data.all_product} 건</b>
+          <b>{sellerStatus && sellerStatus.all_product} 건</b>
         </SalesCategory>
         <SalesCategory>
           <span>노출 상품 수:</span>
-          <b>{data && data.displayed_product} 건</b>
+          <b>{sellerStatus && sellerStatus.displayed_product} 건</b>
         </SalesCategory>
       </SalesStatus>
     </SalesBox>
@@ -25,8 +25,7 @@ export default function Bookmark({ data }) {
 const SalesBox = styled.div`
   display: inline-block;
   width: 33.3%;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 0 15px;
   margin-bottom: 22px;
 `;
 
@@ -39,13 +38,10 @@ const SalesStatus = styled.div`
 `;
 
 const SalesCategory = styled.div`
-  ${({ theme }) => theme.flex('space-between', '', '')}
+  ${({ theme }) => theme.flex('space-between')}
   height:30px;
 
-  span {
-    font-size: 13px;
-  }
-
+  span,
   b {
     font-size: 13px;
   }

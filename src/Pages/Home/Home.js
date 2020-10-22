@@ -1,14 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import regeneratorRuntime from 'regenerator-runtime';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import ProductManage from './Components/ProductManage';
 import RefundManage from './Components/RefundManage';
 import Bookmark from './Components/Bookmark';
 import QnA from './Components/QnA';
 import Notice from './Components/Notice';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import regeneratorRuntime from 'regenerator-runtime';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
@@ -16,7 +16,7 @@ import { GoGraph } from 'react-icons/go';
 
 export default function Home() {
   // axios시 받은 data를 data 상태로 관리한다.
-  const [data, setData] = useState();
+  const [sellerStatus, setSellerStatus] = useState();
 
   // Test : json형식 mock-data 생성
   // axios get을 사용하여 데이터를 받아온다.
@@ -25,7 +25,7 @@ export default function Home() {
       const result = await axios.get(`/public/Data/DataHomeSeller.json`);
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
       const { DataHomeSeller } = result.data;
-      setData(DataHomeSeller);
+      setSellerStatus(DataHomeSeller);
     } catch (err) {
       console.log(err);
     }
@@ -38,22 +38,22 @@ export default function Home() {
 
   // 매출 금액 차트에 들어가는 일별 Price
   const priceOfSales =
-    data &&
-    data.chart_data.map((item) => {
+    sellerStatus &&
+    sellerStatus.chart_data.map((item) => {
       return item.price;
     });
 
   // 매출 건수 차트에 들어가는 일별 건수
   const numOfSales =
-    data &&
-    data.chart_data.map((item) => {
+    sellerStatus &&
+    sellerStatus.chart_data.map((item) => {
       return item.num;
     });
 
   // 매출 차트에 공통으로 사용되는 금액, 건수의 날짜
   const dateBySales =
-    data &&
-    data.chart_data.map((item) => {
+    sellerStatus &&
+    sellerStatus.chart_data.map((item) => {
       return item.date;
     });
 
@@ -180,11 +180,11 @@ export default function Home() {
         <Section>
           <SalesContainer>
             {/* 상품, 배송 상태 차트 컴포넌트 */}
-            <ProductManage data={data} />
+            <ProductManage sellerStatus={sellerStatus} />
             {/* 환불, 반품 상태 차트 컴포넌트 */}
             <RefundManage />
             {/* 즐겨찾기, 전체 상품수 등 상태 차트 컴포넌트 */}
-            <Bookmark data={data} />
+            <Bookmark sellerStatus={sellerStatus} />
           </SalesContainer>
           <StaticsContainer>
             {/* 매출 통계 건수 차트 생성하여 컴포넌트 분리 예정 */}
@@ -241,7 +241,7 @@ const Main = styled.div`
 
 const Section = styled.div`
   width: 100%;
-  padding: 20px 20px;
+  padding: 20px;
   border-radius: 0 0 0 4px;
   background-color: #fafafa;
 `;
