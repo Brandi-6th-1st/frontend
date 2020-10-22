@@ -9,6 +9,9 @@ import Notice from './Components/Notice';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import regeneratorRuntime from 'regenerator-runtime';
+import Nav from '../../Components/Nav/Nav';
+import Header from '../../Components/Header/Header';
+import Footer from '../../Components/Footer/Footer';
 import { GoGraph } from 'react-icons/go';
 
 export default function Home() {
@@ -225,32 +228,21 @@ export default function Home() {
           </StaticsContainer>
         </Section>
       </Main>
+      <Footer />
     </Fragment>
   );
 }
-
-const Header = styled.div`
-  /* position: fixed; */
-  width: 100%;
-  height: 45px;
-  top: 0;
-  background-color: rgb(135, 59, 83);
-`;
 
 const Main = styled.div`
   display: flex;
   background-color: #fafafa;
 `;
 
-const Nav = styled.div`
-  width: 215px;
-  height: 850px;
-  background-color: black;
-`;
-
 const Section = styled.div`
   width: 100%;
   padding: 20px 20px;
+  /* nav상태에 따라 마진 크기 변동 예정 */
+  margin-left: 215px;
 `;
 
 const SalesContainer = styled.div`
