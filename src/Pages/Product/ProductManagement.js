@@ -15,7 +15,7 @@ export default function ProductManagement() {
     <Fragment>
       <Header />
       <Main>
-        {/* <Nav /> */}
+        <Nav />
         <Section>
           <h3>상품 관리</h3>
           <FilterContainer>
