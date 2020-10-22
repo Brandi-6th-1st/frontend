@@ -1,7 +1,6 @@
 export default function cartReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'ADD_ITEM':
-      console.log(state);
       return [...state, action.payload]; // 스토어의 이전 상태에 새로운 item을 추가
     case 'DELETE_ITEM':
       return state.filter(
