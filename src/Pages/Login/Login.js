@@ -34,6 +34,7 @@ export default function Login() {
               name="idValue"
               ref={register({ required: true })}
               placeholder="셀러 아이디"
+              className={errors.idValue && 'ErrorInput'}
             />
             {errors.idValue && errors.pwValue && <p>아이디를 입력해주세요</p>}
 
@@ -41,6 +42,7 @@ export default function Login() {
               name="pwValue"
               ref={register({ required: true, pattern: /^[A-Za-z]+$/i })}
               placeholder="셀러 비밀번호"
+              className={errors.pwValue && 'ErrorInput'}
             />
             {errors.pwValue && <p>비밀번호를 입력해주세요</p>}
             <Button onClick={handleLoginButton}>로그인</Button>
@@ -127,6 +129,9 @@ const Input = styled.input`
   width: 100%;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
+  &.ErrorInput {
+    border: 1px solid #b94a48;
+  }
 `;
 
 const Check = styled.div`
