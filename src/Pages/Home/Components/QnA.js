@@ -28,9 +28,9 @@ export default function QnA() {
           </ul>
         </StaticsCategory>
         <StaticsContent>
-          {DataQnA.map((question) => {
+          {DataQnA.map((question, idx) => {
             return (
-              <SellerNoti>
+              <SellerNoti key={idx}>
                 <QnANickName>{question.nickname}</QnANickName>
                 <QnAQuestion>{question.question}</QnAQuestion>
                 <QnATitle>{question.itemTitle}</QnATitle>
@@ -38,12 +38,6 @@ export default function QnA() {
               </SellerNoti>
             );
           })}
-          {/* <CustomerQnA>
-          <QnANickName>회원 닉네임</QnANickName>
-          <QnAQuestion>질문</QnAQuestion>
-          <QnATitle>상품명</QnATitle>
-          <QnARegist>등록일</QnARegist>
-        </CustomerQnA> */}
         </StaticsContent>
       </StaticsStatus>
     </StaticsBox>

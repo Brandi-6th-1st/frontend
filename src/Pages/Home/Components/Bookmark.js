@@ -1,24 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import DataSalesStatus from '../Data/DataSalesStatus';
 
-export default function Bookmark() {
+export default function Bookmark({ data }) {
   return (
     <SalesBox>
       <SalesStatus>
-        {DataSalesStatus.map((Item) => {
-          return (
-            <SalesCategory>
-              <span>
-                {Item.categoryTitle} {Item.categoryTitle.length > 0 && ':'}
-              </span>
-              <b>
-                {Item.number}
-                {Item.categoryTitle.length > 0 && '건'}
-              </b>
-            </SalesCategory>
-          );
-        })}
+        <SalesCategory>
+          <span>즐겨찾기 수:</span>
+          <b>9 건</b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>전체 상품 수:</span>
+          <b>{data && data.all_product} 건</b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>노출 상품 수:</span>
+          <b>{data && data.displayed_product} 건</b>
+        </SalesCategory>
       </SalesStatus>
     </SalesBox>
   );
@@ -34,6 +32,7 @@ const SalesBox = styled.div`
 
 const SalesStatus = styled.div`
   background-color: #fff;
+  height: 100%;
   padding: 15px 20px 0px 20px;
   border: 1px solid #dddddd;
   border-radius: 3px;

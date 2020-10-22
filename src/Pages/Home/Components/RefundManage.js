@@ -1,25 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import DataRefundStatus from '../Data/DataRefundStatus';
 
 export default function RefundManage() {
   return (
     <SalesBox>
       <SalesStatus>
-        {DataRefundStatus.map((Item) => {
-          return (
-            <SalesCategory>
-              <span>
-                {Item.categoryTitle}
-                {Item.categoryTitle.length > 0 && ':'}
-              </span>
-              <b>
-                {Item.number}
-                {Item.categoryTitle.length > 0 && '건'}
-              </b>
-            </SalesCategory>
-          );
-        })}
+        <SalesCategory>
+          <span>환불 요청 :</span>
+          <b>1 건</b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>반품 진행 :</span>
+          <b>5 건</b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>주문 취소중 :</span>
+          <b>3 건</b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>환불 승인중 :</span>
+          <b>2 건</b>
+        </SalesCategory>
       </SalesStatus>
     </SalesBox>
   );
@@ -34,6 +35,7 @@ const SalesBox = styled.div`
 `;
 
 const SalesStatus = styled.div`
+  height: 100%;
   background-color: #fff;
   padding: 15px 20px 0px 20px;
   border: 1px solid #dddddd;

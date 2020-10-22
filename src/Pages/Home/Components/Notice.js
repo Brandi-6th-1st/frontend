@@ -12,9 +12,9 @@ export default function Notice() {
           <span>공지사항</span>
         </StaticsTitle>
         <StaticsContent>
-          {DataNotification.map((question) => {
+          {DataNotification.map((question, idx) => {
             return (
-              <CustomerQnA>
+              <CustomerQnA key={idx}>
                 <NotiNum>{question.categoryNum}</NotiNum>
                 <NotiCategory>{question.category}</NotiCategory>
                 <NotiTitle>{question.categoryTitle}</NotiTitle>

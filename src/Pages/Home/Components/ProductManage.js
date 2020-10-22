@@ -1,19 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
-import DataShippingStatus from '../Data/DataShippingStatus';
 
-export default function ProductManage() {
+export default function ProductManage({ data }) {
   return (
     <SalesBox>
       <SalesStatus>
-        {DataShippingStatus.map((Item) => {
-          return (
-            <SalesCategory>
-              <span>{Item.categoryTitle} : </span>
-              <b>{Item.number}건 </b>
-            </SalesCategory>
-          );
-        })}
+        <SalesCategory>
+          <span>상품 준비 : </span>
+          <b>{data && data.product_preparation}건 </b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>배송 준비 : </span>
+          <b>2건 </b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>배송 중 : </span>
+          <b>5건 </b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>배송 완료 : </span>
+          <b>{data && data.delivery_completed}건 </b>
+        </SalesCategory>
+        <SalesCategory>
+          <span>구매 확정 : </span>
+          <b>3건 </b>
+        </SalesCategory>
       </SalesStatus>
     </SalesBox>
   );
