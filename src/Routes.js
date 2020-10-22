@@ -3,6 +3,7 @@ import React from 'react';
 import Login from './Pages/Login/Login';
 import Signup from './Pages/Signup/Signup';
 import Main from './Pages/Main/Main';
+import Home from './Pages/Home/Home';
 
 function Routes() {
   return (
