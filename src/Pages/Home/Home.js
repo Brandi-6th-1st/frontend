@@ -57,119 +57,71 @@ export default function Home() {
       return item.date;
     });
 
-  // 매출 건수 차트에 들어가는 Data 및 차트 Format
-  const numOfOptions = {
-    title: {
-      // 차트에 표기되는 메인 Title을 보이지 않게 Null로 변경
-      text: null,
-    },
+  // 매출 금액에 들어가는 차트 데이터
+  const priceChart = () =>
+    chartForm(priceOfSales, dateBySales, null, '결제 금액', '원');
 
-    credits: {
-      // 차트에 표기되는 highchart 제거
-      enabled: false,
-    },
-    // 차트에 표시되는 선의 종류
-    series: [
-      {
-        // 차트에 표시되는 선의 색깔
-        color: '#AA4643',
-        // 차트에 표기되는 Data ( 매출 건수 )
-        data: numOfSales,
-        // 차트에 표기되는 Data 이름
-        name: '결제 건수',
-        // 차트 하단에 표기되는 Name을 표시하지 않게 해줍니다.
-        showInLegend: false,
-      },
-    ],
-    // X축 관련 Format 및 data
-    xAxis: {
-      // X축에 표시되는 Data
-      categories: dateBySales,
-      labels: {
-        // 차트에 월,일만 표기되도록 앞에 년도를 짤라서 출력 (데이터에 따른 수정 예정)
-        formatter: function () {
-          return this.value.substring(3);
-        },
-      },
-    },
-    // Y축 관련 Format 및 data
-    yAxis: {
-      // Y축 왼쪽에 표시되는 Title을 보이지 않게 null로 설정
+  // 매출 건수에 들어가는 차트 데이터
+  const numChart = () =>
+    chartForm(numOfSales, dateBySales, '#AA4643', '결제 건수', '건');
+
+  const chartForm = (series, date, color, tooltipTitle, tooltipUnit) => {
+    const options = {
       title: {
+        // 차트에 표기되는 메인 Title을 보이지 않게 Null로 변경
         text: null,
       },
-      // Y축 표시도는 data format을 1 000단위로 설정
-      labels: {
-        format: '{value:,.0f} ',
+      credits: {
+        // 차트에 표기되는 highchart 제거
+        enabled: false,
       },
-    },
-    // 차트에 hover 하였을때 출력되는 툴팁
-    tooltip: {
-      formatter: function () {
-        // axios에서 넘겨받은 날짜를 xx년 xx월 xx일 형식으로 바꾸기 위해서 split
-        const splitDate = this.x.split('/');
-        // 위에서 split한 Data를 각 Format에 맞게 넣어 출력한다.
-        var tooltipText = `결제 건수 <br> <b> ${splitDate[0]}년 ${splitDate[1]}월  ${splitDate[2]}일 : ${this.y} 건</b>`;
-        return tooltipText;
-      },
-    },
-    showInLegend: true,
-  };
-
-  // 매출 금액 차트에 들어가는 Data 및 차트 Format
-  const priceOfOptions = {
-    title: {
-      // 차트에 표기되는 메인 Title을 보이지 않게 Null로 변경
-      text: null,
-    },
-    credits: {
-      // 차트에 표기되는 highchart 제거
-      enabled: false,
-    },
-    // 차트에 표시되는 선의 종류
-    series: [
-      {
-        // 차트에 표기되는 Data ( 매출 건수 )
-        data: priceOfSales,
-        // 차트에 표기되는 Data 이름
-        name: '결제 금액',
-        // 차트 하단에 표기되는 Name을 표시하지 않게 해줍니다.
-        showInLegend: false,
-      },
-    ],
-    // X축 관련 Format 및 data
-    xAxis: {
-      // X축에 표시되는 Data
-      categories: dateBySales,
-      labels: {
-        // 차트에 월,일만 표기되도록 앞에 년도를 짤라서 출력 (데이터에 따른 수정 예정)
-        formatter: function () {
-          return this.value.substring(3);
+      // 차트에 표시되는 선의 종류
+      series: [
+        {
+          color: color,
+          // 차트에 표기되는 Data ( 매출 건수, 매출 금액)
+          data: series,
+          // 차트에 표기되는 Data 이름
+          name: tooltipTitle,
+          // 차트 하단에 표기되는 Name을 표시하지 않게 해줍니다.
+          showInLegend: false,
+        },
+      ],
+      // X축 관련 Format 및 data
+      xAxis: {
+        // X축에 표시되는 Data
+        categories: date,
+        labels: {
+          // 차트에 월,일만 표기되도록 앞에 년도를 짤라서 출력 (데이터에 따른 수정 예정)
+          formatter: function () {
+            return this.value.substring(3);
+          },
         },
       },
-    },
-    // Y축 관련 Format 및 data
-    yAxis: {
-      // Y축 왼쪽에 표시되는 Title을 보이지 않게 null로 설정
-      title: {
-        text: null,
+      // Y축 관련 Format 및 data
+      yAxis: {
+        // Y축 왼쪽에 표시되는 Title을 보이지 않게 null로 설정
+        title: {
+          text: null,
+        },
+        // Y축 표시도는 data format을 1 000단위로 설정
+        labels: {
+          format: '{value:,.0f} ',
+        },
       },
-      // Y축 표시도는 data format을 1 000단위로 설정
-      labels: {
-        format: '{value:,.0f} ',
+      // 차트에 hover 하였을때 출력되는 툴팁
+      tooltip: {
+        formatter: function () {
+          // axios에서 넘겨받은 날짜를 xx년 xx월 xx일 형식으로 바꾸기 위해서 split
+          const splitDate = this.x.split('/');
+          // 위에서 split한 Data를 각 Format에 맞게 넣어 출력한다.
+          var tooltipText = `${tooltipTitle} <br> <b> ${splitDate[0]}년 ${splitDate[1]}월  ${splitDate[2]}일 : ${this.y} ${tooltipUnit}</b>`;
+          return tooltipText;
+        },
       },
-    },
-    // 차트에 hover 하였을때 출력되는 툴팁
-    tooltip: {
-      formatter: function () {
-        // axios에서 넘겨받은 날짜를 xx년 xx월 xx일 형식으로 바꾸기 위해서 split
-        const splitDate = this.x.split('/');
-        // 위에서 split한 Data를 각 Format에 맞게 넣어 출력한다.
-        var tooltipText = `결제 금액 <br> <b> ${splitDate[0]}년 ${splitDate[1]}월  ${splitDate[2]}일 : ${this.y} 원</b>`;
-        return tooltipText;
-      },
-    },
-    showInLegend: true,
+      showInLegend: true,
+    };
+    return options;
   };
 
   return (
@@ -199,7 +151,7 @@ export default function Home() {
                 <StaticsGraph>
                   <HighchartsReact
                     highcharts={Highcharts}
-                    options={numOfOptions}
+                    options={numChart()}
                   />
                 </StaticsGraph>
               </StaticsStatus>
@@ -216,7 +168,7 @@ export default function Home() {
                 <StaticsGraph>
                   <HighchartsReact
                     highcharts={Highcharts}
-                    options={priceOfOptions}
+                    options={priceChart()}
                   />
                 </StaticsGraph>
               </StaticsStatus>
