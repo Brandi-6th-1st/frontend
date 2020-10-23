@@ -227,7 +227,7 @@ export default function Signup() {
 }
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100%;
   background-color: #fafafa;
 `;
 
