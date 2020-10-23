@@ -1,8 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
-
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
-
   * {
   margin: 0;
   padding: 0;
@@ -30,6 +28,9 @@ const GlobalStyle = createGlobalStyle`
   body {
     line-height: 1;
     margin: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #34373A;
   }
 
   ol,
