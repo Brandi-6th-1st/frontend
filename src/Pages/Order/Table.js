@@ -2,7 +2,8 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import ORDER_EXAMPLE from './DataOrder';
 
-export default function Table() {
+export default function Table({ pagetext }) {
+  console.log(pagetext.id);
   return (
     <div>
       <UpperTable>
@@ -10,7 +11,7 @@ export default function Table() {
           <Total>
             전체 조회건 수: <b>0</b> 건
           </Total>
-          <Button blue>배송처리</Button>
+          {pagetext.button && <Button blue>{pagetext.button}</Button>}
         </div>
         <div>
           <Button>전체주문 엑셀다운로드</Button>
@@ -20,35 +21,26 @@ export default function Table() {
       <TableContainer>
         <table>
           <thead>
-            <th>
+            <th className="checkbox">
               <input type="checkbox" />
             </th>
-            <th>결제일자</th>
-            <th>주문번호</th>
-            <th>주문상세번호</th>
-            <th>상품명</th>
-            <th>옵션정보</th>
-            <th>수량</th>
-            <th>주문자명</th>
-            <th>핸드폰번호</th>
-            <th>주문상태</th>
+            {pagetext.table_header &&
+              pagetext.table_header.map((el) => <th>{el}</th>)}
           </thead>
-          {ORDER_EXAMPLE.map((el) => (
-            <tbody>
-              <td>
-                <input type="checkbox" />
-              </td>
-              <td>{el.paid_at}</td>
-              <td>{el.order_number}</td>
-              <td>{el.detail_order_number}</td>
-              <td>{el.product_name}</td>
-              <td>{el.option_info}</td>
-              <td>{el.quantity}</td>
-              <td>{el.receiver_name}</td>
-              <td>{el.receiver_contact}</td>
-              <td>{el.order_status}</td>
-            </tbody>
-          ))}
+          <tbody>
+            {ORDER_EXAMPLE[pagetext.id - 1].map((order) => (
+              <tr>
+                <td className="checkbox">
+                  <input type="checkbox" />
+                </td>
+                {Object.values(order)
+                  .slice(1)
+                  .map((el) => (
+                    <td>{el}</td>
+                  ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </TableContainer>
       <UnderTable>
@@ -91,19 +83,29 @@ const TableContainer = styled.div`
     margin-top: 10px;
     width: 100%;
     th {
-      min-width: 80px;
       padding: 8px;
       background: #eee;
       border: 1px solid #ddd;
       font-size: 14px;
       font-weight: 500;
       text-align: start;
+      &.checkbox {
+        width: 25px;
+        text-align: center;
+      }
     }
     td {
       padding: 8px;
       border: 1px solid #ddd;
       font-size: 14px;
       color: #222;
+      &.checkbox {
+        width: 25px;
+        text-align: center;
+      }
+    }
+    input[type='checkbox'] {
+      cursor: pointer;
     }
   }
 `;

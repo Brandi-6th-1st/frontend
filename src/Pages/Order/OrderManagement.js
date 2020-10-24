@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Filter from './Filter';
 import OrderList from './OrderList';
+import COMPONENT_ORDER from './DataOrderComponent';
 
 export default function OrderManagement() {
+  // 주소에 있는 id 파라미터로 동일한 컴포넌트에서 다른 데이터를 사용하여 각 주문 상태에 따른 내용을 가져옵니다.
+  const match = useParams();
+  const categoryId = match.id;
+  const pagetext = COMPONENT_ORDER[categoryId - 1];
+
   return (
     <ManagementContainer>
       <Title>
         <h3>주문 관리</h3>
-        <span>상품준비 관리</span>
+        <span>{pagetext.title} 관리</span>
         <div>
-          <p>
-            ( 상품준비 단계에서는 구매회원의 주문취소가 가능하며, 배송준비단계로
-            처리할 경우 3영업일 동안은 구매회원의 주문취소가 불가능합니다. )
-          </p>
-          <p>
-            ( 배송준비로 변경하신 후 3영업일 이내로 상품 배송이 시작되지 않을
-            경우 구매회원의 주문취소가 가능하며 이에 따른 책임은 판매자 회원에게
-            있습니다. (전자상거래법 제 15조 1항에 근거) )
-          </p>
+          {pagetext.description &&
+            pagetext.description.map((el) => <p>{el}</p>)}
         </div>
       </Title>
-      <Filter />
-      <OrderList />
+      <Filter pagetext={pagetext} />
+      <OrderList pagetext={pagetext} />
     </ManagementContainer>
   );
 }
@@ -30,8 +30,6 @@ export default function OrderManagement() {
 const ManagementContainer = styled.div`
   width: 100%;
   min-height: 875px;
-  /* margin-top: 45px; */
-  /* margin-left: 215px; */
   padding: 72px 20px 20px 20px;
   background: #fafafa;
   border-radius: 0 0 0 4px;

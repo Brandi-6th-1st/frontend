@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { KeyboardArrowRight, List } from '@styled-icons/material';
 import Table from './Table';
 
-export default function OrderList() {
+export default function OrderList({ pagetext }) {
   return (
     <div>
       <Pagebar>
@@ -16,10 +16,10 @@ export default function OrderList() {
             <KeyboardArrowRight size={15} color="#999" />
           </li>
           <li>
-            상품준비 관리
+            {pagetext.title} 관리
             <KeyboardArrowRight size={15} color="#999" />
           </li>
-          <li>상품준비 리스트</li>
+          <li>{pagetext.title} 리스트</li>
         </ul>
         <div>
           <Select>
@@ -37,7 +37,7 @@ export default function OrderList() {
           </Select>
         </div>
       </Pagebar>
-      <Table />
+      <Table pagetext={pagetext} />
     </div>
   );
 }

@@ -24,7 +24,8 @@ export default function Nav() {
         <KeyboardArrowLeft size={20} />
       </SideToggler>
       <NavBox>
-        {MASTER_NAV.map((el, idx) => (
+        {/* 백에서 보내주는 Nav 데이터를 넣어주기만 하면 아이콘 알아서 반영됩니다! */}
+        {SELLER_NAV.map((el, idx) => (
           <NavList
             setSubActive={(e) => setSubActive(e)}
             active={active}
@@ -43,10 +44,9 @@ export default function Nav() {
 }
 
 const NavContainer = styled.div`
-  /* position: fixed; */
   width: 215px;
   height: 100vh;
-  margin-top: 45px;
+  padding-top: 45px;
   background: #35373a;
   z-index: 10;
   ${({ sidebarSmall }) =>
@@ -61,7 +61,7 @@ const NavBox = styled.ul`
 `;
 
 const SideToggler = styled.div`
-  ${({ theme }) => theme.flex('center', 'center', '')}
+  ${({ theme }) => theme.flex('center', 'center')}
   width: 23px;
   height: 23px;
   margin-top: 15px;

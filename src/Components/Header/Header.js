@@ -25,6 +25,7 @@ const HeaderContainer = styled.div`
   width: 100vw;
   height: 45px;
   background: #873b53;
+  z-index: 100;
   div {
     ${({ theme }) => theme.flex('', 'center', 'row')}
   }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import DateFilter from './DateFilter';
 
-export default function Filter() {
+export default function Filter({ pagetext }) {
   return (
     <FilterContainer>
       <div>
@@ -17,15 +17,14 @@ export default function Filter() {
         <SearchInput type="text" placeholder="검색어를 입력하세요." />
       </div>
       <div>
-        <span>결제완료일 :</span>
+        <span>{pagetext.filter_date} :</span>
         <DateBtn type="button" value="전체" />
         <DateBtn type="button" value="오늘" />
         <DateBtn type="button" value="3일" />
         <DateBtn type="button" value="1주일" />
         <DateBtn type="button" value="1개월" />
         <DateBtn type="button" value="3개월" />
-        {/* <DateFilter />
-        <DateFilter /> */}
+        <DateFilter />
       </div>
 
       <div>
@@ -43,7 +42,7 @@ const FilterContainer = styled.div`
   margin-top: 15px;
   margin-bottom: 20px;
   div {
-    ${({ theme }) => theme.flex('', 'center', 'row')}
+    ${({ theme }) => theme.flex('', 'center')}
     width: 100%;
     margin-top: 10px;
     margin-left: 20px;
