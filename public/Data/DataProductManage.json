@@ -1,0 +1,137 @@
+{ 
+  "DataProductManage" : {
+   "homeFilterTitle": [
+    {
+      "id":1,
+      "filterTitle":"셀러명"
+    },
+    {
+      "id":2,
+      "filterTitle":"셀러속성",
+      "category": ["전체", "쇼핑몰", "마켓", "로드샵", "디자이너브랜드", "제너럴브랜드", "내셔널브랜드", "뷰티"]
+    },
+    {
+      "id":3,
+      "filterTitle":"판매여부",
+      "category": ["전체", "판매", "미판매","미판매(직권)"]
+    },
+    {
+      "id":4,
+      "filterTitle":"진열여부",
+      "category": ["전체", "진열", "미진열","미판매(직권)"]
+    },
+    {
+      "id":5,
+      "filterTitle":"할인여부",
+      "category": ["전체", "할인", "미할인"]
+    }
+  ],
+  "productItem":[
+    {
+      "registered_at": "2020-10-21 10:16:40",
+      "main_image_url":"/public/Images/main_logo.jpg",
+      "product_name": "빛빛",
+      "product_code": "SB000000000009042936",
+      "product_number": "17891162",
+      "price": "1,000",
+      "discount_price": "900",
+      "is_on_sale": "판매",
+      "is_displayed": "진열",
+      "is_discounted": "할인",
+      "actions": "할인"
+    },
+    {
+      "registered_at": "2020-10-21 10:16:40",
+      "main_image_url":"/public/Images/rome.jpg",
+      "product_name": "빛빛",
+      "product_code": "SB000000000009042936",
+      "product_number": "17891162",
+      "price": "1,000",
+      "discount_price": "900",
+      "is_on_sale": "판매",
+      "is_displayed": "진열",
+      "is_discounted": "할인",
+      "actions": "할인"
+    },
+    {
+      "registered_at": "2020-10-21 10:16:40",
+      "main_image_url":"/public/Images/main_logo.jpg",
+      "product_name": "빛빛",
+      "product_code": "SB000000000009042936",
+      "product_number": "17891162",
+      "price": "1,000",
+      "discount_price": "900",
+      "is_on_sale": "판매",
+      "is_displayed": "진열",
+      "is_discounted": "할인",
+      "actions": "할인"
+    },
+    {
+      "registered_at": "2020-10-21 10:16:40",
+      "main_image_url":"/public/Images/rome.jpg",
+      "product_name": "빛빛",
+      "product_code": "SB000000000009042936",
+      "product_number": "17891162",
+      "price": "1,000",
+      "discount_price": "900",
+      "is_on_sale": "판매",
+      "is_displayed": "진열",
+      "is_discounted": "할인",
+      "actions": "할인"
+    },
+    {
+      "registered_at": "2020-10-21 10:16:40",
+      "main_image_url":"/public/Images/main_logo.jpg",
+      "product_name": "빛빛",
+      "product_code": "SB000000000009042936",
+      "product_number": "17891162",
+      "price": "1,000",
+      "discount_price": "900",
+      "is_on_sale": "판매",
+      "is_displayed": "진열",
+      "is_discounted": "할인",
+      "actions": "할인"
+    },
+    {
+      "registered_at": "2020-10-21 10:16:40",
+      "main_image_url":"/public/Images/rome.jpg",
+      "product_name": "빛빛",
+      "product_code": "SB000000000009042936",
+      "product_number": "17891162",
+      "price": "1,000",
+      "discount_price": "900",
+      "is_on_sale": "판매",
+      "is_displayed": "진열",
+      "is_discounted": "할인",
+      "actions": "할인"
+    },
+    {
+      "registered_at": "2020-10-21 10:16:40",
+      "main_image_url":"/public/Images/main_logo.jpg",
+      "product_name": "빛빛",
+      "product_code": "SB000000000009042936",
+      "product_number": "17891162",
+      "price": "1,000",
+      "discount_price": "900",
+      "is_on_sale": "판매",
+      "is_displayed": "진열",
+      "is_discounted": "할인",
+      "actions": "할인"
+    },
+    {
+      "registered_at": "2020-10-21 10:16:40",
+      "main_image_url":"/public/Images/rome.jpg",
+      "product_name": "빛빛",
+      "product_code": "SB000000000009042936",
+      "product_number": "17891162",
+      "price": "1,000",
+      "discount_price": "900",
+      "is_on_sale": "판매",
+      "is_displayed": "진열",
+      "is_discounted": "할인",
+      "actions": "할인"
+    }
+  ]
+
+ }
+}
