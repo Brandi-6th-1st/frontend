@@ -25,11 +25,11 @@ const SELLER_NAV = [
     category: '주문관리',
     subcategory: [
       { id: 1, title: '전체주문 관리' },
-      { id: 2, title: '상품준비관리' },
+      { id: 2, title: '상품준비관리', link: '/Order/1' },
       { id: 3, title: '배송준비관리' },
-      { id: 4, title: '배송중관리' },
-      { id: 5, title: '배송완료관리' },
-      { id: 6, title: '구매확정관리' },
+      { id: 4, title: '배송중관리', link: '/Order/2' },
+      { id: 5, title: '배송완료관리', link: '/Order/3' },
+      { id: 6, title: '구매확정관리', link: '/Order/4' },
     ],
   },
   {
