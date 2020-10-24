@@ -46,7 +46,9 @@ const NavContainer = styled.div`
   /* position: fixed; */
   width: 215px;
   height: 100vh;
+  margin-top: 45px;
   background: #35373a;
+  z-index: 10;
   ${({ sidebarSmall }) =>
     sidebarSmall &&
     css`
@@ -60,7 +62,7 @@ const NavBox = styled.ul`
 
 const SideToggler = styled.div`
   ${({ theme }) => theme.flex('center', 'center', '')}
-  width: 24px;
+  width: 23px;
   height: 23px;
   margin-top: 15px;
   background-color: #fcfcfc;

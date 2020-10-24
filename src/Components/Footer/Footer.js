@@ -35,6 +35,7 @@ const FooterContainer = styled.div`
   height: 50px;
   padding: 10px 20px 5px 20px;
   background: #35373a;
+  z-index: 100;
   div {
     color: #999ba2;
     line-height: 1.5;
