@@ -36,6 +36,7 @@ export default function Nav() {
             subcategory={el.subcategory}
             handlePage={handlePage}
             sidebarSmall={sidebarSmall}
+            link={el.link}
           />
         ))}
       </NavBox>

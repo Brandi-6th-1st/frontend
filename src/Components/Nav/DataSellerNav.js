@@ -2,6 +2,7 @@ const SELLER_NAV = [
   {
     id: 1,
     category: '홈',
+    link: '/Home',
   },
   {
     id: 2,
