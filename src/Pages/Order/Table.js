@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import ORDER_EXAMPLE from './DataOrder';
 
 export default function Table({ pagetext }) {
-  console.log(pagetext.id);
   return (
     <div>
       <UpperTable>

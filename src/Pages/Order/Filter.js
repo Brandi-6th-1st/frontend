@@ -1,34 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import DateFilter from './DateFilter';
 
 export default function Filter({ pagetext }) {
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchOption, setSearchOption] = useState('');
+  const [periodButton, setPeriodButton] = useState('3일');
+
+  const handleChange = (e) => {
+    setSearchKeyword(e.target.value);
+  };
+
+  const handleSelect = (e) => {
+    setSearchOption(e.target.value);
+  };
+
+  const periodHandler = (e) => {
+    setPeriodButton(e.target.value);
+  };
+
+  const searchHandler = () => {
+    // 검색버튼 눌렀을때 검색유효성 검사
+    // 검색어는 있는데 검색 항목을 선택하지 않았을 경우
+    searchKeyword && !searchOption && alert('검색항목를 입력해주세요.');
+  };
+
+  useEffect(() => {
+    console.log(searchOption);
+  }, [searchOption]);
+
   return (
     <FilterContainer>
       <div>
-        <Select>
-          <option value>Select..</option>
+        <Select onChange={handleSelect}>
+          <option value="" selected>
+            Select..
+          </option>
           <option value="ORDER_DETAIL_NO">주문상세번호</option>
           <option value="ORDER_NO">주문번호</option>
           <option value="ORDRR_NAME">주문자명</option>
           <option value="ORDRR_HP">핸드폰번호</option>
           <option value="PRODUCT_NAME">상품명</option>
         </Select>
-        <SearchInput type="text" placeholder="검색어를 입력하세요." />
+        <SearchInput
+          onChange={handleChange}
+          type="text"
+          placeholder="검색어를 입력하세요."
+        />
       </div>
       <div>
         <span>{pagetext.filter_date} :</span>
-        <DateBtn type="button" value="전체" />
-        <DateBtn type="button" value="오늘" />
-        <DateBtn type="button" value="3일" />
-        <DateBtn type="button" value="1주일" />
-        <DateBtn type="button" value="1개월" />
-        <DateBtn type="button" value="3개월" />
+        <DateBtn
+          type="button"
+          value="전체"
+          onClick={periodHandler}
+          selected={periodButton === '전체'}
+        />
+        <DateBtn
+          type="button"
+          value="오늘"
+          onClick={periodHandler}
+          selected={periodButton === '오늘'}
+        />
+        <DateBtn
+          type="button"
+          value="3일"
+          onClick={periodHandler}
+          selected={periodButton === '3일'}
+        />
+        <DateBtn
+          type="button"
+          value="1주일"
+          onClick={periodHandler}
+          selected={periodButton === '1주일'}
+        />
+        <DateBtn
+          type="button"
+          value="1개월"
+          onClick={periodHandler}
+          selected={periodButton === '1개월'}
+        />
+        <DateBtn
+          type="button"
+          value="3개월"
+          onClick={periodHandler}
+          selected={periodButton === '3개월'}
+        />
         <DateFilter />
       </div>
 
       <div>
-        <Button search>검색</Button>
+        <Button search onClick={searchHandler}>
+          검색
+        </Button>
         <Button>초기화</Button>
       </div>
     </FilterContainer>
@@ -87,6 +151,8 @@ const DateBtn = styled.input`
   font-size: 14px;
   border: 1px solid #e5e5e5;
   border-radius: 4px;
+  background: ${({ selected }) => selected && '#428bca'};
+  color: ${({ selected }) => selected && 'white'};
 `;
 
 const Button = styled.button`
