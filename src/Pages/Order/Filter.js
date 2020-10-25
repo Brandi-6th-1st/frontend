@@ -31,7 +31,7 @@ export default function Filter({ pagetext }) {
 
   return (
     <FilterContainer>
-      <div>
+      <Div>
         <Select onChange={handleSelect}>
           <option value="" selected>
             Select..
@@ -47,8 +47,8 @@ export default function Filter({ pagetext }) {
           type="text"
           placeholder="검색어를 입력하세요."
         />
-      </div>
-      <div>
+      </Div>
+      <Div>
         <span>{pagetext.filter_date} :</span>
         <DateBtn
           type="button"
@@ -87,14 +87,14 @@ export default function Filter({ pagetext }) {
           selected={periodButton === '3개월'}
         />
         <DateFilter />
-      </div>
+      </Div>
 
-      <div>
+      <Div>
         <Button search onClick={searchHandler}>
           검색
         </Button>
         <Button>초기화</Button>
-      </div>
+      </Div>
     </FilterContainer>
   );
 }
@@ -105,19 +105,20 @@ const FilterContainer = styled.div`
   padding-bottom: 3px;
   margin-top: 15px;
   margin-bottom: 20px;
-  div {
-    ${({ theme }) => theme.flex('', 'center')}
-    width: 100%;
-    margin-top: 10px;
-    margin-left: 20px;
-    &:last-child {
-      ${({ theme }) => theme.flex('center')}
-    }
-    span {
-      width: 130px;
-      font-size: 14px;
-      color: #222;
-    }
+`;
+
+const Div = styled.div`
+  ${({ theme }) => theme.flex('', 'center')}
+  width: 100%;
+  margin-top: 10px;
+  margin-left: 20px;
+  &:last-child {
+    ${({ theme }) => theme.flex('center')}
+  }
+  span {
+    width: 130px;
+    font-size: 14px;
+    color: #222;
   }
 `;
 

@@ -7,37 +7,40 @@ export default function DateFilter() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   return (
-    <div style={{ width: '300px' }}>
-      <InquiryperiodBox>
-        <SelectPeriod
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          dateFormat="yyyy-MM-dd"
-          placeholderText="클릭해주세요."
-          shouldCloseOnSelect={false}
-        />
-        <span>~</span>
-        <SelectPeriod
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          dateFormat="yyyy-MM-dd"
-          placeholderText="클릭해주세요."
-          shouldCloseOnSelect={false}
-        />
-      </InquiryperiodBox>
-    </div>
+    <InquiryperiodBox>
+      <SelectPeriod
+        selected={startDate}
+        onChange={(date) => setStartDate(date)}
+        dateFormat="yyyy-MM-dd"
+        placeholderText="클릭해주세요."
+        shouldCloseOnSelect={false}
+      />
+      <span>~</span>
+      <SelectPeriod
+        selected={endDate}
+        onChange={(date) => setEndDate(date)}
+        dateFormat="yyyy-MM-dd"
+        placeholderText="클릭해주세요."
+        shouldCloseOnSelect={false}
+      />
+    </InquiryperiodBox>
   );
 }
 
 const InquiryperiodBox = styled.div`
+  ${({ theme }) => theme.flex('center', 'center')};
   display: table;
-  border: 1px solid #e5e5e5;
-  width: 25%;
+  width: 22%;
+  height: 34px;
   margin: 0 15px;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
   span {
     display: table-cell;
-    padding: 6px 12px;
+    padding: 8px 12px;
     background: #e5e5e5;
+    text-align: center;
   }
 `;
 
