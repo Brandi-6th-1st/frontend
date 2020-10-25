@@ -2,11 +2,12 @@ import React, { Fragment, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import axios from 'axios';
 import styled from 'styled-components';
+import ProductDetail from './Components/ProductDetail';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import DatePicker from 'react-datepicker';
-import './datepick.css';
+import '../../Styles/datepick.css';
 import {
   GoListUnordered,
   GoChevronRight,
@@ -19,8 +20,43 @@ export default function ProductManagement() {
   const [endDate, setEndDate] = useState();
   const [differentFilter, setDifferentFilter] = useState();
   const [product, setProduct] = useState();
+  const [filterAtribute, setFilterAtribute] = useState(1);
+  const [filterSales, setFilterSales] = useState();
+  const [filterDisplay, setFilterDisplay] = useState();
+  const [filterDiscount, setFilterDiscount] = useState();
+  const [limit, setLimit] = useState(10);
 
-  // new Array(4).fill(true)
+  //각 필터의 카테고리의 길이만큼 배열의 길이 생성
+  const createFilter = (data) => {
+    // 각 필터에 들어가는 카테고리 개수만큼 배열의 기링를 만들기 위한 함수
+    const filterLength = (data) => {
+      return new Array(data[0] && data[0].category.length)
+        .fill()
+        .map((_, index) => (index === 0 ? true : false));
+    };
+    // 셀러속성의 카테고리 데이터 분리
+    const AtributeData = data.homeFilterTitle.filter(
+      (el) => el.filterTitle === '셀러속성'
+    );
+
+    const SalesData = data.homeFilterTitle.filter(
+      (el) => el.filterTitle === '판매여부'
+    );
+
+    const DisplayedData = data.homeFilterTitle.filter(
+      (el) => el.filterTitle === '진열여부'
+    );
+
+    const DiscountData = data.homeFilterTitle.filter(
+      (el) => el.filterTitle === '할인여부'
+    );
+
+    // 각 배열의 길이만큼 각 상태의 불리언 값으로 생성해준다.
+    setFilterAtribute(filterLength(AtributeData));
+    setFilterSales(filterLength(SalesData));
+    setFilterDisplay(filterLength(DisplayedData));
+    setFilterDiscount(filterLength(DiscountData));
+  };
 
   // Test : json형식 mock-data 생성
   // axios get을 사용하여 데이터를 받아온다.
@@ -35,43 +71,67 @@ export default function ProductManagement() {
         DataProductManage.homeFilterTitle.filter(
           (el) => el.filterTitle === '셀러명'
         )[0];
-      // 마스터에서만 사용하는 셀러명 검색 필터가 있다면
+
+      // 해당 필터의 세부 카테고리 별로 boolean 생성
       if (DataProductManage && sellerName) {
+        // 마스터에서만 사용하는 셀러명 검색 필터가 있다면
         // DifferentFilter 상태르 만들어 따로 관리
         setDifferentFilter(sellerName);
+
         // 필터 종류 배열에서 셀러명 필터만 제거하고
         const sellerData = {
           ...DataProductManage,
-          homeFilterTitle: DataProductManage.homeFilterTitle.slice(1),
+          homeFilterTitle: DataProductManage.homeFilterTitle.filter(
+            (el) => el.filterTitle !== '셀러명'
+          ),
         };
         // 제거한 필터를 product 상태로 관리
         setProduct(sellerData);
-        console.log(product && product);
+        createFilter(DataProductManage);
       } else {
         //마스터에서만 사용하는 셀러명 필터가 없다면 전체를 상태로 관리
         setProduct(DataProductManage);
+        console.log(product);
+        createFilter(DataProductManage);
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const filterSellerName =
-    product &&
-    product.homeFilterTitle.filter((el) => el.filterTitle === '셀러속성');
-  // console.log(!!filterSellerName);
+  // 각 카테고리가 선택되었을때 상태를 변경해준다.
+  const selectAtribute = (idx) => {
+    setFilterAtribute(
+      filterAtribute.map((el, index) => {
+        return index === idx ? true : false;
+      })
+    );
+  };
 
-  // const [selectAtribute, setSelectAtribute] = useState([
-  //   true,
-  //   new Array(
-  //     product &&
-  //       product.homeFilterTitle.filterTitle === '셀러명' &&
-  //       category.length
-  //   ).fill(false),
-  // ]);
-  // console.log(selectAtribute);
+  const selectSales = (idx) => {
+    setFilterSales(
+      filterSales.map((el, index) => {
+        return index === idx ? true : false;
+      })
+    );
+  };
 
-  // 페이지 마운트시 fetch 하여 배송, 즐겨찾기, 차트 데이터 등을 받아온다.
+  const selectdDisplay = (idx) => {
+    setFilterDisplay(
+      filterDisplay.map((el, index) => {
+        return index === idx ? true : false;
+      })
+    );
+  };
+
+  const selectDiscount = (idx) => {
+    setFilterDiscount(
+      filterDiscount.map((el, index) => {
+        return index === idx ? true : false;
+      })
+    );
+  };
+  // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {
     getData();
   }, []);
@@ -106,24 +166,26 @@ export default function ProductManagement() {
             </FilterCategoryTitle>
             <FilterCategoryTitle>
               {differentFilter && differentFilter.filterTitle === '셀러명' && (
-                <Fragment>
+                <SelectFilterCategory>
                   <FilterTitle>
                     {differentFilter && differentFilter.filterTitle}
                   </FilterTitle>
                   <SellerSearchBox>
                     <SellerSearch placeholder="검색어를 입력하세요."></SellerSearch>
                   </SellerSearchBox>
-                </Fragment>
+                </SelectFilterCategory>
               )}
-              <select>
-                <option>Select</option>
-                <option>상품명</option>
-                <option>상품번호</option>
-                <option>상품코드</option>
-              </select>
-              <SearchBox>
-                <ProductSearch placeholder="검색어를 입력하세요."></ProductSearch>
-              </SearchBox>
+              <SelectFilterCategory>
+                <select>
+                  <option>Select</option>
+                  <option>상품명</option>
+                  <option>상품번호</option>
+                  <option>상품코드</option>
+                </select>
+                <SearchBox>
+                  <ProductSearch placeholder="검색어를 입력하세요."></ProductSearch>
+                </SearchBox>
+              </SelectFilterCategory>
             </FilterCategoryTitle>
             {product &&
               product.homeFilterTitle.map((cate) => {
@@ -131,57 +193,62 @@ export default function ProductManagement() {
                   <SelectFilterCategory cate={cate.category.length}>
                     <SelectFilterTitle>{cate.filterTitle} :</SelectFilterTitle>
                     <FilterBtnBox>
-                      {cate.category.map((cate) => {
-                        return <SelectBtn>{cate}</SelectBtn>;
-                      })}
+                      {cate.filterTitle === '셀러속성' &&
+                        cate.category.map((cate, idx) => {
+                          return (
+                            <SelectBtn
+                              onClick={() => selectAtribute(idx)}
+                              idx={idx}
+                              filterAtribute={filterAtribute}
+                              name="셀러속성"
+                            >
+                              {cate}
+                            </SelectBtn>
+                          );
+                        })}
+                      {cate.filterTitle === '판매여부' &&
+                        cate.category.map((cate, idx) => {
+                          return (
+                            <SelectBtn
+                              onClick={() => selectSales(idx)}
+                              idx={idx}
+                              filterSales={filterSales}
+                              name="판매여부"
+                            >
+                              {cate}
+                            </SelectBtn>
+                          );
+                        })}
+                      {cate.filterTitle === '진열여부' &&
+                        cate.category.map((cate, idx) => {
+                          return (
+                            <SelectBtn
+                              onClick={() => selectdDisplay(idx)}
+                              idx={idx}
+                              filterDisplay={filterDisplay}
+                              name="진열여부"
+                            >
+                              {cate}
+                            </SelectBtn>
+                          );
+                        })}
+                      {cate.filterTitle === '할인여부' &&
+                        cate.category.map((cate, idx) => {
+                          return (
+                            <SelectBtn
+                              onClick={() => selectDiscount(idx)}
+                              idx={idx}
+                              filterDiscount={filterDiscount}
+                              name="할인여부"
+                            >
+                              {cate}
+                            </SelectBtn>
+                          );
+                        })}
                     </FilterBtnBox>
                   </SelectFilterCategory>
                 );
               })}
-            {/* <SelectFilterCategory>
-              <SelectFilterTitle>
-                {product && product.homeFilterTitle[0].filterTitle} :
-              </SelectFilterTitle>
-              <FilterBtnBox>
-                {product &&
-                  product.homeFilterTitle[0].category.map((cate) => {
-                    return <SelectBtn>{cate}</SelectBtn>;
-                  })}
-              </FilterBtnBox>
-            </SelectFilterCategory>
-            <SelectFilterCategory>
-              <SelectFilterTitle>
-                {product && product.homeFilterTitle[1].filterTitle} :
-              </SelectFilterTitle>
-              <FilterBtnBox>
-                {product &&
-                  product.homeFilterTitle[1].category.map((cate) => {
-                    return <SelectBtn>{cate}</SelectBtn>;
-                  })}
-              </FilterBtnBox>
-            </SelectFilterCategory>
-            <SelectFilterCategory>
-              <SelectFilterTitle>
-                {product && product.homeFilterTitle[2].filterTitle} :
-              </SelectFilterTitle>
-              <FilterBtnBox>
-                {product &&
-                  product.homeFilterTitle[2].category.map((cate) => {
-                    return <SelectBtn>{cate}</SelectBtn>;
-                  })}
-              </FilterBtnBox>
-            </SelectFilterCategory>
-            <SelectFilterCategory> */}
-            {/* <SelectFilterTitle>
-                {product && product.homeFilterTitle[3].filterTitle} :
-              </SelectFilterTitle>
-              <FilterBtnBox>
-                {product &&
-                  product.homeFilterTitle[3].category.map((cate) => {
-                    return <SelectBtn>{cate}</SelectBtn>;
-                  })}
-              </FilterBtnBox>
-            </SelectFilterCategory> */}
             <SearchContainer>
               <SearchBtn>검색</SearchBtn>
               <CanclehBtn>초기화</CanclehBtn>
@@ -232,66 +299,7 @@ export default function ProductManagement() {
               적용
             </ApplyBtn>
           </ChangeContainer>
-          <ProductContainer>
-            <AllProductView>
-              <span>
-                전체 조회건 수 : <b> {product && product.productItem.length}</b>
-                건
-              </span>
-            </AllProductView>
-            <table>
-              <ProductHead>
-                <tr>
-                  <ProductCategory twidth={'1%'}>
-                    <input type="checkbox"></input>
-                  </ProductCategory>
-                  <ProductCategory twidth={'12%'}>등록일</ProductCategory>
-                  <ProductCategory twidth={'9%'}>대표이미지</ProductCategory>
-                  <ProductCategory twidth={'10%'}>상품명</ProductCategory>
-                  <ProductCategory twidth={'10%'}>상품코드</ProductCategory>
-                  <ProductCategory twidth={'7%'}>상품번호</ProductCategory>
-                  <ProductCategory twidth={'7%'}>판매가</ProductCategory>
-                  <ProductCategory twidth={'7%'}>할인가</ProductCategory>
-                  <ProductCategory twidth={'8%'}>판매여부</ProductCategory>
-                  <ProductCategory twidth={'7%'}>진열여부</ProductCategory>
-                  <ProductCategory twidth={'7%'}>할인여부</ProductCategory>
-                  <ProductCategory twidth={'5%'}>Actions</ProductCategory>
-                </tr>
-              </ProductHead>
-
-              {product &&
-                product.productItem.map((cate, idx) => {
-                  return (
-                    <ProductLine idx={idx}>
-                      <ProductItem>
-                        <input type="checkbox"></input>
-                      </ProductItem>
-                      <ProductItem>{cate.registered_at}</ProductItem>
-                      <ProductItem>
-                        <img
-                          src={cate.main_image_url}
-                          width="70px"
-                          height="70px"
-                        />
-                      </ProductItem>
-                      <ProductItem>{cate.product_name}</ProductItem>
-                      <ProductItem>
-                        <a href="">{cate.product_code}</a>
-                      </ProductItem>
-                      <ProductItem>{cate.product_number}</ProductItem>
-                      <ProductItem>{cate.price}</ProductItem>
-                      <ProductItem> {cate.discount_price}</ProductItem>
-                      <ProductItem>{cate.is_on_sale}</ProductItem>
-                      <ProductItem>{cate.is_displayed}</ProductItem>
-                      <ProductItem>{cate.is_discounted}</ProductItem>
-                      <ProductItem>
-                        <BuyBtn>구매하기</BuyBtn>
-                      </ProductItem>
-                    </ProductLine>
-                  );
-                })}
-            </table>
-          </ProductContainer>
+          <ProductDetail product={product} />
         </Section>
       </Main>
       {/* <Footer /> */}
@@ -328,7 +336,7 @@ const FilterContainer = styled.div`
 const FilterCategoryTitle = styled.div`
   ${({ theme }) => theme.flex('', 'center')}
   margin-top: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   padding-right: 15px;
 
   select {
@@ -356,14 +364,6 @@ const FilterTitle = styled.div`
 const SelectFilterTitle = styled(FilterTitle)`
   display: inline-flex;
 `;
-
-// const SellerTitle = styled.div`
-//   ${({ theme }) => theme.flex('', 'center')}
-//   width: 100px;
-//   height: 25px;
-//   padding-left: 15px;
-//   color: #222222;
-// `;
 
 const InquiryperiodBox = styled.div`
   display: table;
@@ -395,12 +395,13 @@ const SelectPeriod = styled(DatePicker)`
 `;
 
 const SearchBox = styled(InquiryperiodBox)`
+  width: 67%;
   margin: 0;
 `;
 
 const SellerSearchBox = styled(InquiryperiodBox)`
-  width: 33%;
-  margin: 0 15px;
+  width: 67%;
+  /* margin: 0 15px; */
 `;
 
 const SellerSearch = styled(PeriodBox)`
@@ -411,17 +412,31 @@ const ProductSearch = styled(PeriodBox)`
   cursor: inherit;
 `;
 
-const SellerAtribute = styled.div`
-  width: 80%;
-  margin: 0px 15px;
-`;
-
 const FilterBtnBox = styled.div`
-  /* width: 33.33333333%; */
   margin: 0px 15px;
 `;
 
 const SelectBtn = styled.button`
+  background-color: ${({ name, filterAtribute, idx }) =>
+    name === '셀러속성' && filterAtribute && filterAtribute[idx] && '#428bca'};
+  color: ${({ name, filterAtribute, idx }) =>
+    name === '셀러속성' && filterAtribute && filterAtribute[idx] && 'white'};
+
+  background-color: ${({ name, filterSales, idx }) =>
+    name === '판매여부' && filterSales && filterSales[idx] && '#428bca'};
+  color: ${({ name, filterSales, idx }) =>
+    name === '판매여부' && filterSales && filterSales[idx] && 'white'};
+
+  background-color: ${({ name, filterDisplay, idx }) =>
+    name === '진열여부' && filterDisplay && filterDisplay[idx] && '#428bca'};
+  color: ${({ name, filterDisplay, idx }) =>
+    name === '진열여부' && filterDisplay && filterDisplay[idx] && 'white'};
+
+  background-color: ${({ name, filterDiscount, idx }) =>
+    name === '할인여부' && filterDiscount && filterDiscount[idx] && '#428bca'};
+  color: ${({ name, filterDiscount, idx }) =>
+    name === '할인여부' && filterDiscount && filterDiscount[idx] && 'white'};
+
   margin-right: 3px;
   padding: 6px 12px;
   border: 1px solid #adadad;
@@ -527,70 +542,4 @@ const ApplyBtn = styled.button`
   svg {
     vertical-align: middle;
   }
-`;
-
-const AllProductView = styled.div`
-  margin-bottom: 3px;
-
-  span {
-    font-size: 13px;
-  }
-`;
-
-const ProductContainer = styled.div`
-  table {
-    width: 100%;
-  }
-`;
-
-const ProductHead = styled.thead`
-  width: 100%;
-`;
-
-const ProductCategory = styled.th`
-  width: ${(props) => props.twidth};
-  background-color: #eee;
-  padding: 9px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: inherit;
-`;
-
-const ProductLine = styled.tr`
-  background-color: ${({ idx }) => (idx % 2 === 0 ? '#f5f5f5' : '#fff')};
-`;
-
-const ProductItem = styled.th`
-  padding: 9px;
-  border: 1px solid #ddd;
-  font-size: 13px;
-  font-weight: 400;
-  text-align: inherit;
-  vertical-align: top;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  input {
-    width: 14px;
-  }
-
-  a {
-    color: #0d638f;
-
-    :hover {
-      text-decoration: revert;
-    }
-  }
-`;
-
-const BuyBtn = styled.button`
-  background-color: #428bca;
-  border-radius: 2px;
-  font-size: 12px;
-  padding: 3px 0px;
-  color: white;
-  width: 100%;
-  cursor: pointer;
 `;
