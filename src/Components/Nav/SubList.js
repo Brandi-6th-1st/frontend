@@ -19,7 +19,7 @@ export default function SubList({
     handlePage(categoryIdx, subIdx);
     setSubActive(subIdx);
     // 여기에서 history push로 페이지 이동시켜주면 돼요!
-    link && history.push(link);
+    history.push(link);
   };
 
   return (
@@ -29,7 +29,7 @@ export default function SubList({
           index={idx + 1}
           subActive={subActive}
           key={el.id}
-          onClick={() => goToMenu(idx + 1, !!el.link ? el.link : null)} // goToMenu의 두번째 인자로 map 돌릴때 이동할 백에서 nav 데이터에 포함해준 주소를 넣어주면 되겠죠! ex) /order/orderlist, /product/register
+          onClick={() => goToMenu(idx + 1, el.link)} // goToMenu의 두번째 인자로 map 돌릴때 이동할 백에서 nav 데이터에 포함해준 주소를 넣어주면 되겠죠! ex) /order/orderlist, /product/register
           sidebarSmall={sidebarSmall}
         >
           {el.title}
