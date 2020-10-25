@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import styled, { css } from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import SubList from './SubList';
 import { KeyboardArrowLeft, KeyboardArrowDown } from '@styled-icons/material';
 import {
@@ -28,7 +29,10 @@ export default function NavList({
   setSubActive,
   handlePage,
   sidebarSmall,
+  link,
 }) {
+  const history = useHistory();
+
   const isSubActive = index === subActive;
   const isPageActive = index === active[0];
   const [isHoverActive, setIsHoverActive] = useState(0);
@@ -42,10 +46,15 @@ export default function NavList({
     sidebarSmall && setIsHoverActive(index);
   };
 
+  const handleClick = (index, link) => {
+    toggleSubNav(index);
+    link && history.push(link);
+  };
+
   return (
     <Fragment>
       <NavElement
-        onClick={() => toggleSubNav(index)}
+        onClick={() => handleClick(index, link)}
         isPageActive={isPageActive}
         isSubActive={isSubActive}
         sidebarSmall={sidebarSmall}

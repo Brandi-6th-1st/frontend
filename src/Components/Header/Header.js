@@ -21,9 +21,11 @@ export default function Header() {
 
 const HeaderContainer = styled.div`
   ${({ theme }) => theme.flex('space-between', 'center', 'row')}
+  position: fixed;
   width: 100vw;
   height: 45px;
   background: #873b53;
+  z-index: 100;
   div {
     ${({ theme }) => theme.flex('', 'center', 'row')}
   }
