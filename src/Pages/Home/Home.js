@@ -162,7 +162,7 @@ export default function Home() {
                 <StaticsTitle>
                   <GoGraph />
                   <span>
-                    매출 통계[최근 30일간의 결제완료된 주문 건수의 합계]
+                    매출 통계[최근 30일간의 결제완료된 주문 금액의 합계]
                   </span>
                 </StaticsTitle>
                 <StaticsGraph>
