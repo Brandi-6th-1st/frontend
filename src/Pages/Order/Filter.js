@@ -88,7 +88,6 @@ export default function Filter({ pagetext }) {
         />
         <DateFilter />
       </Div>
-
       <Div>
         <Button search onClick={searchHandler}>
           검색
@@ -114,9 +113,11 @@ const Div = styled.div`
   margin-left: 20px;
   &:last-child {
     ${({ theme }) => theme.flex('center')}
+    padding-right: 100px;
   }
   span {
-    width: 130px;
+    width: 90px;
+    margin-right: 35px;
     font-size: 14px;
     color: #222;
   }
@@ -135,7 +136,7 @@ const Select = styled.select`
 
 const SearchInput = styled.input`
   height: 30px;
-  width: 316px;
+  width: 35%;
   padding: 6px 10px;
   background: white;
   border: 1px solid #e5e5e5;
@@ -152,8 +153,19 @@ const DateBtn = styled.input`
   font-size: 14px;
   border: 1px solid #e5e5e5;
   border-radius: 4px;
-  background: ${({ selected }) => selected && '#428bca'};
-  color: ${({ selected }) => selected && 'white'};
+  &:hover {
+    background: #e6e6e6;
+    border-color: #adadad;
+  }
+  ${({ selected }) =>
+    selected &&
+    css`
+      background: #428bca;
+      color: white;
+      &:hover {
+        background: #428bca;
+      }
+    `}
 `;
 
 const Button = styled.button`
@@ -163,11 +175,20 @@ const Button = styled.button`
   background: white;
   color: #333;
   border: 1px solid #e5e5e5;
+  cursor: pointer;
+  &:hover {
+    background: #e6e6e6;
+    border-color: #adadad;
+  }
   ${(props) =>
     props.search &&
     css`
       background: #428bca;
       border-color: #357ebd;
       color: white;
+      &:hover {
+        background: #3071a9;
+        border-color: #285e8e;
+      }
     `}
 `;

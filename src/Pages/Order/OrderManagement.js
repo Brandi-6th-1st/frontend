@@ -10,6 +10,7 @@ export default function OrderManagement() {
   const match = useParams();
   const categoryId = match.id;
   const pagetext = COMPONENT_ORDER[categoryId - 1];
+  console.log(match);
 
   return (
     <ManagementContainer>
