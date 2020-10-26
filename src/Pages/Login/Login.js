@@ -5,18 +5,13 @@ import LoginFooter from './LoginFooter';
 import { Link } from 'react-router-dom';
 
 export default function Login() {
+  const [validInput, setValidInput] = useState('');
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = (data) => {
     console.log(data);
   };
-  const handleIdBlur = (e) => {
-    setIdValue(e.target.value);
-  };
 
-  const handlePwBlur = (e) => {
-    setPwValue(e.target.value);
-  };
-
+  //id 5글자 이상, password 5글자 이상일 경우에만 로그인 가능하도록 추가기능 구현 예정
   const handleLoginButton = () => {
     if (idValue.length < 5 || pwValue.length < 5) {
       setValidInput(false);
@@ -26,30 +21,32 @@ export default function Login() {
   return (
     <Container>
       <Content>
-        <Logo alt="브랜디로고" src="/public/Images/logo2.png" />
+        <Logo alt='브랜디로고' src='/public/Images/logo2.png' />
         <LoginBox>
           <LoginTitle>브랜디 어드민 로그인</LoginTitle>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
-              name="idValue"
+              name='idValue'
               ref={register({ required: true })}
-              placeholder="셀러 아이디"
+              placeholder='셀러 아이디'
               className={errors.idValue && 'ErrorInput'}
             />
+            {/* id와 password가 입력되지 않았을 때 나타날 오류 */}
             {errors.idValue && errors.pwValue && <p>아이디를 입력해주세요</p>}
-
             <Input
-              name="pwValue"
+              name='pwValue'
               ref={register({ required: true, pattern: /^[A-Za-z]+$/i })}
-              placeholder="셀러 비밀번호"
+              placeholder='셀러 비밀번호'
               className={errors.pwValue && 'ErrorInput'}
             />
+            {/* id와 password가 입력되지 않았을 때 나타날 오류 */}
             {errors.pwValue && <p>비밀번호를 입력해주세요</p>}
+
             <Button onClick={handleLoginButton}>로그인</Button>
             <Join>
               <p>아직 셀러가 아니신가요?</p>
               <p>
-                <Link to="/Signup">회원가입하기</Link>
+                <Link to='/Signup'>회원가입하기</Link>
               </p>
             </Join>
           </form>
@@ -57,36 +54,6 @@ export default function Login() {
       </Content>
       <LoginFooter />
     </Container>
-
-    // <Container>
-    //   <Content>
-    //     <Logo alt="브랜디로고" src="/public/Images/logo2.png" />
-    //     <LoginBox>
-    //       <LoginTitle>브랜디 어드민 로그인</LoginTitle>
-    //       <form>
-    //         <Input
-    //           name="idValue"
-    //           placeholder="셀러 아이디"
-    //           onBlur={handleIdBlur}
-    //         />
-    //         <Input
-    //           name="pwValue"
-    //           placeholder="셀러 비밀번호"
-    //           onBlur={handlePwBlur}
-    //         />
-    //         {!validInput ? <p>아이디와 비밀번호를 다시 확인해주세요.</p> : null}
-    //       </form>
-    //       <Button onClick={handleLoginButton}>로그인</Button>
-    //       <Join>
-    //         <p>아직 셀러가 아니신가요?</p>
-    //         <JoinButton>
-    //           <Link to="/Signup">회원가입하기</Link>
-    //         </JoinButton>
-    //       </Join>
-    //     </LoginBox>
-    //   </Content>
-    //   <LoginFooter />
-    // </Container>
   );
 }
 

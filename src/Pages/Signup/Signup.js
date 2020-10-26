@@ -19,19 +19,21 @@ export default function Signup() {
   return (
     <Container>
       <Content>
-        <Logo alt="브랜디로고" src="/public/Images/logo2.png" />
+        <Logo alt='브랜디로고' src='/public/Images/logo2.png' />
         <Title>셀러 회원 가입</Title>
         <hr></hr>
         <SignupBox>
           <SubTitle>정보입력</SubTitle>
           <form onSubmit={handleSubmit(onSubmit)}>
             <InfoTitle>가입 정보</InfoTitle>
+            {/*id를 입력하지 않거나 5글자 미만으로 입력한 경우, border에 색을 주기 위해 className 활용*/}
             <IconInput className={errors.id && 'ErrorInput'}>
+              {/* id에 에러가 발생할 경우, */}
               <TiUserOutline color={errors.id ? '#b94a48' : null} />
               <input
-                name="id"
-                type="text"
-                placeholder="아이디"
+                name='id'
+                type='text'
+                placeholder='아이디'
                 ref={register({
                   required: '필수 입력항목 입니다. ',
                   minLength: {
@@ -45,11 +47,12 @@ export default function Signup() {
             <IconInput className={errors.password && 'ErrorInput'}>
               <TiLockClosedOutline color={errors.password ? '#b94a48' : null} />
               <input
-                name="password"
-                type="password"
-                placeholder="비밀번호"
+                name='password'
+                type='password'
+                placeholder='비밀번호'
                 ref={register({
                   required: '필수 입력항목 입니다.',
+                  //패스워드 최소 8글자 최대 20글자, 영문 대소문자, 특수문자
                   pattern: {
                     value: /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/,
                     message:
@@ -62,9 +65,9 @@ export default function Signup() {
             <IconInput className={errors.rePw && 'ErrorInput'}>
               <TiInputCheckedOutline color={errors.rePw ? '#b94a48' : null} />
               <input
-                name="rePw"
-                type="password"
-                placeholder="비밀번호 재입력"
+                name='rePw'
+                type='password'
+                placeholder='비밀번호 재입력'
                 ref={register({
                   validate: (value) =>
                     value === watch('password') ||
@@ -80,9 +83,9 @@ export default function Signup() {
             <IconInput className={errors.phone && 'ErrorInput'}>
               <TiPhoneOutline color={errors.phone ? '#b94a48' : null} />
               <input
-                name="phone"
-                type="tell"
-                placeholder="핸드폰번호"
+                name='phone'
+                type='tell'
+                placeholder='핸드폰번호'
                 ref={register({
                   required: '필수 입력항목입니다.',
                 })}
@@ -97,31 +100,31 @@ export default function Signup() {
             <InfoTitle>셀러 정보</InfoTitle>
             <IntputRadio>
               <label>
-                <input name="seller" value="shoppingmall" type="radio" />
+                <input name='seller' value='shoppingmall' type='radio' />
                 쇼핑몰
               </label>
               <label>
-                <input name="seller" value="market" type="radio" />
+                <input name='seller' value='market' type='radio' />
                 마켓
               </label>
               <label>
-                <input name="seller" value="roadshop" type="radio" />
+                <input name='seller' value='roadshop' type='radio' />
                 로드샵
               </label>
               <label>
-                <input name="seller" value="designer" type="radio" />
+                <input name='seller' value='designer' type='radio' />
                 디자이너브랜드
               </label>
               <label>
-                <input name="seller" value="general" type="radio" />
+                <input name='seller' value='general' type='radio' />
                 제너럴브랜드
               </label>
               <label>
-                <input name="seller" value="national" type="radio" />
+                <input name='seller' value='national' type='radio' />
                 내셔널브랜드
               </label>
               <label>
-                <input name="seller" value="beauty" type="radio" />
+                <input name='seller' value='beauty' type='radio' />
                 뷰티
               </label>
             </IntputRadio>
@@ -130,8 +133,8 @@ export default function Signup() {
                 color={errors.sellerName ? '#b94a48' : null}
               />
               <input
-                name="sellerName"
-                placeholder="셀러명 (상호)"
+                name='sellerName'
+                placeholder='셀러명 (상호)'
                 ref={register({
                   required: '필수 입력항목입니다.',
                 })}
@@ -143,8 +146,8 @@ export default function Signup() {
                 color={errors.engSellerName ? '#b94a48' : null}
               />
               <input
-                name="engSellerName"
-                placeholder="영문 셀러명 (영문상호)"
+                name='engSellerName'
+                placeholder='영문 셀러명 (영문상호)'
                 ref={register({
                   required: '필수 입력항목입니다.',
                 })}
@@ -156,8 +159,8 @@ export default function Signup() {
                 color={errors.customerContact ? '#b94a48' : null}
               />
               <input
-                name="customerContact"
-                placeholder="고객센터 전화번호"
+                name='customerContact'
+                placeholder='고객센터 전화번호'
                 ref={register({
                   required: '필수 입력항목입니다.',
                 })}
@@ -203,19 +206,19 @@ export default function Signup() {
             })} */}
             <ButtonGroup>
               <Button
-                type="submit"
-                value="신청"
-                backgroundColor="#5bc0de"
-                topLeft="4px"
-                bottomLeft="4px"
+                type='submit'
+                value='신청'
+                backgroundColor='#5bc0de'
+                topLeft='4px'
+                bottomLeft='4px'
               />
 
               <Button
-                type="submit"
-                value="취소"
-                backgroundColor="#d9534f"
-                topRight="4px"
-                bottomRight="4px"
+                type='submit'
+                value='취소'
+                backgroundColor='#d9534f'
+                topRight='4px'
+                bottomRight='4px'
               />
             </ButtonGroup>
           </form>
@@ -284,6 +287,7 @@ const SubTitle = styled.div`
 
 const InfoTitle = styled.div`
   display: flex;
+  align-items: center;
   margin: 30px 0 5px 0;
   font-size: 18px;
   span {
@@ -294,7 +298,7 @@ const InfoTitle = styled.div`
 `;
 
 const ExtraInfo = styled.div`
-  margin-top: 5px;
+  margin-left: 5px;
   display: flex;
   color: #1e90ff;
   font-size: 12px;
