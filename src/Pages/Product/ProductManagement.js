@@ -24,18 +24,20 @@ import {
 
 export default function ProductManagement() {
   const dispatch = useDispatch();
+  // 캘린더에 선택된 검색 시작 날짜를 관리
   const [startDate, setStartDate] = useState();
+  // 캘린더에 선택된 검색 마지막 날짜를 관리
   const [endDate, setEndDate] = useState();
+  // 마스터와 셀러에 공통으로 들어가지 않는 데이터를 따로 분리
   const [differentFilter, setDifferentFilter] = useState();
+  // 공통으로 사용되는 데이터를 관리
   const [product, setProduct] = useState();
-  const [filterAtribute, setFilterAtribute] = useState(1);
-  const [filterSales, setFilterSales] = useState();
-  const [filterDisplay, setFilterDisplay] = useState();
-  const [filterDiscount, setFilterDiscount] = useState();
+  // 각 필터의 상태를 [{},{} ...]으로 관리
+  const [filterStatus, setFilterStatus] = useState();
+  // 쿼리스트링을 위해 limit 생성
   const [limit, setLimit] = useState(10);
 
-  const [filterStatus, setFilterStatus] = useState();
-
+  // store에서 유저타입과 토큰을 가져온다.
   const { userType, token } = useSelector(({ userInfo }) => ({
     userType: userInfo.userType,
     token: userInfo.token,
@@ -46,7 +48,6 @@ export default function ProductManagement() {
     const allFilter =
       data &&
       data.homeFilterTitle.map((el) => {
-        console.log(el.category && el.category.length);
         return {
           [el.filterTitle]: new Array(el.category && el.category.length)
             .fill()
@@ -54,53 +55,7 @@ export default function ProductManagement() {
           selectedId: [''],
         };
       });
-
     setFilterStatus(allFilter);
-    console.log(allFilter);
-    console.log(filterStatus);
-    // 각 필터에 들어가는 카테고리 개수만큼 배열의 길이를 만들기 위한 함수
-    // const filterLength = (data) => {
-    //   return new Array(data[0] && data[0].category.length)
-    //     .fill()
-    //     .map((_, index) => (index === 0 ? true : false));
-    // };
-    // // 각 필터의 세부 카테고리 분리
-    // const AtributeData = data.homeFilterTitle.filter(
-    //   (el) => el.filterTitle === '셀러속성'
-    // );
-
-    // const SalesData = data.homeFilterTitle.filter(
-    //   (el) => el.filterTitle === '판매여부'
-    // );
-
-    // const DisplayedData = data.homeFilterTitle.filter(
-    //   (el) => el.filterTitle === '진열여부'
-    // );
-
-    // const DiscountData = data.homeFilterTitle.filter(
-    //   (el) => el.filterTitle === '할인여부'
-    // );
-
-    // // 각 배열의 길이만큼 각 상태의 불리언 값으로 생성해준다.
-    // setFilterAtribute({
-    //   isSelected: filterLength(AtributeData),
-    //   selectedId: [''],
-    // });
-
-    // setFilterSales({
-    //   isSelected: filterLength(SalesData),
-    //   selectedId: [''],
-    // });
-
-    // setFilterDisplay({
-    //   isSelected: filterLength(DisplayedData),
-    //   selectedId: [''],
-    // });
-
-    // setFilterDiscount({
-    //   isSelected: filterLength(DiscountData),
-    //   selectedId: [''],
-    // });
   };
 
   // Test : json형식 mock-data 생성
@@ -113,17 +68,17 @@ export default function ProductManagement() {
 
       // 유저 타입이 마스터인 경우,
       if (DataProductManage.isMaster) {
+        // 전역에서 관리하는 상태에 유저 타입을 마스터로 변경
         dispatch(isMaster());
 
-        const sellerName =
+        // 백엔드에서 전체 데이터를 받지 않고 셀러명만 특정위치에 들어가야 함으로 필터로 데이터 분리
+        const masterData =
           DataProductManage &&
           DataProductManage.homeFilterTitle.filter(
             (el) => el.filterTitle === '셀러명'
           )[0];
 
-        setDifferentFilter(sellerName);
-
-        // 필터 종류 배열에서 셀러명 필터만 제거하고
+        // 특정 위치에 꼭 들어가지 않아도 되는 필터 저장
         const sellerData = {
           ...DataProductManage,
           homeFilterTitle: DataProductManage.homeFilterTitle.filter(
@@ -131,7 +86,9 @@ export default function ProductManagement() {
           ),
         };
 
-        // 제거한 필터를 product 상태로 관리
+        // 마스터에서만 사용하는 데이터 저장
+        setDifferentFilter(masterData);
+        // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(sellerData);
         //각 필터별로 상태를 생성
         createFilter(sellerData);
@@ -139,8 +96,9 @@ export default function ProductManagement() {
       // 유저 타입이 셀러인 경우,
       if (!DataProductManage.isMaster) {
         dispatch(isSeller());
-        console.log(DataProductManage);
+        // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
+        //각 필터별로 상태를 생성
         createFilter(DataProductManage);
       }
     } catch (err) {
@@ -153,14 +111,16 @@ export default function ProductManagement() {
     getData();
   }, []);
 
+  // 각 필터별로 세부 카테고리의 갯수만큼 불리언 배열 생성
   const changeFilter = (id, idx, name) => {
+    // 단일선택하는 필터를 가져와 필터별 상태 생성
     if (name !== '셀러속성') {
       setFilterStatus(
         filterStatus.map((el) =>
           !!el[name]
             ? {
                 ...el,
-                [name]: el[name].map((item, index) => {
+                [name]: el[name].map((_, index) => {
                   return index === idx ? true : false;
                 }),
                 selectedId: id,
@@ -168,98 +128,86 @@ export default function ProductManagement() {
             : el
         )
       );
-      console.log('!@!#!@#', filterStatus);
-    } else {
-      const filterLength = (atribute) => {
-        return new Array(atribute && atribute.length)
-          .fill()
-          .map((_, index) => (index === 0 ? true : false));
-      };
+    }
 
-      const selectedElement = filterStatus.map(
-        (el) => !!el[name] && el[name]
-      )[0];
-      console.log(selectedElement);
+    // 다중선택하는 필터를 가져와 필터별 상태 생성
+    if (name === '셀러속성') {
+      // 필터 전체를 관리하는 배열에서 다중선택하는 필터인 셀러속성이 들어있는 배열만 가져온다.
+      const selectedElement =
+        filterStatus && filterStatus.filter((el) => el && !!el[name] && el)[0];
 
-      const allSelectBtn = selectedElement[0];
+      // 버튼이 클릭되었을때 반대로 바꿔주고 나머지는 그대로 출력한다.
+      const changeBtn = selectedElement[name].map((el, index) => {
+        return index === idx ? !el : el;
+      });
 
-      const allSelected = selectedElement.slice(1).every((item) => {
+      // 전체 버튼이 선택되지 않았을때는 전체버튼의 클릭상태를 빼준다.
+      if (idx !== 0) {
+        changeBtn[0] = false;
+      }
+
+      // 전체 버튼이 선택되어야 하는 상황일때 전체만 true인 배열을 생성한다.
+      const resetBtn = selectedElement[name].map((el, index) => {
+        return index === 0 ? true : false;
+      });
+
+      // 전체 버튼이 눌렸을 때,
+      const allSelectBtn = changeBtn[0];
+
+      // 전체의 버튼이 눌리게 되면,
+      const allSelected = changeBtn.slice(1).every((item) => {
         return item;
       });
 
-      const allNotSelected = selectedElement.slice(1).every((item) => {
+      // 모든 버튼이 눌리지 않았을 때,
+      const allNotSelected = changeBtn.slice(1).every((item) => {
         return !item;
       });
+
+      // 버튼이 클릭되었다가 해제될때,
+      const isSelected = selectedElement[name].map((el, index) => {
+        return index === idx && !el;
+      });
+
+      const addId = (idx) => {
+        // 버튼이 클릭되었을 때,
+        if (isSelected[idx]) return selectedElement.selectedId.concat(id);
+
+        // 버튼이 해제되었을 때,
+        if (!isSelected[idx])
+          return (
+            // 선택되어 있는 상태를 관리하는 배열에서 클릭된 id를 제외한 값만 필터링한다.
+            selectedElement.selectedId &&
+            selectedElement.selectedId.filter((el) => {
+              return el !== id && el;
+            })
+          );
+      };
+
+      // 전체가 아닌 버튼이 선택되었을 때, 상태를 바꿔줄 값을 변수로 관리
+      const setStatus = { [name]: changeBtn, selectedId: addId(idx) };
+
+      // 전체가 선택되었을 때, 상태를 바꿔줄 초기화할 값을 변수로 관리
+      const resetStatus = { [name]: resetBtn, selectedId: [] };
+
+      // 전체 상태에서 바꿔줄 값만 필터링하여 바꿔서 끼워준다.
+      const setFilter = (btnStatus) => {
+        return filterStatus.map((el) => {
+          return !!el[name] ? btnStatus : el;
+        });
+      };
+
+      // 전체가 선택되어야 할 조건
+      const allCondition = allSelectBtn || allSelected || allNotSelected;
+
+      if (!allCondition) {
+        setFilterStatus(setFilter(setStatus));
+      }
+      if (allCondition) {
+        setFilterStatus(setFilter(resetStatus));
+      }
     }
   };
-  // 각 카테고리가 선택되었을때 상태를 변경해준다.
-  const selectAtribute = (id, idx) => {
-    const AtributeData = product.homeFilterTitle.filter(
-      (el) => el.filterTitle === '셀러속성'
-    );
-
-    const filterLength = (data) => {
-      return new Array(data[0] && data[0].category.length)
-        .fill()
-        .map((_, index) => (index === 0 ? true : false));
-    };
-
-    const selectElement = { ...filterAtribute };
-    selectElement.isSelected[0] = false;
-    selectElement.isSelected[idx] = !selectElement.isSelected[idx];
-    // selectElement.selectedId.filter((el) => el !== id);
-
-    // 전체 버튼이 눌렸을 때,
-    const allSelectBtn = selectElement.isSelected[0];
-
-    // 전체 선택 되었을 때,
-    const allSelected = selectElement.isSelected.slice(1).every((item) => {
-      return item;
-    });
-
-    // 하나도 선택되지 않았을 때,
-    const allNotSelected = selectElement.isSelected.slice(1).every((item) => {
-      return !item;
-    });
-
-    // 전체버튼으로 가지는 로직
-    const selectAll = allSelectBtn || allSelected || allNotSelected;
-
-    // 각 필터별로 세부 카테고리가 선택되었을 때,
-    setFilterAtribute({
-      isSelected:
-        // 전체 선택되거나 하나도 선택되지 않았을때 초기값으로 변경
-        selectAll ? filterLength(AtributeData) : selectElement.isSelected,
-      selectedId: selectAll ? '' : [...filterAtribute.selectedId].concat([id]),
-    });
-  };
-
-  // const selectSales = (id, idx) => {
-  //   setFilterSales({
-  //     isSelected: filterSales.isSelected.map((el, index) => {
-  //       return index === idx ? true : false;
-  //     }),
-  //     selectedId: [id],
-  //   });
-  // };
-
-  // const selectdDisplay = (id, idx) => {
-  //   setFilterDisplay({
-  //     isSelected: filterDisplay.isSelected.map((el, index) => {
-  //       return index === idx ? true : false;
-  //     }),
-  //     selectedId: [id],
-  //   });
-  // };
-
-  // const selectDiscount = (id, idx) => {
-  //   setFilterDiscount({
-  //     isSelected: filterDiscount.isSelected.map((el, index) => {
-  //       return index === idx ? true : false;
-  //     }),
-  //     selectedId: [id],
-  //   });
-  // };
 
   return (
     <Fragment>
@@ -321,27 +269,6 @@ export default function ProductManagement() {
                   <SelectFilterCategory cate={cate.category.length}>
                     <SelectFilterTitle>{cate.filterTitle} :</SelectFilterTitle>
                     <FilterBtnBox>
-                      {/* {cate.filterTitle === '셀러속성' &&
-                        cate.category.map((sub, idx) => {
-                          return (
-                            <SelectBtn
-                              onClick={() =>
-                                // selectAtribute(sub.category_id, idx)
-                                changeFilter(
-                                  sub.category_id,
-                                  idx,
-                                  cate.filterTitle
-                                )
-                              }
-                              idx={idx}
-                              name={cate.filterTitle}
-                              filterAtribute={filterAtribute}
-                            >
-                              {sub.category_title}
-                            </SelectBtn>
-                          );
-                        })} */}
-
                       {cate.category.map((sub, idx) => {
                         return (
                           <SelectBtn
@@ -360,50 +287,6 @@ export default function ProductManagement() {
                           </SelectBtn>
                         );
                       })}
-                      {/* {cate.filterTitle === '판매여부' &&
-                        cate.category.map((sub, idx) => {
-                          return (
-                            <SelectBtn
-                              onClick={() => selectSales(sub.category_id, idx)}
-                              idx={idx}
-                              filterSales={filterSales}
-                              name={cate.filterTitle}
-                            >
-                              {sub.category_title}
-                            </SelectBtn>
-                          );
-                        })}
-                      {cate.filterTitle === '진열여부' &&
-                        cate.category.map((sub, idx) => {
-                          return (
-                            <SelectBtn
-                              onClick={() =>
-                                selectdDisplay(sub.category_id, idx)
-                              }
-                              idx={idx}
-                              filterDisplay={filterDisplay}
-                              name={cate.filterTitle}
-                            >
-                              {sub.category_title}
-                            </SelectBtn>
-                          );
-                        })}
-                      {cate.filterTitle === '할인여부' &&
-                        cate.category.map((sub, idx) => {
-                          return (
-                            <SelectBtn
-                              onClick={() =>
-                                selectDiscount(sub.category_id, idx)
-                              }
-                              idx={idx}
-                              filterDiscount={filterDiscount}
-                              name={cate.filterTitle}
-                            >
-                              {sub.category_title}
-                            </SelectBtn>
-                          );
-                        })}
-                     */}
                     </FilterBtnBox>
                   </SelectFilterCategory>
                 );

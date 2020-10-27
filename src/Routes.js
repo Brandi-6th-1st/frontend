@@ -11,13 +11,13 @@ function Routes() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/Login" component={Login} />
-        <Route exact path="/Signup" component={Signup} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={Signup} />
         <Route exact path="/" component={Main} />
-        <Route exact path="/Home" component={Home} />
-        <Route exact path="/Product" component={ProductManagement} />
-        <Route exact path="/Order" component={Order} />
-        <Route exact path="/Order/:id" component={Order} />
+        <Route exact path="/home" component={Home} />
+        <Route exact path="/product" component={ProductManagement} />
+        <Route exact path="/order" component={Order} />
+        <Route exact path="/order/:id" component={Order} />
       </Switch>
     </Router>
   );
