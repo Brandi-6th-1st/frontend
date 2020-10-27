@@ -5,17 +5,18 @@ import Signup from './Pages/Signup/Signup';
 import Main from './Pages/Main/Main';
 import Home from './Pages/Home/Home';
 import Order from './Pages/Order/Order';
+import User from './Pages/User/User';
 
 function Routes() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/Login" component={Login} />
-        <Route exact path="/Signup" component={Signup} />
-        <Route exact path="/" component={Main} />
-        <Route exact path="/Home" component={Home} />
-        <Route exact path="/Order" component={Order} />
-        <Route exact path="/Order/:id" component={Order} />
+        <Route exact path='/login' component={Login} />
+        <Route exact path='/signup' component={Signup} />
+        <Route exact path='/' component={Main} />
+        <Route exact path='/home' component={Home} />
+        <Route exact path='/order/:id' component={Order} />
+        <Route exact path='/user' component={User} />
       </Switch>
     </Router>
   );
