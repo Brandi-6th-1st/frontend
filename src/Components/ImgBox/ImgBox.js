@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
 
-function ImgBox() {
+function ImgBox({ boxWidth, boxHeight, imgWidth, imgHeight }) {
+  let form = $('form')[0];
+  let formData = new FormData(form);
+  // formData.append('section', 'general');
+  // formData.append('action', 'previewImg');
+  // formData.append('image', $('input[type=file]')[0].files[0]);
+
   const [ImgBase, setImgBase] = useState(''); // 업로드 될 이미지
   const [imgFile, setImgFile] = useState(null); // 파일 전송을 위한 state
   const handleChangeFile = (event) => {
@@ -20,40 +26,45 @@ function ImgBox() {
     }
   };
   return (
-    <div>
-      <ImgUpload>
-        <ImgPreview
-          width='130px'
-          height='100px'
-          imgWidth='90px'
-          imgHeight='90px'
-        >
-          {ImgBase ? (
-            <img src={ImgBase} />
-          ) : (
-            <BaseImg src='/public/Images/intern_seller_profile.jpeg' /> //이미지 업로드 되기 전 기본 이미지
-          )}
-        </ImgPreview>
-        <ImgAdd>
-          <label htmlFor='ex_file'>이미지 선택</label>
-          <input type='file' id='ex_file' onChange={handleChangeFile} />
-        </ImgAdd>
-      </ImgUpload>
-    </div>
+    <Fragment>
+      <form id='formEl'>
+        <ImgUpload>
+          {/* props로 전달받을 박스 크기와 이미지 크기 */}
+          <ImgPreview
+            boxWidth={boxWidth}
+            boxHeight={boxHeight}
+            imgWidth={imgWidth}
+            imgHeight={imgHeight}
+          >
+            {ImgBase ? (
+              <img src={ImgBase} />
+            ) : (
+              <BaseImg src='/public/Images/intern_seller_profile.jpeg' /> //이미지 업로드 되기 전 기본 이미지
+            )}
+          </ImgPreview>
+          <ImgAdd>
+            <label htmlFor='imgFile'>이미지 선택</label>
+            <input type='file' id='imgFile' onChange={handleChangeFile} />
+          </ImgAdd>
+        </ImgUpload>
+      </form>
+    </Fragment>
   );
 }
+
+<script></script>;
 
 export default ImgBox;
 
 const ImgUpload = styled.div``;
 
 const ImgPreview = styled.div`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  vertical-align: middle;
-  text-align: center;
-  border: 1px solid #eee;
+  width: ${(props) => props.boxWidth};
+  height: ${(props) => props.boxHeight};
   background-color: #fff;
+  vertical-align: middle;
+  border: 1px solid #eee;
+  text-align: center;
   img {
     width: ${(props) => props.imgWidth};
     height: ${(props) => props.imgHeight};
@@ -69,14 +80,14 @@ const ImgAdd = styled.div`
   margin-bottom: 20px;
   label {
     padding: 10px;
+    background-color: #fff;
     border: 1px solid #eee;
     border-radius: 4px;
-    background-color: #fff;
   }
   input {
-    margin-top: 15px;
     width: 1px;
     height: 1px;
+    margin-top: 15px;
     overflow: hidden;
   }
 `;

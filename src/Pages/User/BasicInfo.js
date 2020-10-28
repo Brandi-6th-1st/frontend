@@ -5,25 +5,7 @@ import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning } from 'react-icons/ai';
 
 function BasicInfo() {
-  const [ImgBase, setImgBase] = useState(''); // 업로드 될 이미지
-  const [imgFile, setImgFile] = useState(null); // 파일 전송을 위한 state
-
-  const handleChangeFile = (event) => {
-    let reader = new FileReader();
-
-    reader.onloadend = (e) => {
-      // 2. 읽기가 완료되면 아래코드가 실행됩니다.
-      const base = reader.result;
-      if (base) {
-        setImgBase(base.toString()); // 파일 base 상태 업데이트
-      }
-    };
-    if (event.target.files[0]) {
-      reader.readAsDataURL(event.target.files[0]); // 1. 파일을 읽어 버퍼에 저장합니다.
-      setImgFile(event.target.files[0]); // 파일 상태 업데이트
-    }
-  };
-
+  //'비밀번호 변경하기' 버튼 클릭 시 사용할 함수
   const handlePassword = () => {
     conosle.log('clicked');
   };
@@ -42,30 +24,20 @@ function BasicInfo() {
                 셀러 프로필 <span>*</span>
               </td>
               <td>
-                <ImgUpload>
-                  <ImgPreview>
-                    {ImgBase ? (
-                      <img src={ImgBase} />
-                    ) : (
-                      <BaseImg src='/public/Images/intern_seller_profile.jpeg' /> //이미지 업로드 되기 전 기본 이미지
-                    )}
-                  </ImgPreview>
-                  <ImgAdd>
-                    <label htmlFor='ex_file'>이미지 선택</label>
-                    <input
-                      type='file'
-                      id='ex_file'
-                      onChange={handleChangeFile}
-                    />
-                  </ImgAdd>
-                  <ExtraInfo>
-                    <AiOutlineWarning />
-                    <p>
-                      셀러 프로필 확장자는 <b>jpg, jpeg, png </b>만 가능하며,
-                      허용 가능한 최대 파일사이즈 크기는 <b>5MB</b> 입니다.
-                    </p>
-                  </ExtraInfo>
-                </ImgUpload>
+                {/* ImgBox component에 props로 전달해 줄 값 */}
+                <ImgBox
+                  boxWidth='130px'
+                  boxHeight='100px'
+                  imgWidth='90px'
+                  imgHeight='90px'
+                />
+                <ExtraInfo>
+                  <AiOutlineWarning />
+                  <p>
+                    셀러 프로필 확장자는 <b>jpg, jpeg, png </b>만 가능하며, 허용
+                    가능한 최대 파일사이즈 크기는 <b>5MB</b> 입니다.
+                  </p>
+                </ExtraInfo>
               </td>
             </tr>
             <tr>
@@ -80,7 +52,7 @@ function BasicInfo() {
               <td>셀러계정</td>
               <td>
                 intern_seller
-                <button onClick={handlePassword}>비밀번호변경하기</button>
+                <button onClick={handlePassword}>비밀번호 변경하기</button>
               </td>
             </tr>
           </tbody>

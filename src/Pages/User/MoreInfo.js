@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning, AiOutlineMail } from 'react-icons/ai';
 import { ImPhone } from 'react-icons/im';
-// import ImgBox from '../../Components/ImgBox/ImgBox';
+import ImgBox from '../../Components/ImgBox/ImgBox';
 
 function MoreInfo() {
   const { register, errors, watch, handleSubmit } = useForm({ mode: 'submit' });
@@ -22,7 +22,12 @@ function MoreInfo() {
             <tr>
               <td>셀러페이지 배경이미지</td>
               <td>
-                {/* <ImgBox /> */}
+                <ImgBox
+                  boxWidth='130px'
+                  boxHeight='100px'
+                  imgWidth='90px'
+                  imgHeight='90px'
+                />
                 <ExtraInfo>
                   <AiOutlineWarning />
                   <p>
