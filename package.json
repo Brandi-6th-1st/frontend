@@ -33,6 +33,7 @@
     "react-hook-form": "^6.9.5",
     "react-icons": "^3.11.0",
     "react-redux": "^7.2.1",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
     "styled-components": "^5.2.0",
@@ -79,5 +80,6 @@
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$": "<rootDir>/src/utils/empty-module.js"
     }
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

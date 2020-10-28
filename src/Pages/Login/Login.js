@@ -1,21 +1,78 @@
 import React, { useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
+// import axios from 'axios';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import LoginFooter from './LoginFooter';
-import { Link } from 'react-router-dom';
 
 export default function Login() {
-  const [validInput, setValidInput] = useState('');
+  const [inputValue, setInputValue] = useState({
+    idValue: '',
+    pwValue: '',
+  });
+
   const { register, handleSubmit, errors } = useForm();
+
+  const history = useHistory();
+
   const onSubmit = (data) => {
     console.log(data);
   };
 
-  //id 5글자 이상, password 5글자 이상일 경우에만 로그인 가능하도록 추가기능 구현 예정
-  const handleLoginButton = () => {
-    if (idValue.length < 5 || pwValue.length < 5) {
-      setValidInput(false);
-    }
+  // 구조화
+  const { idValue, pwValue } = inputValue;
+
+  //id, password 입력 값 저장
+  const handleInput = (e) => {
+    const nextInputValue = {
+      ...inputValue,
+      [e.target.name]: e.target.value,
+    };
+    setInputValue(nextInputValue);
+    console.log('inputValue: ', inputValue);
+    console.log('idValue: ', idValue);
+  };
+
+  //master
+  //id:soojsooj
+  //pw:PW1!soojsooj
+
+  //seller
+  // id: seller1
+  //pw: PW1!seller1
+  const goToHome = (e) => {
+    e.preventDefault();
+    fetch('http://10.251.1.180:5000/account/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        identification: idValue,
+        password: pwValue,
+      }),
+    })
+      .then((response) => response.json())
+      // .then((result) => console.log(result));
+      // .then((response) => {
+      //   if (response.token) {
+      //     localStorage.setItem('wtw-token', response.token);
+      //   }
+      // });
+      // .then((result) => console.log('result: ', result));
+      .then((result) => {
+        if (
+          result.Authorization &&
+          idValue.length >= 5 &&
+          pwValue.length >= 5
+        ) {
+          thislocalStorage.setItem('token', result.Authorization);
+          alert('로그인 성공');
+          // history.push('./');
+        } else if (result.message === 'UNAUTHORIZED') {
+          alert('아이디와 비밀번호를 확인해주세요');
+        }
+      });
   };
 
   return (
@@ -30,19 +87,23 @@ export default function Login() {
               ref={register({ required: true })}
               placeholder='셀러 아이디'
               className={errors.idValue && 'ErrorInput'}
+              onChange={handleInput}
             />
             {/* id와 password가 입력되지 않았을 때 나타날 오류 */}
             {errors.idValue && errors.pwValue && <p>아이디를 입력해주세요</p>}
             <Input
               name='pwValue'
-              ref={register({ required: true, pattern: /^[A-Za-z]+$/i })}
+              // ref={register({ required: true, pattern: /^[A-Za-z]+$/i })}
+              ref={register({ required: true })}
               placeholder='셀러 비밀번호'
               className={errors.pwValue && 'ErrorInput'}
+              onChange={handleInput}
             />
             {/* id와 password가 입력되지 않았을 때 나타날 오류 */}
             {errors.pwValue && <p>비밀번호를 입력해주세요</p>}
 
-            <Button onClick={handleLoginButton}>로그인</Button>
+            <Button onClick={goToHome}>로그인</Button>
+            {/* <Button>로그인</Button> */}
             <Join>
               <p>아직 셀러가 아니신가요?</p>
               <p>
