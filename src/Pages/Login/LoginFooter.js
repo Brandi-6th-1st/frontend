@@ -25,21 +25,20 @@ export default function LoginFooter() {
 }
 
 const Footer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 20px 0;
+  ${({ theme }) => theme.flex('cneter')}
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
+  padding: 20px 0;
   background-color: #212121;
 `;
 
 const FooterFantom = styled.div`
   display: block;
-  padding: 20px 0;
   width: 100%;
   height: 100px;
+  padding: 20px 0;
   background-color: #212121;
 `;
 

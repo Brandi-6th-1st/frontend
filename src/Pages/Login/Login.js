@@ -135,15 +135,15 @@ const Content = styled.div`
 `;
 
 const Logo = styled.img`
-  margin: 0 auto 40px auto;
   width: 130px;
+  margin: 0 auto 40px auto;
 `;
 
 const LoginBox = styled.div`
   width: 380px;
   height: 380px;
   padding: 64px 30px 0 30px;
-  background: #fff;
+  background-color: #fff;
   border-radius: 20px;
 `;
 
@@ -152,9 +152,9 @@ const LoginTitle = styled.h3`
 `;
 
 const Input = styled.input`
+  width: 100%;
   margin: 5px 0;
   padding: 13px 16px;
-  width: 100%;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
   &.ErrorInput {
@@ -175,9 +175,9 @@ const Label = styled.label`
 `;
 
 const Checkbox = styled.input`
-  margin-right: 5px;
   width: 15px;
   height: 15px;
+  margin-right: 5px;
   font-weight: 100;
 `;
 
@@ -186,8 +186,8 @@ const Button = styled.button`
   margin-top: 20px;
   padding: 13px 0;
   background-color: black;
-  color: white;
   border-radius: 8px;
+  color: white;
   text-align: center;
 `;
 

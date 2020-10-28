@@ -205,21 +205,9 @@ export default function Signup() {
               );
             })} */}
             <ButtonGroup>
-              <Button
-                type='submit'
-                value='신청'
-                backgroundColor='#5bc0de'
-                topLeft='4px'
-                bottomLeft='4px'
-              />
+              <Button primary type='submit' value='신청' />
 
-              <Button
-                type='submit'
-                value='취소'
-                backgroundColor='#d9534f'
-                topRight='4px'
-                bottomRight='4px'
-              />
+              <Button type='submit' value='취소' />
             </ButtonGroup>
           </form>
         </SignupBox>
@@ -240,8 +228,8 @@ const Content = styled.div`
   height: auto;
   margin: 0 auto;
   padding: 30px;
-  overflow: auto;
   background-color: #fff;
+  overflow: auto;
   hr {
     width: 100%;
     margin-bottom: 20px;
@@ -250,8 +238,8 @@ const Content = styled.div`
 `;
 
 const Logo = styled.img`
-  margin: 0 auto 40px auto;
   width: 130px;
+  margin: 0 auto 40px auto;
 `;
 
 const Title = styled.h3`
@@ -286,8 +274,7 @@ const SubTitle = styled.div`
 `;
 
 const InfoTitle = styled.div`
-  display: flex;
-  align-items: center;
+  ${({ theme }) => theme.flex(null, 'center')};
   margin: 30px 0 5px 0;
   font-size: 18px;
   span {
@@ -298,8 +285,8 @@ const InfoTitle = styled.div`
 `;
 
 const ExtraInfo = styled.div`
-  margin-left: 5px;
   display: flex;
+  margin-left: 5px;
   color: #1e90ff;
   font-size: 12px;
   ${(props) =>
@@ -311,9 +298,9 @@ const ExtraInfo = styled.div`
 
 const IconInput = styled.div`
   ${({ theme }) => theme.flex(null, 'center')}
+  width: 100%;
   margin: 10px 0;
   padding: 13px 16px;
-  width: 100%;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
   svg {
@@ -329,8 +316,7 @@ const IconInput = styled.div`
 `;
 
 const IntputRadio = styled.div`
-  display: flex;
-  align-items: center;
+  ${({ theme }) => theme.flex(null, 'center')}
   flex-wrap: wrap;
   font-size: 13px;
   line-height: 1.4;
@@ -349,14 +335,21 @@ const ButtonGroup = styled.div`
 
 const Button = styled.input`
   padding: 6px 12px;
-  background-color: ${(props) => props.backgroundColor};
-  border-top-left-radius: ${(props) => props.topLeft || 0};
-  border-bottom-left-radius: ${(props) => props.bottomLeft || 0};
-  border-top-right-radius: ${(props) => props.topRight || 0};
-  border-bottom-right-radius: ${(props) => props.bottomRight || 0};
+  background-color: #d9534f;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
   font-size: 14px;
   text-align: center;
   color: #fff;
+  ${(props) =>
+    props.primary &&
+    css`
+      background-color: #5bc0de;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    `};
 `;
 
 const SIGNUP_SELLER_LIST = [
