@@ -194,6 +194,7 @@ const Main = styled.div`
 const Section = styled.div`
   width: 100%;
   padding: 20px;
+  padding-top: 65px;
   border-radius: 0 0 0 4px;
   background-color: #fafafa;
 `;
