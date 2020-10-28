@@ -60,15 +60,11 @@ export default function Login() {
       // });
       // .then((result) => console.log('result: ', result));
       .then((result) => {
-        if (
-          result.Authorization &&
-          idValue.length >= 5 &&
-          pwValue.length >= 5
-        ) {
-          thislocalStorage.setItem('token', result.Authorization);
+        if (result.data.Authorization) {
+          localStorage.setItem('token', result.data.Authorization);
           alert('로그인 성공');
           // history.push('./');
-        } else if (result.message === 'UNAUTHORIZED') {
+        } else if (result.data.message === 'UNAUTHORIZED') {
           alert('아이디와 비밀번호를 확인해주세요');
         }
       });
