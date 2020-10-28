@@ -55,6 +55,9 @@ const NavContainer = styled.div`
     css`
       width: 40px;
     `}
+  @media only screen and (max-width: 833px) {
+    display: none;
+  }
 `;
 
 const NavBox = styled.ul`
