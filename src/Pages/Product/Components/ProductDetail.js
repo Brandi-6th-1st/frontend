@@ -15,7 +15,7 @@ export default function ProductDetail({ product }) {
             <ProductCategory twidth={'1%'}>
               <input type="checkbox"></input>
             </ProductCategory>
-            <ProductCategory twidth={'12%'}>등록일</ProductCategory>
+            <ProductCategory width={'12%'}>등록일</ProductCategory>
             <ProductCategory twidth={'9%'}>대표이미지</ProductCategory>
             <ProductCategory twidth={'10%'}>상품명</ProductCategory>
             <ProductCategory twidth={'10%'}>상품코드</ProductCategory>
@@ -57,6 +57,7 @@ export default function ProductDetail({ product }) {
             );
           })}
       </table>
+      <PaginationContainer>123</PaginationContainer>
     </ProductContainer>
   );
 }
@@ -126,3 +127,5 @@ const BuyBtn = styled.button`
   width: 100%;
   cursor: pointer;
 `;
+
+const PaginationContainer = styled.div``;

@@ -8,6 +8,7 @@ import {
   isUnknown,
   isToken,
 } from '../../Store/Reducer/userInfo';
+import { ko } from 'date-fns/esm/locale';
 import { getAttribute, clearAttribute } from '../../Store/Reducer/commonStatus';
 import DatePicker from 'react-datepicker';
 import '../../Styles/datepick.css';
@@ -25,6 +26,7 @@ import {
 
 export default function ProductManagement() {
   const dispatch = useDispatch();
+  // 마스터에만 사용되는 데이터를 관리
   const [differentFilter, setDifferentFilter] = useState();
   // 공통으로 사용되는 데이터를 관리
   const [product, setProduct] = useState();
@@ -34,13 +36,13 @@ export default function ProductManagement() {
   const [salesStatus, setSalesStatus] = useState();
   // 진열여부 변경시 사용할 상태
   const [displayStatus, setDisplayStatus] = useState();
-  // axios할 쿼리 생성
+  // axios할 쿼리url 생성
   const [queryUrl, setQueryUrl] = useState('');
-
+  // 쿼리스트링을 만들 상태를 따로 관리
   const [query, setQuery] = useState({
     startDate: null,
     endDate: null,
-    sellerName: null,
+    sellerName: '',
     sellerDetail: null,
     productDetail: null,
     sellerAttribute: [],
@@ -56,21 +58,10 @@ export default function ProductManagement() {
     token: userInfo.token,
   }));
 
+  // store에서 셀러속성을 사용하기 위하여
   const { category } = useSelector(({ commonStatus }) => ({
     category: commonStatus.category,
   }));
-
-  // 상품번호, 코드 명으로 검색할 검색창에 인풋에 따라 상태 변경
-  const handleProductDetail = (e) => {
-    const { value } = e.target;
-    setQuery({ ...query, productDetail: value });
-  };
-
-  // 셀러명 검색창 인풋이 들어오면 상태 변경
-  const handleSellerName = (e) => {
-    const { value } = e.target;
-    setQuery({ ...query, sellerName: value });
-  };
 
   //각 필터의 카테고리의 길이만큼 배열의 길이 생성
   const createFilter = (data) => {
@@ -139,7 +130,18 @@ export default function ProductManagement() {
         createFilter(DataProductManage);
       }
     } catch (err) {
-      console.log(err);
+      if (err.response) {
+        console.log('서버 응답을 받았으나 성공하지 못했습니다.');
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log('서버 응답 실패');
+        console.log(error.request);
+      } else {
+        console.log(error.message);
+      }
+      console.log(error.config);
     }
   };
 
@@ -148,9 +150,9 @@ export default function ProductManagement() {
     getData();
   }, []);
 
-  // 각 필터별로 세부 카테고리의 갯수만큼 불리언 배열 생성
+  // 각 필터 선택시 true <-> false로 바꿔준다.
   const changeFilter = (id, idx, name) => {
-    // 단일선택하는 필터를 가져와 필터별 상태 생성
+    // 단일선택하는 필터인 경우
     if (name !== '셀러속성') {
       setFilterStatus(
         filterStatus.map((el) =>
@@ -167,7 +169,7 @@ export default function ProductManagement() {
       );
     }
 
-    // 다중선택하는 필터를 가져와 필터별 상태 생성
+    // 다중선택하는 필터인 경우
     if (name === '셀러속성') {
       // 필터 전체를 관리하는 배열에서 다중선택하는 필터인 셀러속성이 들어있는 배열만 가져온다.
       const selectedElement =
@@ -248,7 +250,9 @@ export default function ProductManagement() {
     }
   };
 
+  // 검색 버튼일 눌리게 되면 동작할 함수.
   const sendData = () => {
+    // 셀러속성의 현재 버튼이 눌린 상태
     const attribute =
       filterStatus.filter((el) => {
         return !!el['셀러속성'] && el.selectedId;
@@ -261,6 +265,7 @@ export default function ProductManagement() {
           return acc + ',' + item;
         });
 
+    // 판매여부의 현재 버튼이 눌린 상태
     const salse =
       filterStatus.filter((el) => {
         return !!el['판매여부'] && el.selectedId;
@@ -269,6 +274,7 @@ export default function ProductManagement() {
         return !!el['판매여부'] && el.selectedId;
       })[0].selectedId;
 
+    // 진열여부의 현재 버튼이 눌린 상태
     const display =
       filterStatus.filter((el) => {
         return !!el['진열여부'] && el.selectedId;
@@ -277,6 +283,7 @@ export default function ProductManagement() {
         return !!el['진열여부'] && el.selectedId;
       })[0].selectedId;
 
+    // 할인여부의 현재 버튼이 눌린 상태
     const discount =
       filterStatus.filter((el) => {
         return !!el['할인여부'] && el.selectedId;
@@ -285,6 +292,19 @@ export default function ProductManagement() {
         return !!el['할인여부'] && el.selectedId;
       })[0].selectedId;
 
+    // 백엔드와 데이터를 맞출때 보내질 데이터 형식으로 변경
+    const dateFormatChange = (date) => {
+      if (!!date) {
+        var year = date.getFullYear(); //YYYY
+        var month = 1 + date.getMonth(); //MM
+        month = month >= 10 ? month : '0' + month; //MM 두자리로 저장
+        var day = date.getDate(); //D
+        day = day >= 10 ? day : '0' + day; //DD
+        return `${year}-${month}-${day}`;
+      }
+    };
+
+    // 쿼리 내용 최신화
     setQuery({
       ...query,
       sellerAttribute: attribute,
@@ -293,19 +313,40 @@ export default function ProductManagement() {
       discountStatus: discount,
     });
 
+    // 상태로 관리하던 key, value 값을 쿼리스트링으로 변경
     const url =
       '?' +
       Object.entries({
         ...query,
+        startDate: dateFormatChange(query.startDate),
+        endDate: dateFormatChange(query.endDate),
         sellerAttribute: attribute,
         salesStatus: salse,
         displayStatus: display,
         discountStatus: discount,
       })
-        .flatMap((el) => el[0] + '=' + el[1])
+        .flatMap((el) => !!el[1] && el[0] + '=' + el[1])
+        .filter((el) => !!el)
         .join('&');
 
+    // 쿼리스트링으로 보낼 url을 상태로 관리
     setQueryUrl(url);
+  };
+
+  const resetFilter = () => {
+    createFilter(product);
+    setQuery({
+      startDate: null,
+      endDate: null,
+      sellerName: '',
+      sellerDetail: null,
+      productDetail: '',
+      sellerAttribute: [],
+      salesStatus: null,
+      displayStatus: null,
+      discountStatus: null,
+      limit: query.limit,
+    });
   };
 
   console.log(queryUrl);
@@ -324,16 +365,28 @@ export default function ProductManagement() {
               <InquiryperiodBox>
                 <SelectPeriod
                   selected={query.startDate}
+                  locale={ko}
                   dateFormat="yyyy-MM-dd"
-                  onChange={(date) => setQuery({ ...query, startDate: date })}
+                  onChange={(date) =>
+                    setQuery({
+                      ...query,
+                      startDate: date,
+                    })
+                  }
                   placeholderText="클릭해주세요."
                   shouldCloseOnSelect={false}
                 />
                 <span>~</span>
                 <SelectPeriod
                   selected={query.endDate}
-                  onChange={(date) => setQuery({ ...query, endDate: date })}
+                  locale={ko}
                   dateFormat="yyyy-MM-dd"
+                  onChange={(date) =>
+                    setQuery({
+                      ...query,
+                      endDate: date,
+                    })
+                  }
                   placeholderText="클릭해주세요."
                   shouldCloseOnSelect={false}
                 />
@@ -350,7 +403,9 @@ export default function ProductManagement() {
                     <SellerSearch
                       name="셀러이름"
                       value={query.sellerName}
-                      onChange={(e) => handleSellerName(e)}
+                      onChange={(e) =>
+                        setQuery({ ...query, sellerName: e.target.value })
+                      }
                       type="text"
                       placeholder="검색어를 입력하세요."
                     ></SellerSearch>
@@ -371,9 +426,11 @@ export default function ProductManagement() {
                 </select>
                 <SearchBox>
                   <ProductSearch
-                    name="productInfo"
-                    value={query.productInfo}
-                    onChange={(e) => handleProductDetail(e)}
+                    name="productDetail"
+                    value={query.productDetail}
+                    onChange={(e) =>
+                      setQuery({ ...query, productDetail: e.target.value })
+                    }
                     placeholder="검색어를 입력하세요."
                     type="text"
                   ></ProductSearch>
@@ -411,7 +468,7 @@ export default function ProductManagement() {
               })}
             <SearchContainer>
               <SearchBtn onClick={sendData}>검색</SearchBtn>
-              <CanclehBtn>초기화</CanclehBtn>
+              <CanclehBtn onClick={resetFilter}>초기화</CanclehBtn>
             </SearchContainer>
           </FilterContainer>
           <TitleContainer>
@@ -510,8 +567,6 @@ const Main = styled.div`
 const Section = styled.div`
   width: 100%;
   padding: 20px 20px;
-  /* nav상태에 따라 마진 크기 변동 예정 */
-  /* margin-left: 215px; */
   border-radius: 0 0 0 4px;
   background-color: #fafafa;
 
@@ -597,7 +652,6 @@ const SearchBox = styled(InquiryperiodBox)`
 
 const SellerSearchBox = styled(InquiryperiodBox)`
   width: 51%;
-  /* margin: 0 15px; */
 `;
 
 const SellerSearch = styled(PeriodBox)`
