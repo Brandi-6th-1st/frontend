@@ -4,7 +4,6 @@ import { useHistory, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import LoginFooter from './LoginFooter';
-
 export default function Login() {
   const [inputValue, setInputValue] = useState({
     idValue: '',
