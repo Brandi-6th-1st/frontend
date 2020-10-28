@@ -2,10 +2,11 @@ import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
 
 function ImgBox({ boxWidth, boxHeight, imgWidth, imgHeight }) {
-  let form = $('form')[0];
-  let formData = new FormData(form);
+  // let form = $('form')[0];
+  // let formData = new FormData(form);
   // formData.append('section', 'general');
   // formData.append('action', 'previewImg');
+  // // 파일 첨부
   // formData.append('image', $('input[type=file]')[0].files[0]);
 
   const [ImgBase, setImgBase] = useState(''); // 업로드 될 이미지
