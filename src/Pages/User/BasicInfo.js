@@ -4,11 +4,25 @@ import ImgBox from '../../Components/ImgBox/ImgBox';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning } from 'react-icons/ai';
 
-function BasicInfo() {
-  //'비밀번호 변경하기' 버튼 클릭 시 사용할 함수
-  const handlePassword = () => {
-    conosle.log('clicked');
+function BasicInfo({ sellerInfo }) {
+  const [visible, setVisible] = useState(false);
+
+  const openModal = () => {
+    setVisible(true);
   };
+
+  const closeModal = () => {
+    setVisible(false);
+  };
+
+  const {
+    identification,
+    seller_name_kr,
+    seller_name_en,
+    manager_name,
+    manager_contact,
+    manager_email,
+  } = sellerInfo[0];
 
   return (
     <BasicInfoBox>
@@ -46,13 +60,13 @@ function BasicInfo() {
             </tr>
             <tr>
               <td>셀러 영문명</td>
-              <td>interseller</td>
+              <td>{seller_name_en}</td>
             </tr>
             <tr>
               <td>셀러계정</td>
               <td>
-                intern_seller
-                <button onClick={handlePassword}>비밀번호 변경하기</button>
+                {identification}
+                <button onClick={openModal}>비밀번호 변경하기</button>
               </td>
             </tr>
           </tbody>
@@ -66,6 +80,7 @@ export default BasicInfo;
 
 const BasicInfoBox = styled.div`
   margin-bottom: 25px;
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
 `;
@@ -107,21 +122,21 @@ const Table = styled.table`
   font-size: 13px;
   tbody {
     vertical-align: middle;
-  }
-  tr {
-    &:nth-child(odd) {
-      background-color: #f9f9f9;
+    tr {
+      &:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
     }
-  }
-  th,
-  td {
-    border: 1px solid #ddd;
-  }
-  td {
-    padding: 8px;
-    vertical-align: middle;
-    &:first-child {
-      width: 252px;
+    th,
+    td {
+      border: 1px solid #ddd;
+    }
+    td {
+      padding: 8px;
+      vertical-align: middle;
+      &:first-child {
+        width: 252px;
+      }
     }
   }
 `;

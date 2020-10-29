@@ -2,23 +2,16 @@ import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
 
 function ImgBox({ boxWidth, boxHeight, imgWidth, imgHeight }) {
-  // let form = $('form')[0];
-  // let formData = new FormData(form);
-  // formData.append('section', 'general');
-  // formData.append('action', 'previewImg');
-  // // 파일 첨부
-  // formData.append('image', $('input[type=file]')[0].files[0]);
-
-  const [ImgBase, setImgBase] = useState(''); // 업로드 될 이미지
+  const [ImgBase64, setImgBase64] = useState(''); // 업로드 될 이미지
   const [imgFile, setImgFile] = useState(null); // 파일 전송을 위한 state
   const handleChangeFile = (event) => {
     let reader = new FileReader();
 
     reader.onloadend = (e) => {
       // 2. 읽기가 완료되면 아래코드가 실행됩니다.
-      const base = reader.result;
-      if (base) {
-        setImgBase(base.toString()); // 파일 base 상태 업데이트
+      const base64 = reader.result;
+      if (base64) {
+        setImgBase64(base64.toString()); // 파일 base 상태 업데이트
       }
     };
     if (event.target.files[0]) {
@@ -37,8 +30,8 @@ function ImgBox({ boxWidth, boxHeight, imgWidth, imgHeight }) {
             imgWidth={imgWidth}
             imgHeight={imgHeight}
           >
-            {ImgBase ? (
-              <img src={ImgBase} />
+            {ImgBase64 ? (
+              <img src={ImgBase64} />
             ) : (
               <BaseImg src='/public/Images/intern_seller_profile.jpeg' /> //이미지 업로드 되기 전 기본 이미지
             )}
@@ -60,6 +53,7 @@ export default ImgBox;
 const ImgUpload = styled.div``;
 
 const ImgPreview = styled.div`
+  ${({ theme }) => theme.flex('center', 'center')}
   width: ${(props) => props.boxWidth};
   height: ${(props) => props.boxHeight};
   background-color: #fff;

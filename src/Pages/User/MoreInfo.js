@@ -1,163 +1,137 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning, AiOutlineMail } from 'react-icons/ai';
 import { ImPhone } from 'react-icons/im';
 import ImgBox from '../../Components/ImgBox/ImgBox';
+// import IconInput from '../../Components/IconInput/IconInput';
 
-function MoreInfo() {
+function MoreInfo({ sellerInfo }) {
   const { register, errors, watch, handleSubmit } = useForm({ mode: 'submit' });
   const onSubmit = (data) => console.log(data);
 
+  const {
+    manager_name,
+    manager_contact,
+    manager_email,
+    status_history,
+  } = sellerInfo[0];
+
   return (
-    <MoreInfoBox>
-      <InfoTitle>
-        <FaUserAlt />
-        <p>상세정보</p>
-      </InfoTitle>
-      <InfoBody>
-        <Table>
-          <tbody>
-            <tr>
-              <td>셀러페이지 배경이미지</td>
-              <td>
-                <ImgBox
-                  boxWidth='130px'
-                  boxHeight='100px'
-                  imgWidth='90px'
-                  imgHeight='90px'
-                />
-                <ExtraInfo>
-                  <AiOutlineWarning />
-                  <p>
-                    브랜디 앱과 웹 사이트의 셀러 페이지에 보여질
-                    배경이미지입니다.
-                  </p>
-                </ExtraInfo>
-                <ExtraInfo>
-                  <AiOutlineWarning />
-                  <p>
-                    배경이미지는 <b>1200 * 850</b> 사이즈 이상으로 등록해주세요.
-                  </p>
-                </ExtraInfo>
-                <ExtraInfo>
-                  <AiOutlineWarning />
-                  <p>
-                    확장자는 <b>jpg, jpeg, png</b> 만 가능하며, 허용 가능한 최대
-                    파일사이즈 크기는 <b>5MB</b> 입니다.
-                  </p>
-                </ExtraInfo>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                셀러 한 줄 소개<span>*</span>
-              </td>
-              <td>
-                <IconInput
-                  className={errors.sellerIntroduction && 'ErrorInput'}
-                >
-                  <FaUserAlt
-                    color={errors.sellerIntroduction ? '#b94a48' : null}
+    <Fragment>
+      <MoreInfoBox>
+        <InfoTitle>
+          <FaUserAlt />
+          <p>상세정보</p>
+        </InfoTitle>
+        <InfoBody>
+          <Table>
+            <tbody>
+              <tr>
+                <td>셀러페이지 배경이미지</td>
+                <td>
+                  <ImgBox
+                    boxWidth='130px'
+                    boxHeight='100px'
+                    imgWidth='90px'
+                    imgHeight='90px'
                   />
-                  <input
-                    name='sellerIntroduction'
-                    type='text'
-                    placeholder='셀러 한 줄 소개'
-                    ref={register({
-                      required: '필수 입력항목 입니다. ',
-                    })}
-                  />
-                </IconInput>
-                {errors.sellerIntroduction && (
-                  <p>{errors.sellerIntroduction.message}</p>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <td>셀러 상세 소개</td>
-              <td>
-                <textarea placeholder='셀러 상세 소개' />
-                <ExtraInfo>
-                  <AiOutlineWarning />
-                  <p>셀러 상세 소개 글은 최소10자 이상 입니다.</p>
-                </ExtraInfo>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                담당자 정보<span>*</span>
-              </td>
-              <td>
-                <IconInput className={errors.managerName && 'ErrorInput'}>
-                  <FaUserAlt color={errors.managerName ? '#b94a48' : null} />
-                  <input
-                    name='managerName'
-                    type='text'
-                    placeholder='담당자명'
-                    ref={register({
-                      required: '필수 입력항목 입니다. ',
-                    })}
-                  />
-                </IconInput>
-                <IconInput className={errors.managerPhone && 'ErrorInput'}>
-                  <ImPhone color={errors.managerPhone ? '#b94a48' : null} />
-                  <input
-                    name='managerPhone'
-                    type='text'
-                    placeholder='담당자 핸드폰 번호'
-                    ref={register({
-                      required: '필수 입력항목 입니다. ',
-                    })}
-                  />
-                </IconInput>
-                <IconInput className={errors.managerEmail && 'ErrorInput'}>
-                  <AiOutlineMail
-                    color={errors.managerEmail ? '#b94a48' : null}
-                  />
-                  <input
-                    name='managerEmail'
-                    type='text'
-                    placeholder='담당자 이메일'
-                    ref={register({
-                      required: '필수 입력항목 입니다. ',
-                    })}
-                  />
-                </IconInput>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                고객센터<span>*</span>
-              </td>
-              <td>
-                <IconInput
-                  className={errors.customerCenterPhone && 'ErrorInput'}
-                >
-                  <ImPhone
-                    color={errors.customerCenterPhone ? '#b94a48' : null}
-                  />
-                  <input
-                    name='customerCenterPhone'
-                    type='text'
-                    placeholder='고객센터 전화번호'
-                    ref={register({
-                      required: '필수 입력항목 입니다. ',
-                    })}
-                  />
-                </IconInput>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                택배 주소 <span>*</span>
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-      </InfoBody>
-    </MoreInfoBox>
+                  <ExtraInfo>
+                    <AiOutlineWarning />
+                    <p>
+                      브랜디 앱과 웹 사이트의 셀러 페이지에 보여질
+                      배경이미지입니다.
+                    </p>
+                  </ExtraInfo>
+                  <ExtraInfo>
+                    <AiOutlineWarning />
+                    <p>
+                      배경이미지는 <b>1200 * 850</b> 사이즈 이상으로
+                      등록해주세요.
+                    </p>
+                  </ExtraInfo>
+                  <ExtraInfo>
+                    <AiOutlineWarning />
+                    <p>
+                      확장자는 <b>jpg, jpeg, png</b> 만 가능하며, 허용 가능한
+                      최대 파일사이즈 크기는 <b>5MB</b> 입니다.
+                    </p>
+                  </ExtraInfo>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  담당자 정보<span>*</span>
+                </td>
+                <td>
+                  <IconInput className={errors.managerName && 'ErrorInput'}>
+                    <FaUserAlt color={errors.managerName ? '#b94a48' : null} />
+                    <input
+                      readOnly
+                      name='managerName'
+                      type='text'
+                      placeholder={manager_name}
+                      ref={register({
+                        required: '필수 입력항목 입니다. ',
+                      })}
+                    />
+                  </IconInput>
+                  <IconInput className={errors.managerPhone && 'ErrorInput'}>
+                    <ImPhone color={errors.managerPhone ? '#b94a48' : null} />
+                    <input
+                      readOnly
+                      name='managerPhone'
+                      type='text'
+                      placeholder={manager_contact}
+                      ref={register({
+                        required: '필수 입력항목 입니다. ',
+                      })}
+                    />
+                  </IconInput>
+                  <IconInput className={errors.managerEmail && 'ErrorInput'}>
+                    <AiOutlineMail
+                      color={errors.managerEmail ? '#b94a48' : null}
+                    />
+                    <input
+                      readOnly
+                      name='managerEmail'
+                      type='text'
+                      placeholder={manager_email}
+                      ref={register({
+                        required: '필수 입력항목 입니다. ',
+                      })}
+                    />
+                  </IconInput>
+                </td>
+              </tr>
+              <tr>
+                <td>셀러 상태 변경 기록</td>
+                <td>
+                  <MiniTable>
+                    <thead>
+                      <tr>
+                        <td>셀러상태 변경 적용일시</td>
+                        <td>셀러상태</td>
+                      </tr>
+                      {sellerInfo &&
+                        status_history.map((history, i) => {
+                          return (
+                            <tr key={i}>
+                              <td>{history.changed_at}</td>
+                              <td>{history.status}</td>
+                            </tr>
+                          );
+                        })}
+                    </thead>
+                  </MiniTable>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </InfoBody>
+      </MoreInfoBox>
+    </Fragment>
   );
 }
 
@@ -165,6 +139,7 @@ export default MoreInfo;
 
 const MoreInfoBox = styled.div`
   margin-bottom: 25px;
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
 `;
@@ -199,21 +174,22 @@ const Table = styled.table`
   }
   tbody {
     vertical-align: middle;
-  }
-  tr {
-    &:nth-child(odd) {
-      background-color: #f9f9f9;
+    background-color: #fff;
+    tr {
+      &:nth-child(even) {
+        background-color: #f9f9f9;
+      }
     }
-  }
-  th,
-  td {
-    border: 1px solid #ddd;
-  }
-  td {
-    padding: 8px;
-    vertical-align: middle;
-    &:first-child {
-      width: 252px;
+    th,
+    td {
+      border: 1px solid #ddd;
+    }
+    td {
+      padding: 8px;
+      vertical-align: middle;
+      &:first-child {
+        width: 252px;
+      }
     }
   }
   textarea {
@@ -240,6 +216,7 @@ const IconInput = styled.div`
   margin: 10px 0;
   padding: 13px 16px;
   width: 41%;
+  background-color: #fff;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
   svg {
@@ -253,4 +230,24 @@ const IconInput = styled.div`
   &.ErrorInput {
     border: 1px solid #b94a48;
   }
+`;
+
+const MiniTable = styled.table`
+  width: 100%;
+  border: 1px solid #ddd;
+  /* thead {
+    
+    tr {
+      &:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+    }
+    td {
+      padding: 8px;
+      font-size: 13px;
+      &:first-child {
+        width: 65%;
+      }
+    }
+  } */
 `;
