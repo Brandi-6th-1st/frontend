@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Pagination from 'react-js-pagination';
 // require('bootstrap/less/bootstrap.less');
@@ -13,15 +13,153 @@ export default function ProductDetail({
   product,
   setQuery,
   query,
-  changeProductStatus,
-  setChangeProductStatus,
-  // setSalesStatus,
-  // salesStatus,
-  // setDisplayStatus,
-  // displayStatus,
+  setActivePage,
+  activePage,
+  setProduct,
   sendData,
 }) {
-  console.log(changeProductStatus);
+  // 버튼의 클릭 상태를 나타내느 배열 생성
+  const [isSelected, setIsSelected] = useState(
+    new Array(product && product.productItem.length).fill(false)
+  );
+  // 전체 상품 체크 상태
+  const [allCheck, setAllCheck] = useState(false);
+  // 상품 디테일에서 체크된 id와 index를 관리하는 배열
+  const [checkProduct, setCheckProduct] = useState([]);
+  // 상품의 판매, 진열 상태 변경하기 위한 상태
+  const [changeStatus, setchangeStatus] = useState({
+    salesStatus: {
+      id: '',
+      filterId: 3,
+    },
+    displayStatus: {
+      id: '',
+      filterId: 4,
+    },
+  });
+
+  // 전체 버튼을 클릭했을 경우 실행
+  const handleClickAll = () => {
+    if (allCheck) {
+      setAllCheck(!allCheck);
+      setIsSelected(new Array(product.productItem.length).fill(!allCheck));
+      setCheckProduct([]);
+    } else {
+      setAllCheck(!allCheck);
+      setIsSelected(new Array(product.productItem.length).fill(!allCheck));
+      setCheckProduct(product.productItem.map((el) => String(el.id)));
+    }
+  };
+
+  //개별 버튼을 클릭했을 경우 실행
+  const selectProduct = (e, idx) => {
+    const { checked, id } = e.target;
+    const newSelceted = isSelected.map((el, i) => (idx === i ? !el : el));
+
+    setIsSelected(newSelceted);
+
+    // 모든 버튼이 눌렸을 경우
+    if (newSelceted.every((item) => item)) {
+      setAllCheck(true);
+    } else {
+      setAllCheck(false);
+    }
+
+    //체크된 상품의 id를 저장한다.
+    if (!!checked) {
+      setCheckProduct(checkProduct.concat(id));
+    } else {
+      setCheckProduct(checkProduct.filter((el) => el !== id));
+    }
+  };
+
+  const handliLimit = (e) => {
+    setActivePage(1);
+    setQuery({
+      ...query,
+      limit: e.target.value,
+      offset: e.target.value * 0,
+    });
+  };
+
+  useEffect(() => {
+    if (product) {
+      setIsSelected(new Array(product.productItem.length).fill(false));
+    }
+    return () => {};
+  }, [product]);
+
+  const handlePageChange = (pageNumber) => {
+    setActivePage(pageNumber);
+    setQuery({
+      ...query,
+      offset: query.limit * (pageNumber - 1),
+    });
+  };
+
+  // 상품 판매 진열 상태 적용 버튼이 눌렸을 때 실행하는 함수
+  const changedApply = (e) => {
+    // 판매 or 진열 상태를 입력하지 않았을 경우,
+    if (!changeStatus.salesStatus.id && !changeStatus.displayStatus.id) {
+      return alert('판매여부 or 진열여부를 선택하세요.');
+    }
+
+    // 상품이 하나도 체크되지 않았을 경우
+    if (!checkProduct.length) {
+      return alert('상품을 선택하세요');
+    }
+
+    // 정상적인 동작일때 실행하는 함수
+    if (
+      (!!changeStatus.salesStatus.id || !!changeStatus.displayStatus.id) &&
+      !!checkProduct.length
+    ) {
+      // 판매여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
+      const sales = product.homeFilterTitle
+        .filter((el) => el.id === changeStatus.salesStatus.filterId && el)[0]
+        .category.filter(
+          (item) =>
+            String(item.category_id) === changeStatus.salesStatus.id && item
+        )[0].category_title;
+
+      // 진열여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
+      const display = product.homeFilterTitle
+        .filter((el) => el.id === changeStatus.displayStatus.filterId && el)[0]
+        .category.filter(
+          (item) =>
+            String(item.category_id) === changeStatus.displayStatus.id && item
+        )[0].category_title;
+
+      setProduct({
+        ...product,
+        productItem: product.productItem.map((item) => {
+          if (checkProduct.includes(String(item.id))) {
+            return {
+              ...item,
+              is_on_sale: sales !== '전체' ? sales : item.is_on_sale,
+              is_displayed: display !== '전체' ? display : item.is_displayed,
+            };
+          } else {
+            return item;
+          }
+        }),
+      });
+
+      setAllCheck(false);
+      setCheckProduct([]);
+      setchangeStatus({
+        salesStatus: {
+          id: '',
+          filterId: 3,
+        },
+        displayStatus: {
+          id: '',
+          filterId: 4,
+        },
+      });
+    }
+  };
+
   return (
     <ProductContainer>
       <TitleContainer>
@@ -41,14 +179,9 @@ export default function ProductDetail({
         <LimitRange>
           <select
             value={query.limit}
-            onChange={(e) =>
-              setQuery({
-                ...query,
-                limit: e.target.value,
-                offset: e.target.value * 0,
-                pages: 1,
-              })
-            }
+            onChange={(e) => {
+              handliLimit(e);
+            }}
           >
             <option value={10}>10개씩 보기</option>
             <option value={20}>20개씩 보기</option>
@@ -66,15 +199,18 @@ export default function ProductDetail({
           전체상품 엑셀다운로드
         </PrintExcelBtn>
         <select
-          value={changeProductStatus.salesStatus}
+          value={changeStatus.salesStatus.id}
           onChange={(e) =>
-            setChangeProductStatus({
-              ...changeProductStatus,
-              salesStatus: e.target.value,
+            setchangeStatus({
+              ...changeStatus,
+              salesStatus: {
+                ...changeStatus.salesStatus,
+                id: e.target.value,
+              },
             })
           }
         >
-          <option value={null}>판매여부</option>
+          <option>판매여부</option>
           {product &&
             product.homeFilterTitle.map((el) => {
               return (
@@ -92,15 +228,18 @@ export default function ProductDetail({
             })}
         </select>
         <select
-          value={changeProductStatus.displayStatus}
+          value={changeStatus.displayStatus.id}
           onChange={(e) =>
-            setChangeProductStatus({
-              ...changeProductStatus,
-              displayStatus: e.target.value,
+            setchangeStatus({
+              ...changeStatus,
+              displayStatus: {
+                ...changeStatus.displayStatus,
+                id: e.target.value,
+              },
             })
           }
         >
-          <option value={null}>진열여부</option>
+          <option>진열여부</option>
           {product &&
             product.homeFilterTitle.map((el) => {
               return (
@@ -108,7 +247,11 @@ export default function ProductDetail({
                 el.category.map((sub, i) => {
                   return (
                     i !== 0 && (
-                      <option value={sub.category_id} key={i}>
+                      <option
+                        value={sub.category_id}
+                        key={i}
+                        name={sub.category_title}
+                      >
                         {sub.category_title}
                       </option>
                     )
@@ -117,7 +260,7 @@ export default function ProductDetail({
               );
             })}
         </select>
-        <ApplyBtn>
+        <ApplyBtn onClick={changedApply}>
           <GoCheck />
           적용
         </ApplyBtn>
@@ -132,7 +275,11 @@ export default function ProductDetail({
           <ProductHead>
             <tr>
               <ProductCategory twidth={'1%'}>
-                <input type="checkbox"></input>
+                <input
+                  type="checkbox"
+                  checked={allCheck ? 'checked' : ''}
+                  onChange={() => handleClickAll()}
+                ></input>
               </ProductCategory>
               <ProductCategory>등록일</ProductCategory>
               <ProductCategory>대표이미지</ProductCategory>
@@ -153,7 +300,12 @@ export default function ProductDetail({
                 return (
                   <ProductLine idx={idx} key={idx}>
                     <ProductItem>
-                      <input type="checkbox"></input>
+                      <input
+                        type="checkbox"
+                        id={cate.id}
+                        checked={isSelected[idx] ? 'checked' : ''}
+                        onChange={(e) => selectProduct(e, idx)}
+                      ></input>
                     </ProductItem>
                     <ProductItem>{cate.registered_at}</ProductItem>
                     <ProductItem>
@@ -184,17 +336,13 @@ export default function ProductDetail({
       </TableBox>
       <PaginationContainer>
         <Pagination
-          activePage={query.pages}
+          activePage={activePage}
           itemsCountPerPage={query.limit}
           totalItemsCount={450}
           pageRangeDisplayed={5}
-          onChange={(pageNumber) =>
-            setQuery({
-              ...query,
-              pages: pageNumber,
-              offset: query.limit * (pageNumber - 1),
-            })
-          }
+          onChange={(pageNumber) => {
+            handlePageChange(pageNumber);
+          }}
         />
       </PaginationContainer>
     </ProductContainer>
