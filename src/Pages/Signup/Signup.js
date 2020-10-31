@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { ErrorMessage } from '@hookform/error-message';
 import { useForm } from 'react-hook-form';
@@ -14,7 +15,21 @@ import { AiOutlineWarning } from 'react-icons/ai';
 
 export default function Signup() {
   const { register, errors, watch, handleSubmit } = useForm({ mode: 'all' });
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data);
+    if (confirm('입력하신 정보로 셀러신청을 하시겠습니까?') === true) {
+      history.push('/Login');
+    }
+  };
+  const history = useHistory();
+
+  function handleCancelBtn() {
+    if (confirm('브랜디 회원가입을 취소하시겠습니까?') === true) {
+      history.push('/Login');
+    } else {
+      return false;
+    }
+  }
 
   return (
     <Container>
@@ -84,10 +99,14 @@ export default function Signup() {
               <TiPhoneOutline color={errors.phone ? '#b94a48' : null} />
               <input
                 name='phone'
-                type='tell'
+                type='tel'
                 placeholder='핸드폰번호'
                 ref={register({
                   required: '필수 입력항목입니다.',
+                  // pattern: {
+                  //   value: /^[0-9]{11}}$/,
+                  //   message: '올바른 정보를 입력해주세요.',
+                  // },
                 })}
               />
             </IconInput>
@@ -98,33 +117,70 @@ export default function Signup() {
               기입해주세요.
             </ExtraInfo>
             <InfoTitle>셀러 정보</InfoTitle>
+            {/* <IntputRadio onClick={handleRadioValue}> */}
             <IntputRadio>
               <label>
-                <input name='seller' value='shoppingmall' type='radio' />
+                <input
+                  name='seller'
+                  name='shoppingmall'
+                  type='radio'
+                  defaultChecked='checked'
+                  ref={register()}
+                />
                 쇼핑몰
               </label>
               <label>
-                <input name='seller' value='market' type='radio' />
+                <input
+                  name='seller'
+                  name='market'
+                  type='radio'
+                  ref={register()}
+                />
                 마켓
               </label>
               <label>
-                <input name='seller' value='roadshop' type='radio' />
+                <input
+                  name='seller'
+                  name='roadshop'
+                  type='radio'
+                  ref={register()}
+                />
                 로드샵
               </label>
               <label>
-                <input name='seller' value='designer' type='radio' />
+                <input
+                  name='seller'
+                  name='designer'
+                  type='radio'
+                  ref={register()}
+                />
                 디자이너브랜드
               </label>
               <label>
-                <input name='seller' value='general' type='radio' />
+                <input
+                  name='seller'
+                  name='general'
+                  type='radio'
+                  ref={register()}
+                />
                 제너럴브랜드
               </label>
               <label>
-                <input name='seller' value='national' type='radio' />
+                <input
+                  name='seller'
+                  name='national'
+                  type='radio'
+                  ref={register()}
+                />
                 내셔널브랜드
               </label>
               <label>
-                <input name='seller' value='beauty' type='radio' />
+                <input
+                  name='seller'
+                  name='beauty'
+                  type='radio'
+                  ref={register()}
+                />
                 뷰티
               </label>
             </IntputRadio>
@@ -137,6 +193,10 @@ export default function Signup() {
                 placeholder='셀러명 (상호)'
                 ref={register({
                   required: '필수 입력항목입니다.',
+                  pattern: {
+                    value: /^[가-힣a-zA-Z0-9+]+$/,
+                    message: '한글,영문,숫자만 입력해주세요.',
+                  },
                 })}
               />
             </IconInput>
@@ -150,6 +210,10 @@ export default function Signup() {
                 placeholder='영문 셀러명 (영문상호)'
                 ref={register({
                   required: '필수 입력항목입니다.',
+                  pattern: {
+                    value: /^[A-Za-z0-9+]*$/,
+                    message: '셀러 영문명은 소문자만 입력가능합니다.',
+                  },
                 })}
               />
             </IconInput>
@@ -206,8 +270,7 @@ export default function Signup() {
             })} */}
             <ButtonGroup>
               <Button primary type='submit' value='신청' />
-
-              <Button type='submit' value='취소' />
+              <Button value='취소' type='submit' onClick={handleCancelBtn} />
             </ButtonGroup>
           </form>
         </SignupBox>
