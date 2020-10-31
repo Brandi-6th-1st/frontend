@@ -15,19 +15,16 @@ export const isUnknown = () => ({
   type: typeNone,
 });
 
-const initialState = {
-  userType: false,
-  token: 'najueunBABO',
-};
+const initialState = true;
 
-const userInfo = (state = initialState, { type, payload }) => {
+const userInfo = (state = initialState, { type }) => {
   switch (type) {
     case typeMaster:
-      return { ...initialState, userType: true };
+      return true;
     case typeSeller:
-      return { ...initialState, userType: false };
+      return false;
     case typeNone:
-      return { ...initialState, userType: null };
+      return null;
     default:
       return state;
   }

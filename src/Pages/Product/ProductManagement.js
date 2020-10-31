@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import dateFormatChange from '../../Components/ChangeTimeFormat';
 import { ko } from 'date-fns/esm/locale';
-import { getAttribute, clearAttribute } from '../../Store/Reducer/commonStatus';
 import DatePicker from 'react-datepicker';
 import '../../Styles/datepick.css';
 import styled from 'styled-components';
@@ -16,6 +15,7 @@ import Purchase from './Components/Purchase';
 
 export default function ProductManagement() {
   const dispatch = useDispatch();
+  // 모달창 출력 유무를 관리
   const [showModal, setShowModal] = useState(false);
   // 마스터에만 사용되는 데이터를 관리
   const [differentFilter, setDifferentFilter] = useState();
@@ -50,10 +50,7 @@ export default function ProductManagement() {
   });
 
   // store에서 유저타입과 토큰을 가져온다.
-  const { userType, token } = useSelector(({ userInfo }) => ({
-    userType: userInfo.userType,
-    token: userInfo.token,
-  }));
+  const userType = useSelector(({ userInfo }) => userInfo);
 
   // store에 있는 마스터 or 셀러 필터를 가져온다.
   const { commonFilter } = useSelector(({ filter }) => ({
@@ -94,7 +91,7 @@ export default function ProductManagement() {
       const { DataProductManage } = result.data;
 
       // 유저 타입이 마스터인 경우,
-      if (DataProductManage.isMaster) {
+      if (userType) {
         // 셀러명 검색 필터만 분리하여 정의
         const masterData =
           commonFilter &&
@@ -120,7 +117,7 @@ export default function ProductManagement() {
         setFilters(sellerData);
       }
       // 유저 타입이 셀러인 경우,
-      if (!DataProductManage.isMaster) {
+      if (!userType) {
         // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
         // 각 필터별로 상태를 생성

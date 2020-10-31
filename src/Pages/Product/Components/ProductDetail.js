@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Pagination from 'react-js-pagination';
 import {
@@ -19,7 +19,7 @@ export default function ProductDetail({
   setShowModal,
   sendData,
 }) {
-  // 버튼의 클릭 상태를 나타내느 배열 생성
+  // 버튼의 클릭 상태를 나타내는 배열 생성
   const [isSelected, setIsSelected] = useState(
     new Array(product && product.productItem.length).fill(false)
   );
@@ -31,10 +31,12 @@ export default function ProductDetail({
   const [changeStatus, setchangeStatus] = useState({
     salesStatus: {
       id: '',
+      // 판매여부가 담긴 필터 id
       filterId: 3,
     },
     displayStatus: {
       id: '',
+      // 진열여부가 담긴 필터 id
       filterId: 4,
     },
   });
@@ -75,12 +77,11 @@ export default function ProductDetail({
   };
 
   // limit 상태 업데이트
-  const handliLimit = (e) => {
+  const handleLimit = (e) => {
     setActivePage(1);
     setQuery({
       ...query,
       limit: e.target.value,
-      offset: e.target.value * 0,
     });
   };
 
@@ -99,17 +100,7 @@ export default function ProductDetail({
     if (product) {
       setIsSelected(new Array(product.productItem.length).fill(false));
     }
-    return () => {};
   }, [product]);
-
-  // 페이지 변경시 해당 함수 실행
-  const handlePageChange = (pageNumber) => {
-    setActivePage(pageNumber);
-    setQuery({
-      ...query,
-      offset: query.offset,
-    });
-  };
 
   // 상품 판매 진열 상태 적용 버튼이 눌렸을 때 실행하는 함수
   const changedApply = (e) => {
@@ -194,7 +185,7 @@ export default function ProductDetail({
           <select
             value={query.limit}
             onChange={(e) => {
-              handliLimit(e);
+              handleLimit(e);
             }}
           >
             <option value={10}>10개씩 보기</option>
@@ -357,7 +348,7 @@ export default function ProductDetail({
           totalItemsCount={450}
           pageRangeDisplayed={5}
           onChange={(pageNumber) => {
-            handlePageChange(pageNumber);
+            setActivePage(pageNumber);
           }}
         />
       </PaginationContainer>
@@ -365,11 +356,12 @@ export default function ProductDetail({
   );
 }
 const TableBox = styled.div`
+  overflow-x: scroll;
+  white-space: nowrap;
+
   table {
     width: 100%;
   }
-  overflow-x: scroll;
-  white-space: nowrap;
 `;
 
 const ProductContainer = styled.div``;
@@ -397,6 +389,7 @@ const RootTitle = styled.ul`
 
 const LimitRange = styled.div`
   height: 100%;
+
   select {
     height: 100%;
     border-radius: 1px;
@@ -467,7 +460,6 @@ const ProductCategory = styled.th`
   font-size: 14px;
   font-weight: 600;
   text-align: inherit;
-
   overflow-x: hidden;
   white-space: nowrap;
 `;
@@ -513,11 +505,13 @@ const BuyBtn = styled.button`
 const PaginationContainer = styled.div`
   ${({ theme }) => theme.flex('center')}
   padding:15px 0px;
+
   .pagination > li {
     display: inline-block;
     padding-left: 0;
     font-size: 13px;
   }
+
   .pagination > li > a,
   .pagination > li > span {
     position: relative;
