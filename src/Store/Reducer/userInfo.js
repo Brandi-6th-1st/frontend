@@ -22,7 +22,7 @@ export const isToken = (token) => ({
 
 const initialState = {
   userType: false,
-  token: '',
+  token: 'najueunBABO',
 };
 
 const userInfo = (state = initialState, { type, payload }) => {

@@ -2,13 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-
-import {
-  isMaster,
-  isSeller,
-  isUnknown,
-  isToken,
-} from '../../Store/Reducer/userInfo';
+import dateFormatChange from '../../Components/ChangeTimeFormat';
 import { ko } from 'date-fns/esm/locale';
 import { getAttribute, clearAttribute } from '../../Store/Reducer/commonStatus';
 import DatePicker from 'react-datepicker';
@@ -25,6 +19,7 @@ export default function ProductManagement() {
   const [differentFilter, setDifferentFilter] = useState();
   // 공통으로 사용되는 데이터를 관리
   const [product, setProduct] = useState();
+  const [filters, setFilters] = useState({});
   // 각 필터의 상태를 선택된 상태를 배열로 관리
   const [filterStatus, setFilterStatus] = useState();
   // 현재 페이지 관리
@@ -58,9 +53,12 @@ export default function ProductManagement() {
     token: userInfo.token,
   }));
 
-  // store에서 셀러속성을 사용하기 위하여
-  const { category } = useSelector(({ commonStatus }) => ({
-    category: commonStatus.category,
+  console.log('전역토큰', token);
+
+  // store에 있는 마스터 or 셀러 필터를 가져온다.
+  const { masterFilter, sellerFilter } = useSelector(({ filter }) => ({
+    masterFilter: filter.masterFilter,
+    sellerFilter: filter.sellerFilter,
   }));
 
   // get을 통하여 들어오는 필터의 상태별로 각 버튼의 boolean 생성
@@ -79,73 +77,58 @@ export default function ProductManagement() {
     setFilterStatus(allFilter);
   };
 
-  // const fetchFiltred = async (queryObj) => {
-  //   try {
-  //     const result = await axios.get(`/url/product`, {
-  //       params: queryObj,
-  //       timeout: 3000, //3초
-  //     });
-  //     const response = await response.data;
-  //     console.log(response);
-  //   } catch (err) {}
-  // };
-
   ///public/Data/DataProductManage.json
   ///http://10.58.7.141:5000/product
 
   // Test : json형식 mock-data 생성
   // axios get을 사용하여 데이터를 받아온다.
-  const meth = '.get';
-  const test = { id: null, name: '셀러2', attribute: '1,2' };
+
   const getData = async (param) => {
     try {
       const result = await axios.get(`/public/Data/DataProductManage.json`, {
         params: param,
+        timeout: 3000, //3초
       });
 
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
       const { DataProductManage } = result.data;
 
-      const attribute = DataProductManage.homeFilterTitle.filter((title) => {
-        return title.id === 2 && title;
-      })[0];
-
-      if (!!attribute && !category) {
-        dispatch(getAttribute(attribute));
-      }
-
       // 유저 타입이 마스터인 경우,
       if (DataProductManage.isMaster) {
-        // 전역에서 관리하는 상태에 유저 타입을 마스터로 변경
-        dispatch(isMaster());
-
         // 셀러명 검색 필터만 분리하여 정의
         const masterData =
-          DataProductManage &&
-          DataProductManage.homeFilterTitle.filter((el) => el.id === 1)[0];
+          masterFilter &&
+          masterFilter.homeFilterTitle.filter((el) => el.id === 1)[0];
 
-        // 셀러명 검색 필터르 제외한 모든 필터 정의
         const sellerData = {
-          ...DataProductManage,
-          homeFilterTitle: DataProductManage.homeFilterTitle.filter(
+          ...masterFilter,
+          homeFilterTitle: masterFilter.homeFilterTitle.filter(
             (el) => el.id !== 1
           ),
         };
 
+        // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
+        if (!filterStatus) {
+          createFilter(sellerData);
+        }
+
         // 마스터에서만 사용하는 데이터 저장
         setDifferentFilter(masterData);
-        // 마스터와 셀러 공용 필터를 따로 저장
-        setProduct(sellerData);
-        //각 필터별로 상태를 생성
-        createFilter(sellerData);
+        // 상품 리스트에 보여줄 데이터를 저장
+        setProduct(DataProductManage);
+        // 공용으로 사용하는 데이터 저장
+        setFilters(sellerData);
       }
       // 유저 타입이 셀러인 경우,
       if (!DataProductManage.isMaster) {
-        dispatch(isSeller());
         // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
-        //각 필터별로 상태를 생성
-        createFilter(DataProductManage);
+        // 각 필터별로 상태를 생성
+        setFilters(sellerFilter);
+        // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
+        if (!filterStatus) {
+          createFilter(sellerFilter);
+        }
       }
     } catch (err) {
       if (err.response) {
@@ -165,7 +148,7 @@ export default function ProductManagement() {
 
   // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {
-    getData(query);
+    getData(null);
   }, []);
 
   // 각 필터 선택시 true <-> false로 바꿔준다.
@@ -325,16 +308,14 @@ export default function ProductManagement() {
 
     const queryObj = {
       ...query,
-      sellerAttribute: attribute,
+      offset: query.offset !== 0 ? query.offset : null,
+      limit: query.limit !== 10 ? query.limit : null,
+      sellerAttribute: attribute ? attribute : null,
       salesStatus: salse,
       displayStatus: display,
       discountStatus: discount,
     };
 
-    // 쿼리 내용 최신화
-
-    // // 쿼리스트링으로 보낼 url을 상태로 관리
-    const querystring = require('querystring');
     console.log('전송');
     console.log(queryObj);
     getData(queryObj);
@@ -342,7 +323,7 @@ export default function ProductManagement() {
 
   const resetFilter = () => {
     console.log('초기화');
-    createFilter(product);
+    createFilter(filters);
     setQuery({
       startDate: null,
       endDate: null,
@@ -360,18 +341,6 @@ export default function ProductManagement() {
       startDate: '',
       endDate: '',
     });
-  };
-
-  // 백엔드와 데이터를 맞출때 보내질 데이터 형식으로 변경
-  const dateFormatChange = (date) => {
-    if (!!date) {
-      var year = date.getFullYear(); //YYYY
-      var month = 1 + date.getMonth(); //MM
-      month = month >= 10 ? month : '0' + month; //MM 두자리로 저장
-      var day = date.getDate(); //D
-      day = day >= 10 ? day : '0' + day; //DD
-      return `${year}-${month}-${day}`;
-    }
   };
 
   const handleEndDate = (date) => {
@@ -469,8 +438,8 @@ export default function ProductManagement() {
               </SelectFilterCategory>
             </FiltersCategoryTitle>
             {/* 각 필터별로 다른 name을 가지기 때문에 각각 렌더 */}
-            {product &&
-              product.homeFilterTitle.map((cate, i) => {
+            {filters.homeFilterTitle &&
+              filters.homeFilterTitle.map((cate, i) => {
                 return (
                   <SelectFilterCategory cate={cate.category.length} key={i}>
                     <SelectFilterTitle>{cate.filterTitle} :</SelectFilterTitle>
@@ -511,10 +480,7 @@ export default function ProductManagement() {
             setQuery={setQuery}
             activePage={activePage}
             setActivePage={setActivePage}
-            // setSalesStatus={setSalesStatus}
-            // salesStatus={salesStatus}
-            // setDisplayStatus={setDisplayStatus}
-            // displayStatus={displayStatus}
+            filters={filters}
             sendData={sendData}
           />
         </Section>
@@ -526,11 +492,13 @@ export default function ProductManagement() {
 
 const Main = styled.div`
   display: flex;
+  width: 100%;
 `;
 
 const Section = styled.div`
   width: 100%;
   padding: 20px 20px;
+  margin-top: 45px;
   border-radius: 0 0 0 4px;
   background-color: #fafafa;
 
@@ -543,6 +511,7 @@ const Section = styled.div`
 `;
 
 const FilterContainer = styled.div`
+  width: 100%;
   border: 3px solid #eee;
   background-color: #fff;
   margin-bottom: 20px;

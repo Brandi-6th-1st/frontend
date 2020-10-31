@@ -1,38 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import axios from 'axios';
 import DateFilter from './DateFilter';
+import dateFormatChange from '../../Components/ChangeTimeFormat';
 
 export default function Filter({ pagetext }) {
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [searchOption, setSearchOption] = useState('');
-  const [periodButton, setPeriodButton] = useState('3일');
-
-  const handleChange = (e) => {
-    setSearchKeyword(e.target.value);
-  };
-
-  const handleSelect = (e) => {
-    setSearchOption(e.target.value);
-  };
-
-  const periodHandler = (e) => {
-    setPeriodButton(e.target.value);
-  };
+  const [params, setParams] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    searchKeyword: '',
+    searchOption: '',
+    periodButton: '',
+  });
 
   const searchHandler = () => {
     // 검색버튼 눌렀을때 검색유효성 검사
     // 검색어는 있는데 검색 항목을 선택하지 않았을 경우
-    searchKeyword && !searchOption && alert('검색항목를 입력해주세요.');
+    params.searchKeyword &&
+      !params.searchOption &&
+      alert('검색항목를 입력해주세요.');
+  };
+
+  const searchFilterd = async () => {
+    const changeForm = {
+      ...params,
+      startDate: dateFormatChange(params.startDate),
+      endDate: dateFormatChange(params.endDate),
+    };
+    const getData = await axios.get(``, {
+      params: changeForm,
+    });
   };
 
   useEffect(() => {
-    console.log(searchOption);
-  }, [searchOption]);
+    console.log(params.searchOption);
+  }, [params.searchOption]);
 
+  console.log(params);
   return (
     <FilterContainer>
       <Div>
-        <Select onChange={handleSelect}>
+        <Select
+          onChange={(e) =>
+            setParams({ ...params, searchOption: e.target.value })
+          }
+        >
           <option value="" selected>
             Select..
           </option>
@@ -43,51 +55,68 @@ export default function Filter({ pagetext }) {
           <option value="PRODUCT_NAME">상품명</option>
         </Select>
         <SearchInput
-          onChange={handleChange}
+          onChange={(e) =>
+            setParams({ ...params, searchKeyword: e.target.value })
+          }
           type="text"
           placeholder="검색어를 입력하세요."
         />
       </Div>
-      <Div>
-        <span>{pagetext.filter_date} :</span>
-        <DateBtn
-          type="button"
-          value="전체"
-          onClick={periodHandler}
-          selected={periodButton === '전체'}
-        />
-        <DateBtn
-          type="button"
-          value="오늘"
-          onClick={periodHandler}
-          selected={periodButton === '오늘'}
-        />
-        <DateBtn
-          type="button"
-          value="3일"
-          onClick={periodHandler}
-          selected={periodButton === '3일'}
-        />
-        <DateBtn
-          type="button"
-          value="1주일"
-          onClick={periodHandler}
-          selected={periodButton === '1주일'}
-        />
-        <DateBtn
-          type="button"
-          value="1개월"
-          onClick={periodHandler}
-          selected={periodButton === '1개월'}
-        />
-        <DateBtn
-          type="button"
-          value="3개월"
-          onClick={periodHandler}
-          selected={periodButton === '3개월'}
-        />
-        <DateFilter />
-      </Div>
+      <Divs>
+        <FilterBox>
+          <span>{pagetext.filter_date} :</span>
+          <DateBtn
+            type="button"
+            value="전체"
+            onClick={(e) =>
+              setParams({ ...params, periodButton: e.target.value })
+            }
+            selected={params.periodButton === '전체'}
+          />
+          <DateBtn
+            type="button"
+            value="오늘"
+            onClick={(e) =>
+              setParams({ ...params, periodButton: e.target.value })
+            }
+            selected={params.periodButton === '오늘'}
+          />
+          <DateBtn
+            type="button"
+            value="3일"
+            onClick={(e) =>
+              setParams({ ...params, periodButton: e.target.value })
+            }
+            selected={params.periodButton === '3일'}
+          />
+          <DateBtn
+            type="button"
+            value="1주일"
+            onClick={(e) =>
+              setParams({ ...params, periodButton: e.target.value })
+            }
+            selected={params.periodButton === '1주일'}
+          />
+          <DateBtn
+            type="button"
+            value="1개월"
+            onClick={(e) =>
+              setParams({ ...params, periodButton: e.target.value })
+            }
+            selected={params.periodButton === '1개월'}
+          />
+          <DateBtn
+            type="button"
+            value="3개월"
+            onClick={(e) =>
+              setParams({ ...params, periodButton: e.target.value })
+            }
+            selected={params.periodButton === '3개월'}
+          />
+        </FilterBox>
+
+        <DateFilter params={params} setParams={setParams} />
+      </Divs>
       <Div>
         <Button search onClick={searchHandler}>
           검색
@@ -123,7 +152,26 @@ const Div = styled.div`
   }
 `;
 
+const Divs = styled(Div)`
+  @media only screen and (max-width: 1067px) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const FilterBox = styled.div`
+  @media only screen and (max-width: 1067px) {
+    margin-bottom: 10px;
+  }
+
+  span {
+    margin-left: 15px;
+  }
+`;
+
 const Select = styled.select`
+  margin-left: 15px;
   height: 30px;
   width: 120px;
   margin-right: 5px;

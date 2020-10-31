@@ -16,6 +16,7 @@ export default function ProductDetail({
   setActivePage,
   activePage,
   setProduct,
+  filters,
   sendData,
 }) {
   // 버튼의 클릭 상태를 나타내느 배열 생성
@@ -115,7 +116,7 @@ export default function ProductDetail({
       !!checkProduct.length
     ) {
       // 판매여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
-      const sales = product.homeFilterTitle
+      const sales = filters.homeFilterTitle
         .filter((el) => el.id === changeStatus.salesStatus.filterId && el)[0]
         .category.filter(
           (item) =>
@@ -123,7 +124,7 @@ export default function ProductDetail({
         )[0].category_title;
 
       // 진열여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
-      const display = product.homeFilterTitle
+      const display = filters.homeFilterTitle
         .filter((el) => el.id === changeStatus.displayStatus.filterId && el)[0]
         .category.filter(
           (item) =>
@@ -211,8 +212,8 @@ export default function ProductDetail({
           }
         >
           <option>판매여부</option>
-          {product &&
-            product.homeFilterTitle.map((el) => {
+          {filters.homeFilterTitle &&
+            filters.homeFilterTitle.map((el) => {
               return (
                 el.id === 3 &&
                 el.category.map((sub, i) => {
@@ -240,8 +241,8 @@ export default function ProductDetail({
           }
         >
           <option>진열여부</option>
-          {product &&
-            product.homeFilterTitle.map((el) => {
+          {filters.homeFilterTitle &&
+            filters.homeFilterTitle.map((el) => {
               return (
                 el.id === 4 &&
                 el.category.map((sub, i) => {
@@ -337,7 +338,7 @@ export default function ProductDetail({
       <PaginationContainer>
         <Pagination
           activePage={activePage}
-          itemsCountPerPage={query.limit}
+          itemsCountPerPage={Number(query.limit)}
           totalItemsCount={450}
           pageRangeDisplayed={5}
           onChange={(pageNumber) => {

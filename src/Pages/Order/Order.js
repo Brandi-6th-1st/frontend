@@ -20,4 +20,5 @@ export default function Order() {
 
 const Section = styled.div`
   display: flex;
+  width: 100vw;
 `;
