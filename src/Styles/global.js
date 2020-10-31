@@ -23,6 +23,7 @@ const GlobalStyle = createGlobalStyle`
     outline: 0;
     border: 0;
     background: none;
+    cursor: pointer;
   }
 
   body {
