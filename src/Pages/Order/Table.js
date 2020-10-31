@@ -78,6 +78,8 @@ const Button = styled.button`
 
 const TableContainer = styled.div`
   width: 100%;
+  overflow-x: scroll;
+  white-space: nowrap;
   table {
     margin-top: 10px;
     width: 100%;
@@ -88,6 +90,8 @@ const TableContainer = styled.div`
       font-size: 14px;
       font-weight: 500;
       text-align: start;
+      overflow-x: hidden;
+      white-space: nowrap;
       &.checkbox {
         width: 25px;
         text-align: center;
@@ -98,6 +102,8 @@ const TableContainer = styled.div`
       border: 1px solid #ddd;
       font-size: 14px;
       color: #222;
+      overflow-x: hidden;
+      white-space: nowrap;
       &.checkbox {
         width: 25px;
         text-align: center;
