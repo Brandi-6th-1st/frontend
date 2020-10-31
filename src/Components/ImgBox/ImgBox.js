@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 
 function ImgBox({
@@ -7,18 +7,21 @@ function ImgBox({
   imgWidth,
   imgHeight,
   handleChangeFile,
-  // profileImgFile,
-  // setProfileImgFile,
-  // backgroundImgFile,
-  // setBackgroundImgFile,
-  // profileImgBase64,
-  // setProfileImgBase64,
-  // backgroundImgBase64,
-  // setBackgroundImgBase64,
+  profileImgFile,
+  setProfileImgFile,
+  backgroundImgFile,
+  setBackgroundImgFile,
+  profileImgBase64,
+  setProfileImgBase64,
+  backgroundImgBase64,
+  setBackgroundImgBase64,
   imgBase64,
+  imgId,
   setImgBase64,
   imgFile,
   setImgFile,
+  handleProfileImg,
+  handleBackgroundImg,
 }) {
   // const [ImgBase64, setImgBase64] = useState(''); // 업로드 될 이미지
   // const [imgFile, setImgFile] = useState(null); // 파일 전송을 위한 state
@@ -39,9 +42,12 @@ function ImgBox({
   //     setImgFile(event.target.files[0]); // 파일 상태 업데이트
   //   }
   // };
+  useEffect(() => {
+    console.log(imgBase64);
+  }, [imgBase64]);
   return (
     <Fragment>
-      <form id='formEl'>
+      <form>
         <ImgUpload>
           {/* props로 전달받을 박스 크기와 이미지 크기 */}
           <ImgPreview
@@ -57,10 +63,10 @@ function ImgBox({
             )}
           </ImgPreview>
           <ImgAdd>
-            <label htmlFor='imgFile'>이미지 선택</label>
+            <label htmlFor={imgId}>이미지 선택</label>
             <input
               type='file'
-              id='imgFile'
+              id={imgId}
               accept='image/jpg, image/jpeg, image/png'
               onChange={handleChangeFile}
             />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import PasswordModal from './PasswordModal';
 import ImgBox from '../../Components/ImgBox/ImgBox';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning } from 'react-icons/ai';
@@ -7,25 +8,32 @@ import { AiOutlineWarning } from 'react-icons/ai';
 function BasicInfo({
   sellerInfo,
   handleChangeFile,
-  // profileImgBase64,
-  // setProfileImgBase64,
-  // profileImgFile,
-  // setProfileImgFile,
-  imgBase64,
-  setImgBase64,
-  imgFile,
-  setImgFile,
+  profileImgBase64,
+  setProfileImgBase64,
+  profileImgFile,
+  setProfileImgFile,
+  // imgBase64,
+  // setImgBase64,
+  // imgFile,
+  // setImgFile,
+  // handleProfileImg,
 }) {
-  const [visible, setVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const {
-    identification,
-    seller_name_kr,
-    seller_name_en,
-    manager_name,
-    manager_contact,
-    manager_email,
-  } = sellerInfo[0];
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const { identification, seller_name_en } = sellerInfo;
+  const imgId = 'profileImg';
+
+  const handleProfileImg = (event) => {
+    handleChangeFile(event, setProfileImgBase64, setProfileImgFile);
+  };
 
   return (
     <BasicInfoBox>
@@ -47,15 +55,17 @@ function BasicInfo({
                   boxHeight='100px'
                   imgWidth='90px'
                   imgHeight='90px'
-                  handleChangeFile={handleChangeFile}
-                  imgBase64={imgBase64}
-                  setImgBase64={setImgBase64}
-                  imgFile={imgFile}
-                  setImgFile={setImgFile}
-                  // profileImgBase64={profileImgBase64}
-                  // setProfileImgBase64={setProfileImgBase64}
-                  // profileImgFile={profileImgFile}
-                  // setProfileImgFile={setProfileImgFile}
+                  // handleChangeFile={handleChangeFile}
+                  // imgBase64={imgBase64}
+                  // setImgBase64={setImgBase64}
+                  // imgFile={imgFile}
+                  // setImgFile={setImgFile}
+                  imgId={imgId}
+                  handleChangeFile={handleProfileImg}
+                  imgBase64={profileImgBase64}
+                  setImgBase64={setProfileImgBase64}
+                  imgFile={profileImgFile}
+                  setImgFile={setProfileImgFile}
                 />
                 <ExtraInfo>
                   <AiOutlineWarning />
@@ -72,13 +82,15 @@ function BasicInfo({
             </tr>
             <tr>
               <td>셀러 영문명</td>
+
               <td>{seller_name_en}</td>
             </tr>
             <tr>
               <td>셀러계정</td>
               <td>
                 {identification}
-                <button>비밀번호 변경하기</button>
+                <button onClick={openModal}>비밀번호 변경하기</button>
+                <PasswordModal visible={modalVisible} onClose={closeModal} />
               </td>
             </tr>
           </tbody>

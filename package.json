@@ -34,6 +34,7 @@
     "react-hook-form": "^6.9.6",
     "react-icons": "^3.11.0",
     "react-images-upload": "^1.2.8",
+    "react-input-mask": "^2.0.4",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",

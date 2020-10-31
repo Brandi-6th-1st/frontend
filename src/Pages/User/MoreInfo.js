@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
+import InputMask from 'react-input-mask';
 import { useForm } from 'react-hook-form';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning, AiOutlineMail } from 'react-icons/ai';
@@ -9,25 +10,66 @@ import ImgBox from '../../Components/ImgBox/ImgBox';
 
 function MoreInfo({
   sellerInfo,
+  setSellerInfo,
   handleChangeFile,
-  // ackgroundImgBase64,
-  // setBackgroundImgBase64,
-  // backgroundImgFile,
-  // setBackgroundImgFile,
-  imgBase64,
-  setImgBase64,
-  imgFile,
-  setImgFile,
+  backgroundImgBase64,
+  setBackgroundImgBase64,
+  backgroundImgFile,
+  setBackgroundImgFile,
+  // imgBase64,
+  // setImgBase64,
+  // imgFile,
+  // setImgFile,
+  // handleBackgroundImg,
 }) {
-  const { register, errors, watch, handleSubmit } = useForm({ mode: 'submit' });
-  const onSubmit = (data) => console.log(data);
-
+  //백셀러 데이터
   const {
     manager_name,
     manager_contact,
     manager_email,
     status_history,
-  } = sellerInfo[0];
+  } = sellerInfo;
+
+  // //input value 관리를 위한 state
+  // const [inputValue, setInputValue] = useState({
+  //   managerName: '',
+  //   managerPhone: '',
+  //   managerEmail: '',
+  // });
+
+  // //비구조화할당
+  // const { managerName, managerPhone, managerEmail } = inputValue;
+
+  // //input값이 변경될 때 state에 저장
+  // const handleInputValue = (e) => {
+  //   const nextInputValue = {
+  //     ...inputValue,
+  //     [e.target.name]: e.target.value,
+  //   };
+  //   setInputValue(nextInputValue);
+  // };
+
+  const handleInputValue = (e) => {
+    console.log('123123123123', sellerInfo, e.target.name);
+    const nextSellerInfo = {
+      ...sellerInfo,
+      [e.target.name]: e.target.value,
+    };
+    console.log('1', nextSellerInfo);
+    console.log('3', sellerInfo);
+    setSellerInfo(nextSellerInfo);
+    console.log('2', sellerInfo);
+  };
+
+  const { register, errors, watch, handleSubmit } = useForm({ mode: 'submit' });
+  // const onSubmit = (data) => console.log(data);
+
+  const imgId = 'backgroundImg';
+
+  const handleBackgroundImg = (event) => {
+    handleChangeFile(event, setBackgroundImgBase64, setBackgroundImgFile);
+  };
+  console.log(sellerInfo);
 
   return (
     <Fragment>
@@ -47,15 +89,17 @@ function MoreInfo({
                     boxHeight='100px'
                     imgWidth='90px'
                     imgHeight='90px'
-                    handleChangeFile={handleChangeFile}
-                    imgBase64={imgBase64}
-                    setImgBase64={setImgBase64}
-                    imgFile={imgFile}
-                    setImgFile={setImgFile}
-                    // backgroundImgBase64={backgroundImgBase64}
-                    // setBackgroundImgBase64={setBackgroundImgBase64}
-                    // backgroundImgFile={backgroundImgFile}
-                    // setBackgroundImgFile={setBackgroundImgFile}
+                    // handleChangeFile={handleChangeFile}
+                    // imgBase64={imgBase64}
+                    // setImgBase64={setImgBase64}
+                    // imgFile={imgFile}
+                    // setImgFile={setImgFile}
+                    imgBase64={backgroundImgBase64}
+                    setImgBase64={setBackgroundImgBase64}
+                    imgFile={backgroundImgFile}
+                    setImgFile={setBackgroundImgFile}
+                    handleChangeFile={handleBackgroundImg}
+                    imgId={imgId}
                   />
                   <ExtraInfo>
                     <AiOutlineWarning />
@@ -88,10 +132,10 @@ function MoreInfo({
                   <IconInput className={errors.managerName && 'ErrorInput'}>
                     <FaUserAlt color={errors.managerName ? '#b94a48' : null} />
                     <input
-                      readOnly
-                      name='managerName'
+                      name='manager_name'
                       type='text'
-                      placeholder={manager_name}
+                      defaultValue={manager_name}
+                      onChange={handleInputValue}
                       ref={register({
                         required: '필수 입력항목 입니다. ',
                       })}
@@ -99,11 +143,12 @@ function MoreInfo({
                   </IconInput>
                   <IconInput className={errors.managerPhone && 'ErrorInput'}>
                     <ImPhone color={errors.managerPhone ? '#b94a48' : null} />
-                    <input
-                      readOnly
-                      name='managerPhone'
+                    <InputMask
+                      mask='999-9999-9999'
+                      name='manager_contact'
                       type='text'
-                      placeholder={manager_contact}
+                      defaultValue={manager_contact}
+                      onChange={handleInputValue}
                       ref={register({
                         required: '필수 입력항목 입니다. ',
                       })}
@@ -114,12 +159,16 @@ function MoreInfo({
                       color={errors.managerEmail ? '#b94a48' : null}
                     />
                     <input
-                      readOnly
-                      name='managerEmail'
+                      name='manager_email'
                       type='text'
-                      placeholder={manager_email}
+                      defaultValue={manager_email}
+                      onChange={handleInputValue}
                       ref={register({
                         required: '필수 입력항목 입니다. ',
+                        pattern: {
+                          value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                          message: '올바른 이메일 형식이 아닙니다.',
+                        },
                       })}
                     />
                   </IconInput>

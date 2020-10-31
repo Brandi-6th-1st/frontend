@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import styled, { css } from 'styled-components';
+import { useForm } from 'react-hook-form';
 import BasicInfo from './BasicInfo';
 import MoreInfo from './MoreInfo';
 import { AiOutlineHome } from 'react-icons/ai';
@@ -7,20 +8,29 @@ import { FaUserAlt } from 'react-icons/fa';
 
 function SellerInfoMangement({
   sellerInfo,
+  setSellerInfo,
   handleChangeFile,
-  // profileImgBase64,
-  // setProfileImgBase64,
-  // profileImgFile,
-  // setProfileImgFile,
-  // backgroundImgBase64,
-  // setBackgroundImgBase64,
-  // backgroundImgFile,
-  // setBackgroundImgFile,
+  handleProfileImg,
+  handleBackgroundImg,
+  profileImgBase64,
+  setProfileImgBase64,
+  profileImgFile,
+  setProfileImgFile,
+  backgroundImgBase64,
+  setBackgroundImgBase64,
+  backgroundImgFile,
+  setBackgroundImgFile,
   imgBase64,
   setImgBase64,
   imgFile,
   setImgFile,
 }) {
+  const onSubmit = (data) => console.log(data);
+
+  const handleClick = () => {
+    console.log('dddddd');
+  };
+
   return (
     <Fragment>
       {sellerInfo && (
@@ -32,34 +42,39 @@ function SellerInfoMangement({
             <AiOutlineHome />
             <p>회원관리 > 셀러정보 관리 > 셀러정보 조회 / 수정</p>
           </PageBar>
-          <BasicInfo
-            sellerInfo={sellerInfo}
-            handleChangeFile={handleChangeFile}
-            imgBase64={imgBase64}
-            setImgBase64={setImgBase64}
-            imgFile={imgFile}
-            setImgFile={setImgFile}
-            // profileImgBase64={profileImgBase64}
-            // setProfileImgBase64={setProfileImgBase64}
-            // backgroundImgBase64={backgroundImgBase64}
-            // setBackgroundImgBase64={setBackgroundImgBase64}
-          />
-          <MoreInfo
-            sellerInfo={sellerInfo}
-            handleChangeFile={handleChangeFile}
-            imgBase64={imgBase64}
-            setImgBase64={setImgBase64}
-            imgFile={imgFile}
-            setImgFile={setImgFile}
-            // backgroundImgBase64={backgroundImgBase64}
-            // setBackgroundImgBase64={setBackgroundImgBase64}
-            // backgroundImgFile={backgroundImgFile}
-            // setBackgroundImgFile={setBackgroundImgFile}
-          />
-          <ButtonGroup>
-            <Button primary type='submit' value='수정' />
-            <Button type='button' value='취소' />
-          </ButtonGroup>
+          <form onClick={handleClick}>
+            <BasicInfo
+              sellerInfo={sellerInfo}
+              // handleChangeFile={handleChangeFile}
+              // imgBase64={imgBase64}
+              // setImgBase64={setImgBase64}
+              // imgFile={imgFile}
+              // setImgFile={setImgFile}
+              // handleProfileImg={handleProfileImg}
+              profileImgBase64={profileImgBase64}
+              setProfileImgBase64={setProfileImgBase64}
+              profileImgFile={profileImgFile}
+              setProfileImgFile={setProfileImgFile}
+            />
+            <MoreInfo
+              sellerInfo={sellerInfo}
+              setSellerInfo={setSellerInfo}
+              // handleChangeFile={handleChangeFile}
+              // imgBase64={imgBase64}
+              // setImgBase64={setImgBase64}
+              // imgFile={imgFile}
+              // setImgFile={setImgFile}
+              // handleBackgroundImg={handleBackgroundImg}
+              backgroundImgBase64={backgroundImgBase64}
+              setBackgroundImgBase64={setBackgroundImgBase64}
+              backgroundImgFile={backgroundImgFile}
+              setBackgroundImgFile={setBackgroundImgFile}
+            />
+            <ButtonGroup>
+              <Button primary type='submit' value='수정' />
+              <Button type='button' value='취소' />
+            </ButtonGroup>
+          </form>
         </Container>
       )}
     </Fragment>
