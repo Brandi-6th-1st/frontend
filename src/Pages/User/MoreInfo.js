@@ -7,7 +7,18 @@ import { ImPhone } from 'react-icons/im';
 import ImgBox from '../../Components/ImgBox/ImgBox';
 // import IconInput from '../../Components/IconInput/IconInput';
 
-function MoreInfo({ sellerInfo }) {
+function MoreInfo({
+  sellerInfo,
+  handleChangeFile,
+  // ackgroundImgBase64,
+  // setBackgroundImgBase64,
+  // backgroundImgFile,
+  // setBackgroundImgFile,
+  imgBase64,
+  setImgBase64,
+  imgFile,
+  setImgFile,
+}) {
   const { register, errors, watch, handleSubmit } = useForm({ mode: 'submit' });
   const onSubmit = (data) => console.log(data);
 
@@ -36,6 +47,15 @@ function MoreInfo({ sellerInfo }) {
                     boxHeight='100px'
                     imgWidth='90px'
                     imgHeight='90px'
+                    handleChangeFile={handleChangeFile}
+                    imgBase64={imgBase64}
+                    setImgBase64={setImgBase64}
+                    imgFile={imgFile}
+                    setImgFile={setImgFile}
+                    // backgroundImgBase64={backgroundImgBase64}
+                    // setBackgroundImgBase64={setBackgroundImgBase64}
+                    // backgroundImgFile={backgroundImgFile}
+                    // setBackgroundImgFile={setBackgroundImgFile}
                   />
                   <ExtraInfo>
                     <AiOutlineWarning />

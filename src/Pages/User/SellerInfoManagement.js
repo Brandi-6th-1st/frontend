@@ -5,7 +5,22 @@ import MoreInfo from './MoreInfo';
 import { AiOutlineHome } from 'react-icons/ai';
 import { FaUserAlt } from 'react-icons/fa';
 
-function SellerInfoMangement({ sellerInfo }) {
+function SellerInfoMangement({
+  sellerInfo,
+  handleChangeFile,
+  // profileImgBase64,
+  // setProfileImgBase64,
+  // profileImgFile,
+  // setProfileImgFile,
+  // backgroundImgBase64,
+  // setBackgroundImgBase64,
+  // backgroundImgFile,
+  // setBackgroundImgFile,
+  imgBase64,
+  setImgBase64,
+  imgFile,
+  setImgFile,
+}) {
   return (
     <Fragment>
       {sellerInfo && (
@@ -17,8 +32,30 @@ function SellerInfoMangement({ sellerInfo }) {
             <AiOutlineHome />
             <p>회원관리 > 셀러정보 관리 > 셀러정보 조회 / 수정</p>
           </PageBar>
-          <BasicInfo sellerInfo={sellerInfo} />
-          <MoreInfo sellerInfo={sellerInfo} />
+          <BasicInfo
+            sellerInfo={sellerInfo}
+            handleChangeFile={handleChangeFile}
+            imgBase64={imgBase64}
+            setImgBase64={setImgBase64}
+            imgFile={imgFile}
+            setImgFile={setImgFile}
+            // profileImgBase64={profileImgBase64}
+            // setProfileImgBase64={setProfileImgBase64}
+            // backgroundImgBase64={backgroundImgBase64}
+            // setBackgroundImgBase64={setBackgroundImgBase64}
+          />
+          <MoreInfo
+            sellerInfo={sellerInfo}
+            handleChangeFile={handleChangeFile}
+            imgBase64={imgBase64}
+            setImgBase64={setImgBase64}
+            imgFile={imgFile}
+            setImgFile={setImgFile}
+            // backgroundImgBase64={backgroundImgBase64}
+            // setBackgroundImgBase64={setBackgroundImgBase64}
+            // backgroundImgFile={backgroundImgFile}
+            // setBackgroundImgFile={setBackgroundImgFile}
+          />
           <ButtonGroup>
             <Button primary type='submit' value='수정' />
             <Button type='button' value='취소' />

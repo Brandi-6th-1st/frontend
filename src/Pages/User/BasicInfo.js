@@ -4,16 +4,19 @@ import ImgBox from '../../Components/ImgBox/ImgBox';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning } from 'react-icons/ai';
 
-function BasicInfo({ sellerInfo }) {
+function BasicInfo({
+  sellerInfo,
+  handleChangeFile,
+  // profileImgBase64,
+  // setProfileImgBase64,
+  // profileImgFile,
+  // setProfileImgFile,
+  imgBase64,
+  setImgBase64,
+  imgFile,
+  setImgFile,
+}) {
   const [visible, setVisible] = useState(false);
-
-  const openModal = () => {
-    setVisible(true);
-  };
-
-  const closeModal = () => {
-    setVisible(false);
-  };
 
   const {
     identification,
@@ -44,6 +47,15 @@ function BasicInfo({ sellerInfo }) {
                   boxHeight='100px'
                   imgWidth='90px'
                   imgHeight='90px'
+                  handleChangeFile={handleChangeFile}
+                  imgBase64={imgBase64}
+                  setImgBase64={setImgBase64}
+                  imgFile={imgFile}
+                  setImgFile={setImgFile}
+                  // profileImgBase64={profileImgBase64}
+                  // setProfileImgBase64={setProfileImgBase64}
+                  // profileImgFile={profileImgFile}
+                  // setProfileImgFile={setProfileImgFile}
                 />
                 <ExtraInfo>
                   <AiOutlineWarning />
@@ -66,7 +78,7 @@ function BasicInfo({ sellerInfo }) {
               <td>셀러계정</td>
               <td>
                 {identification}
-                <button onClick={openModal}>비밀번호 변경하기</button>
+                <button>비밀번호 변경하기</button>
               </td>
             </tr>
           </tbody>
