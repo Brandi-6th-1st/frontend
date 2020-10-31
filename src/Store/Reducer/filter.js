@@ -12,12 +12,12 @@ export const sellerFilter = (items) => ({
   payload: items,
 });
 
-export const clearFilter = (items) => ({
+export const clearFilter = () => ({
   type: CLEAR_FILTER,
 });
 
 const initialState = {
-  masterFilter: {
+  commonFilter: {
     homeFilterTitle: [
       {
         id: 1,
@@ -117,64 +117,64 @@ const initialState = {
       },
     ],
   },
-  sellerFilter: {
-    homeFilterTitle: [
-      {
-        id: 3,
-        filterTitle: '판매여부',
-        category: [
-          {
-            category_id: '',
-            category_title: '전체',
-          },
-          {
-            category_id: 2,
-            category_title: '판매',
-          },
-          {
-            category_id: 3,
-            category_title: '미판매',
-          },
-        ],
-      },
-      {
-        id: 4,
-        filterTitle: '진열여부',
-        category: [
-          {
-            category_id: '',
-            category_title: '전체',
-          },
-          {
-            category_id: 2,
-            category_title: '진열',
-          },
-          {
-            category_id: 3,
-            category_title: '미진열',
-          },
-        ],
-      },
-      {
-        id: 5,
-        filterTitle: '할인여부',
-        category: [
-          {
-            category_id: '',
-            category_title: '전체',
-          },
-          {
-            category_id: 2,
-            category_title: '할인',
-          },
-          {
-            category_id: 3,
-            category_title: '미할인',
-          },
-        ],
-      },
-    ],
-  },
+  // commonFilter: {
+  //   homeFilterTitle: [
+  //     {
+  //       id: 3,
+  //       filterTitle: '판매여부',
+  //       category: [
+  //         {
+  //           category_id: '',
+  //           category_title: '전체',
+  //         },
+  //         {
+  //           category_id: 2,
+  //           category_title: '판매',
+  //         },
+  //         {
+  //           category_id: 3,
+  //           category_title: '미판매',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: 4,
+  //       filterTitle: '진열여부',
+  //       category: [
+  //         {
+  //           category_id: '',
+  //           category_title: '전체',
+  //         },
+  //         {
+  //           category_id: 2,
+  //           category_title: '진열',
+  //         },
+  //         {
+  //           category_id: 3,
+  //           category_title: '미진열',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: 5,
+  //       filterTitle: '할인여부',
+  //       category: [
+  //         {
+  //           category_id: '',
+  //           category_title: '전체',
+  //         },
+  //         {
+  //           category_id: 2,
+  //           category_title: '할인',
+  //         },
+  //         {
+  //           category_id: 3,
+  //           category_title: '미할인',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 };
 
 const filter = (state = initialState, { type, payload }) => {

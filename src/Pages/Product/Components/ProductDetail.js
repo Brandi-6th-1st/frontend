@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Pagination from 'react-js-pagination';
-// require('bootstrap/less/bootstrap.less');
 import {
   GoListUnordered,
   GoChevronRight,
@@ -17,6 +16,7 @@ export default function ProductDetail({
   activePage,
   setProduct,
   filters,
+  setShowModal,
   sendData,
 }) {
   // 버튼의 클릭 상태를 나타내느 배열 생성
@@ -74,6 +74,7 @@ export default function ProductDetail({
     }
   };
 
+  // limit 상태 업데이트
   const handliLimit = (e) => {
     setActivePage(1);
     setQuery({
@@ -83,6 +84,17 @@ export default function ProductDetail({
     });
   };
 
+  // limit 변경시 쿼리스트링 변경하여 get
+  useEffect(() => {
+    sendData();
+  }, [query.limit]);
+
+  // page 변경시 쿼리스트링 변경하여 get
+  useEffect(() => {
+    sendData();
+  }, [activePage]);
+
+  // 상품의 갯수 변경시 해당 갯수만큼 불리언 배열 생성
   useEffect(() => {
     if (product) {
       setIsSelected(new Array(product.productItem.length).fill(false));
@@ -90,11 +102,12 @@ export default function ProductDetail({
     return () => {};
   }, [product]);
 
+  // 페이지 변경시 해당 함수 실행
   const handlePageChange = (pageNumber) => {
     setActivePage(pageNumber);
     setQuery({
       ...query,
-      offset: query.limit * (pageNumber - 1),
+      offset: query.offset,
     });
   };
 
@@ -110,7 +123,7 @@ export default function ProductDetail({
       return alert('상품을 선택하세요');
     }
 
-    // 정상적인 동작일때 실행하는 함수
+    // 전체버튼이 체크되지 않는 경우
     if (
       (!!changeStatus.salesStatus.id || !!changeStatus.displayStatus.id) &&
       !!checkProduct.length
@@ -131,6 +144,7 @@ export default function ProductDetail({
             String(item.category_id) === changeStatus.displayStatus.id && item
         )[0].category_title;
 
+      // 상품의 진열여부, 판매여부를 변경한다.
       setProduct({
         ...product,
         productItem: product.productItem.map((item) => {
@@ -145,7 +159,7 @@ export default function ProductDetail({
           }
         }),
       });
-
+      // 적용 후 모든 상태를 초기화시킨다.
       setAllCheck(false);
       setCheckProduct([]);
       setchangeStatus({
@@ -176,7 +190,6 @@ export default function ProductDetail({
           </li>
           <li> 리스트</li>
         </RootTitle>
-        {/* limit 추가 예정 */}
         <LimitRange>
           <select
             value={query.limit}
@@ -327,7 +340,9 @@ export default function ProductDetail({
                     <ProductItem>{cate.is_displayed}</ProductItem>
                     <ProductItem>{cate.is_discounted}</ProductItem>
                     <ProductItem>
-                      <BuyBtn>구매하기</BuyBtn>
+                      <BuyBtn onClick={() => setShowModal(true)}>
+                        구매하기
+                      </BuyBtn>
                     </ProductItem>
                   </ProductLine>
                 );
@@ -352,7 +367,6 @@ export default function ProductDetail({
 const TableBox = styled.div`
   table {
     width: 100%;
-    /* table-layout: fixed;  */
   }
   overflow-x: scroll;
   white-space: nowrap;
@@ -515,27 +529,27 @@ const PaginationContainer = styled.div`
     background-color: #fff;
     border: 1px solid #ddd;
   }
-  /* 현재 활성화 된 page css 효과*/
+
   .pagination > li.active > a {
     background: #eee;
     border-color: #dddddd;
     color: #333;
     cursor: not-allowed;
   }
-  /* hover시 css 효과 */
+
   .pagination > li > a:hover {
     background: #eee;
     border-color: #dddddd;
     color: #333;
   }
-  /* 맨 처음 모서리 둥글게 */
+
   .pagination > li:first-child > a,
   .pagination > li:first-child > span {
     margin-left: 0;
     border-bottom-left-radius: 4px;
     border-top-left-radius: 4px;
   }
-  /* 맨 끝 모서리 둥글게 */
+
   .pagination > li:last-child > a,
   .pagination > li:last-child > span {
     margin-right: 0;
@@ -543,5 +557,3 @@ const PaginationContainer = styled.div`
     border-bottom-right-radius: 4px;
   }
 `;
-
-const PaginationBox = styled.div``;

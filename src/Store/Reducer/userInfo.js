@@ -15,11 +15,6 @@ export const isUnknown = () => ({
   type: typeNone,
 });
 
-export const isToken = (token) => ({
-  type: typetoken,
-  payload: token,
-});
-
 const initialState = {
   userType: false,
   token: 'najueunBABO',
@@ -33,8 +28,6 @@ const userInfo = (state = initialState, { type, payload }) => {
       return { ...initialState, userType: false };
     case typeNone:
       return { ...initialState, userType: null };
-    case typetoken:
-      return { ...initialState, token: payload };
     default:
       return state;
   }

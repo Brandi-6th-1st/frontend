@@ -21,16 +21,16 @@ export default function Filter({ pagetext }) {
       alert('검색항목를 입력해주세요.');
   };
 
-  const searchFilterd = async () => {
-    const changeForm = {
-      ...params,
-      startDate: dateFormatChange(params.startDate),
-      endDate: dateFormatChange(params.endDate),
-    };
-    const getData = await axios.get(``, {
-      params: changeForm,
-    });
-  };
+  // const searchFilterd = async () => {
+  //   const changeForm = {
+  //     ...params,
+  //     startDate: dateFormatChange(params.startDate),
+  //     endDate: dateFormatChange(params.endDate),
+  //   };
+  //   const getData = await axios.get(``, {
+  //     params: changeForm,
+  //   });
+  // };
 
   useEffect(() => {
     console.log(params.searchOption);

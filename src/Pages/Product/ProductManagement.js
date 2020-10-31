@@ -12,9 +12,11 @@ import ProductDetail from './Components/ProductDetail';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
+import Purchase from './Components/Purchase';
 
 export default function ProductManagement() {
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   // 마스터에만 사용되는 데이터를 관리
   const [differentFilter, setDifferentFilter] = useState();
   // 공통으로 사용되는 데이터를 관리
@@ -53,12 +55,10 @@ export default function ProductManagement() {
     token: userInfo.token,
   }));
 
-  console.log('전역토큰', token);
-
   // store에 있는 마스터 or 셀러 필터를 가져온다.
-  const { masterFilter, sellerFilter } = useSelector(({ filter }) => ({
-    masterFilter: filter.masterFilter,
-    sellerFilter: filter.sellerFilter,
+  const { commonFilter } = useSelector(({ filter }) => ({
+    commonFilter: filter.commonFilter,
+    // commonFilter: filter.commonFilter,
   }));
 
   // get을 통하여 들어오는 필터의 상태별로 각 버튼의 boolean 생성
@@ -97,12 +97,12 @@ export default function ProductManagement() {
       if (DataProductManage.isMaster) {
         // 셀러명 검색 필터만 분리하여 정의
         const masterData =
-          masterFilter &&
-          masterFilter.homeFilterTitle.filter((el) => el.id === 1)[0];
+          commonFilter &&
+          commonFilter.homeFilterTitle.filter((el) => el.id === 1)[0];
 
         const sellerData = {
-          ...masterFilter,
-          homeFilterTitle: masterFilter.homeFilterTitle.filter(
+          ...commonFilter,
+          homeFilterTitle: commonFilter.homeFilterTitle.filter(
             (el) => el.id !== 1
           ),
         };
@@ -124,10 +124,10 @@ export default function ProductManagement() {
         // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
         // 각 필터별로 상태를 생성
-        setFilters(sellerFilter);
+        setFilters(commonFilter);
         // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
         if (!filterStatus) {
-          createFilter(sellerFilter);
+          createFilter(commonFilter);
         }
       }
     } catch (err) {
@@ -306,10 +306,14 @@ export default function ProductManagement() {
         return el.id === 5 && el.selectedId;
       })[0].selectedId;
 
+    // 상태로 저장하고 있던 값을 params로 보내기 위해 data form 변경
     const queryObj = {
       ...query,
-      offset: query.offset !== 0 ? query.offset : null,
-      limit: query.limit !== 10 ? query.limit : null,
+      offset:
+        (activePage - 1) * query.limit !== 0
+          ? (activePage - 1) * query.limit
+          : null,
+      limit: Number(query.limit) !== 10 ? query.limit : null,
       sellerAttribute: attribute ? attribute : null,
       salesStatus: salse,
       displayStatus: display,
@@ -317,10 +321,17 @@ export default function ProductManagement() {
     };
 
     console.log('전송');
-    console.log(queryObj);
+    console.log('전송된 파람스', queryObj);
+    //변경된 form을 param에 넣어 get Data
     getData(queryObj);
   };
 
+  // 검색버튼을 눌렀을 때 실행되는 함수
+  const handleSearch = () => {
+    sendData();
+    setActivePage(1);
+  };
+  // 초기화 버튼을 눌렀을 때, 상태를 초기화해준다.
   const resetFilter = () => {
     console.log('초기화');
     createFilter(filters);
@@ -335,7 +346,7 @@ export default function ProductManagement() {
       displayStatus: null,
       discountStatus: null,
       limit: Number(query.limit),
-      offset: Number(query.limit) * activePage,
+      offset: Number(query.limit) ? Number(query.limit) : 10 * activePage,
     });
     setCurrentDate({
       startDate: '',
@@ -343,6 +354,7 @@ export default function ProductManagement() {
     });
   };
 
+  // DatePicker 라이브러리에서 지원하는 form과 관리하는 form이 달라서 따로 관리해주었다.
   const handleEndDate = (date) => {
     setCurrentDate({ ...currentDate, endDate: date });
     setQuery({
@@ -351,10 +363,11 @@ export default function ProductManagement() {
     });
   };
 
+  // DatePicker 라이브러리에서 지원하는 form과 관리하는 form이 달라서 따로 관리해주었다.
   const handleStartDate = (date) => {
     setCurrentDate({ ...currentDate, startDate: date });
     setQuery({
-      ...currentDate,
+      ...query,
       startDate: dateFormatChange(date),
     });
   };
@@ -365,6 +378,7 @@ export default function ProductManagement() {
       <Main>
         <Nav />
         <Section>
+          <Purchase showModal={showModal} setShowModal={setShowModal} />
           <h3>상품 관리</h3>
           <FilterContainer>
             <FilterCategoryTitle>
@@ -469,7 +483,7 @@ export default function ProductManagement() {
                 );
               })}
             <SearchContainer>
-              <SearchBtn onClick={sendData}>검색</SearchBtn>
+              <SearchBtn onClick={handleSearch}>검색</SearchBtn>
               <CanclehBtn onClick={resetFilter}>초기화</CanclehBtn>
             </SearchContainer>
           </FilterContainer>
@@ -482,6 +496,8 @@ export default function ProductManagement() {
             setActivePage={setActivePage}
             filters={filters}
             sendData={sendData}
+            setShowModal={setShowModal}
+            showModal={showModal}
           />
         </Section>
       </Main>

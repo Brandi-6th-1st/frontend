@@ -5,6 +5,7 @@ import Signup from './Pages/Signup/Signup';
 import Main from './Pages/Main/Main';
 import ProductManagement from './Pages/Product/ProductManagement';
 import Home from './Pages/Home/Home';
+import Purchase from './Pages/Product/Components/Purchase';
 import Order from './Pages/Order/Order';
 
 function Routes() {
