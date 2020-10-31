@@ -21,6 +21,7 @@ export default function ProductManagement() {
   const [differentFilter, setDifferentFilter] = useState();
   // 공통으로 사용되는 데이터를 관리
   const [product, setProduct] = useState();
+  // 리덕스에서 가져온 필터를 상태로 관리
   const [filters, setFilters] = useState({});
   // 각 필터의 상태를 선택된 상태를 배열로 관리
   const [filterStatus, setFilterStatus] = useState();
