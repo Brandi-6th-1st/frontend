@@ -1,130 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import axios from 'axios';
 import DateFilter from './DateFilter';
-import dateFormatChange from '../../Components/ChangeTimeFormat';
-import { TimeAgo } from '@n1ru4l/react-time-ago';
 
-export default function Filter({ pagetext }) {
-  const [searchDate, setSearchDate] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-  });
-  const [params, setParams] = useState({
-    startDate: null,
-    endDate: null,
-    searchKeyword: null,
-    searchOption: null,
-  });
-
-  const [selectDate, setSelectDate] = useState([
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
-
-  const searchHandler = () => {
-    // 검색버튼 눌렀을때 검색유효성 검사
-    // 검색어는 있는데 검색 항목을 선택하지 않았을 경우
-    params.searchKeyword &&
-      !params.searchOption &&
-      alert('검색항목를 입력해주세요.');
-  };
-
-  const handleDate = (value, i) => {
-    setSelectDate(
-      selectDate && selectDate.map((el, idx) => (idx === i ? true : false))
-    );
-    const newDate = new Date();
-
-    const changeDate = (dayAgo, monthAgo) => {
-      const year = newDate.getFullYear();
-      const month = newDate.getMonth() - monthAgo;
-      const day = newDate.getDate() - dayAgo;
-      return new Date(year, month, day);
-    };
-
-    if (value === '전체') {
-      setParams({ ...params, startDate: null, endDate: null });
-      setSearchDate({ startDate: null, endDate: null });
-    } else if (value === '오늘') {
-      setParams({
-        ...params,
-        startDate: dateFormatChange(newDate),
-        endDate: dateFormatChange(newDate),
-      });
-      setSearchDate({
-        startDate: new Date(),
-        endDate: new Date(),
-      });
-    } else if (value === '3일') {
-      // const dayAgo = new Date().getTime() - oneDay * 3;
-      setParams({
-        ...params,
-        startDate: dateFormatChange(changeDate(3, 0)),
-        endDate: dateFormatChange(newDate),
-      });
-      setSearchDate({
-        startDate: changeDate(3, 0),
-        endDate: new Date(),
-      });
-    } else if (value === '1주일') {
-      setParams({
-        ...params,
-        startDate: dateFormatChange(changeDate(7, 0)),
-        endDate: dateFormatChange(newDate),
-      });
-      setSearchDate({
-        startDate: changeDate(7, 0),
-        endDate: new Date(),
-      });
-    } else if (value === '1개월') {
-      setParams({
-        ...params,
-        startDate: dateFormatChange(changeDate(0, 1)),
-        endDate: dateFormatChange(newDate),
-      });
-      setSearchDate({
-        startDate: changeDate(0, 1),
-        endDate: new Date(),
-      });
-    } else if (value === '3개월') {
-      setParams({
-        ...params,
-        startDate: dateFormatChange(changeDate(0, 3)),
-        endDate: dateFormatChange(newDate),
-      });
-      setSearchDate({
-        startDate: changeDate(0, 3),
-        endDate: new Date(),
-      });
-    }
-  };
-
-  // const searchFilterd = async () => {
-  //   const changeForm = {
-  //     ...params,
-  //     startDate: dateFormatChange(params.startDate),
-  //     endDate: dateFormatChange(params.endDate),
-  //   };
-  //   const getData = await axios.get(``, {
-  //     params: changeForm,
-  //   });
-  // };
-
-  useEffect(() => {
-    console.log(params.searchOption);
-  }, [params.searchOption]);
-
-  console.log(params);
-  // console.log(searchDate);
+export default function Filter({
+  pagetext,
+  searchDate,
+  setSearchDate,
+  handleDate,
+  selectDate,
+  params,
+  setParams,
+  sendQuery,
+  filterReset,
+}) {
   return (
     <FilterContainer>
       <Div>
         <Select
+          value={params.searchOption || ''}
           onChange={(e) =>
             setParams({ ...params, searchOption: e.target.value })
           }
@@ -142,6 +35,7 @@ export default function Filter({ pagetext }) {
           onChange={(e) =>
             setParams({ ...params, searchKeyword: e.target.value })
           }
+          value={params.searchKeyword ? params.searchKeyword : ''}
           type="text"
           placeholder="검색어를 입력하세요."
         />
@@ -201,10 +95,10 @@ export default function Filter({ pagetext }) {
         <DateFilter searchDate={searchDate} setSearchDate={setSearchDate} />
       </Divs>
       <Div>
-        <Button search onClick={searchHandler}>
+        <Button search onClick={() => sendQuery()}>
           검색
         </Button>
-        <Button>초기화</Button>
+        <Button onClick={filterReset}>초기화</Button>
       </Div>
     </FilterContainer>
   );

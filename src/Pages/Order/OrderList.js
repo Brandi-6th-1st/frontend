@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { KeyboardArrowRight, List } from '@styled-icons/material';
 import Table from './Table';
 
-export default function OrderList({ pagetext }) {
+export default function OrderList({ pagetext, orderList, setOrderList }) {
+  console.log('asdasdads', orderList);
   return (
     <div>
       <Pagebar>
@@ -37,7 +38,11 @@ export default function OrderList({ pagetext }) {
           </Select>
         </div>
       </Pagebar>
-      <Table pagetext={pagetext} />
+      <Table
+        pagetext={pagetext}
+        orderList={orderList}
+        setOrderList={setOrderList}
+      />
     </div>
   );
 }

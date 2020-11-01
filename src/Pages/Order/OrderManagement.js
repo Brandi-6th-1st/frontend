@@ -1,8 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import regeneratorRuntime from 'regenerator-runtime';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
 import Filter from './Filter';
 import OrderList from './OrderList';
+import dateFormatChange from '../../Components/ChangeTimeFormat';
 import COMPONENT_ORDER from './DataOrderComponent';
 
 export default function OrderManagement() {
@@ -11,6 +14,162 @@ export default function OrderManagement() {
   const categoryId = match.id;
   const pagetext = COMPONENT_ORDER[categoryId - 1];
   console.log(match);
+
+  // 현재 시간을 newData에 할당
+  const newDate = new Date();
+
+  // 몇일전, 몇달전으로 리턴하는 함수
+  const changeDate = (dayAgo, monthAgo) => {
+    const year = newDate.getFullYear();
+    const month = newDate.getMonth() - monthAgo;
+    const day = newDate.getDate() - dayAgo;
+    return new Date(year, month, day);
+  };
+
+  // datePicker에서 현재 가지고 있는 상태
+  const [searchDate, setSearchDate] = useState({
+    startDate: changeDate(3, 0),
+    endDate: new Date(),
+  });
+
+  // 검색버튼 클릭시 보낼 데이터 관리
+  const [params, setParams] = useState({
+    startDate: null,
+    endDate: null,
+    searchKeyword: null,
+    searchOption: null,
+  });
+
+  // axios.get 시 주문 항목 관리
+  const [orderList, setOrderList] = useState();
+
+  // 현재 클릭되어 있는 날짜 상태
+  const [selectDate, setSelectDate] = useState([
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+  ]);
+
+  const filterReset = () => {
+    setSearchDate({
+      startDate: changeDate(3, 0),
+      endDate: new Date(),
+    });
+    setParams({
+      startDate: null,
+      endDate: null,
+      searchKeyword: null,
+      searchOption: null,
+    });
+    setSelectDate([false, false, true, false, false, false]);
+  };
+
+  // axios.get 하게되는 함수이다. params를 따로 인자로 빼어 params만 넣어서 언제든 실행 가능
+  const getProductInfo = async (params) => {
+    try {
+      const result = await axios.get(
+        `/public/Data/DataProductPreManage.json`,
+        // `/public/Data/DataShippingMansge.json`,
+        // `/public/Data/DataDeliveryComplitedManage.json`,
+        // `/public/Data/DataConfirmPurchase.json`,
+        {
+          params: params,
+          timeout: 3000, //3초
+        }
+      );
+      const { DataProductManage } = result.data;
+      setOrderList(DataProductManage.productItem);
+      console.log('패치', DataProductManage);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 언마운트시 axios.get
+  useEffect(() => {
+    getProductInfo();
+  }, []);
+
+  // 현재 클릭된 버튼에 따라 동작한다.
+  const handleDate = (value, i) => {
+    setSelectDate(
+      selectDate && selectDate.map((el, idx) => (idx === i ? true : false))
+    );
+
+    if (value === '전체') {
+      setParams({ ...params, startDate: null, endDate: null });
+      setSearchDate({ startDate: null, endDate: null });
+    } else if (value === '오늘') {
+      setParams({
+        ...params,
+        startDate: dateFormatChange(newDate),
+        endDate: dateFormatChange(newDate),
+      });
+      setSearchDate({
+        startDate: new Date(),
+        endDate: new Date(),
+      });
+    } else if (value === '3일') {
+      // const dayAgo = new Date().getTime() - oneDay * 3;
+      setParams({
+        ...params,
+        startDate: dateFormatChange(changeDate(3, 0)),
+        endDate: dateFormatChange(newDate),
+      });
+      setSearchDate({
+        startDate: changeDate(3, 0),
+        endDate: new Date(),
+      });
+    } else if (value === '1주일') {
+      setParams({
+        ...params,
+        startDate: dateFormatChange(changeDate(7, 0)),
+        endDate: dateFormatChange(newDate),
+      });
+      setSearchDate({
+        startDate: changeDate(7, 0),
+        endDate: new Date(),
+      });
+    } else if (value === '1개월') {
+      setParams({
+        ...params,
+        startDate: dateFormatChange(changeDate(0, 1)),
+        endDate: dateFormatChange(newDate),
+      });
+      setSearchDate({
+        startDate: changeDate(0, 1),
+        endDate: new Date(),
+      });
+    } else if (value === '3개월') {
+      setParams({
+        ...params,
+        startDate: dateFormatChange(changeDate(0, 3)),
+        endDate: dateFormatChange(newDate),
+      });
+      setSearchDate({
+        startDate: changeDate(0, 3),
+        endDate: new Date(),
+      });
+    }
+  };
+
+  // 검색버튼 클릭시 파람스에 객체를 넣어 해당 쿼리로 get
+  const sendQuery = () => {
+    console.log('전송될 파람스', params);
+    getProductInfo(params);
+  };
+
+  // 현재 날짜가 변경되면 params도 최신화 시킨다.
+  useEffect(() => {
+    setParams({
+      ...params,
+      startDate: dateFormatChange(searchDate.startDate),
+      endDate: dateFormatChange(searchDate.endDate),
+    });
+  }, [searchDate]);
 
   return (
     <ManagementContainer>
@@ -22,8 +181,23 @@ export default function OrderManagement() {
             pagetext.description.map((el) => <p>{el}</p>)}
         </div>
       </Title>
-      <Filter pagetext={pagetext} />
-      <OrderList pagetext={pagetext} />
+      <Filter
+        pagetext={pagetext}
+        searchDate={searchDate}
+        setSearchDate={setSearchDate}
+        handleDate={handleDate}
+        selectDate={selectDate}
+        params={params}
+        setParams={setParams}
+        sendQuery={sendQuery}
+        filterReset={filterReset}
+      />
+      <OrderList
+        pagetext={pagetext}
+        orderList={orderList}
+        setOrderList={setOrderList}
+        setOrderList={setOrderList}
+      />
     </ManagementContainer>
   );
 }
