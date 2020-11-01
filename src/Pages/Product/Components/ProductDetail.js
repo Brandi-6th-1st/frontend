@@ -122,7 +122,7 @@ export default function ProductDetail({
       !!checkProduct.length
     ) {
       // 판매여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
-      const sales = filters.homeFilterTitle
+      const sales = filters.filter_list
         .filter((el) => el.id === changeStatus.salesStatus.filterId && el)[0]
         .category.filter(
           (item) =>
@@ -130,7 +130,7 @@ export default function ProductDetail({
         )[0].category_title;
 
       // 진열여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
-      const display = filters.homeFilterTitle
+      const display = filters.filter_list
         .filter((el) => el.id === changeStatus.displayStatus.filterId && el)[0]
         .category.filter(
           (item) =>
@@ -218,8 +218,8 @@ export default function ProductDetail({
           }
         >
           <option>판매여부</option>
-          {filters.homeFilterTitle &&
-            filters.homeFilterTitle.map((el) => {
+          {filters.filter_list &&
+            filters.filter_list.map((el) => {
               return (
                 el.id === salesId &&
                 el.category.map((sub, i) => {
@@ -247,8 +247,8 @@ export default function ProductDetail({
           }
         >
           <option>진열여부</option>
-          {filters.homeFilterTitle &&
-            filters.homeFilterTitle.map((el) => {
+          {filters.filter_list &&
+            filters.filter_list.map((el) => {
               return (
                 el.id === displayId &&
                 el.category.map((sub, i) => {

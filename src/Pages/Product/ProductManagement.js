@@ -32,11 +32,6 @@ export default function ProductManagement() {
   });
   // 현재 페이지 관리
   const [activePage, setActivePage] = useState(1);
-  const sellerNameId = 'seller_name';
-  const attributeId = 'attribute';
-  const salesId = 'sales';
-  const displayId = 'display';
-  const discountId = 'discount';
 
   // axios할 쿼리url 생성
   // const [queryUrl, setQueryUrl] = useState('');
@@ -68,7 +63,7 @@ export default function ProductManagement() {
   const createFilter = (data) => {
     const allFilter =
       data &&
-      data.homeFilterTitle.map((el) => {
+      data.filter_list.map((el) => {
         return {
           [el.filterTitle]: new Array(el.category && el.category.length)
             .fill()
@@ -99,18 +94,13 @@ export default function ProductManagement() {
       // 유저 타입이 마스터인 경우,
       if (userType) {
         // 셀러명 검색 필터만 분리하여 정의
-
         const masterData =
           commonFilter &&
-          commonFilter.homeFilterTitle.filter(
-            (el) => el.id === sellerNameId
-          )[0];
+          commonFilter.filter_list.filter((el) => el.id === 1)[0];
 
         const sellerData = {
           ...commonFilter,
-          homeFilterTitle: commonFilter.homeFilterTitle.filter(
-            (el) => el.id !== sellerNameId
-          ),
+          filter_list: commonFilter.filter_list.filter((el) => el.id !== 1),
         };
 
         // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
@@ -160,7 +150,7 @@ export default function ProductManagement() {
   // 각 필터 선택시 true <-> false로 바꿔준다.
   const changeFilter = (id, idx, name, filterId) => {
     // 단일선택하는 필터인 경우
-    if (filterId !== attributeId) {
+    if (filterId !== 2) {
       setFilterStatus(
         filterStatus.map((el) =>
           !!el[name]
@@ -178,7 +168,7 @@ export default function ProductManagement() {
     }
 
     // 다중선택하는 필터인 경우
-    if (filterId === attributeId) {
+    if (filterId === 2) {
       // 필터 전체를 관리하는 배열에서 다중선택하는 필터인 셀러속성이 들어있는 배열만 가져온다.
       const multiFilter =
         filterStatus && filterStatus.filter((el) => el && !!el[name] && el)[0];
@@ -286,30 +276,30 @@ export default function ProductManagement() {
     const salse =
       filterStatus &&
       filterStatus.filter((el) => {
-        return el.id === salesId && el.selectedId;
+        return el.id === 3 && el.selectedId;
       })[0] &&
       filterStatus.filter((el) => {
-        return el.id === salesId && el.selectedId;
+        return el.id === 3 && el.selectedId;
       })[0].selectedId;
 
     // 진열여부의 현재 버튼이 눌린 상태
     const display =
       filterStatus &&
       filterStatus.filter((el) => {
-        return el.id === displayId && el.selectedId;
+        return el.id === 4 && el.selectedId;
       })[0] &&
       filterStatus.filter((el) => {
-        return el.id === displayId && el.selectedId;
+        return el.id === 4 && el.selectedId;
       })[0].selectedId;
 
     // 할인여부의 현재 버튼이 눌린 상태
     const discount =
       filterStatus &&
       filterStatus.filter((el) => {
-        return el.id === discountId && el.selectedId;
+        return el.id === 5 && el.selectedId;
       })[0] &&
       filterStatus.filter((el) => {
-        return el.id === discountId && el.selectedId;
+        return el.id === 5 && el.selectedId;
       })[0].selectedId;
 
     // 상태로 저장하고 있던 값을 params로 보내기 위해 data form 변경
@@ -414,7 +404,7 @@ export default function ProductManagement() {
             </FilterCategoryTitle>
             <FiltersCategoryTitle>
               {/* 마스터에만 있는 셀러명 필터 렌더 */}
-              {differentFilter && differentFilter.id === sellerNameId && (
+              {differentFilter && differentFilter.id === 1 && (
                 <SelectFilterCategory>
                   <FilterTitle>
                     {differentFilter && differentFilter.filterTitle}
@@ -458,8 +448,8 @@ export default function ProductManagement() {
               </SelectFilterCategory>
             </FiltersCategoryTitle>
             {/* 각 필터별로 다른 name을 가지기 때문에 각각 렌더 */}
-            {filters.homeFilterTitle &&
-              filters.homeFilterTitle.map((cate, i) => {
+            {filters.filter_list &&
+              filters.filter_list.map((cate, i) => {
                 return (
                   <SelectFilterCategory cate={cate.category.length} key={i}>
                     <SelectFilterTitle>{cate.filterTitle} :</SelectFilterTitle>
@@ -503,8 +493,7 @@ export default function ProductManagement() {
             filters={filters}
             sendData={sendData}
             setShowModal={setShowModal}
-            salesId={salesId}
-            displayId={displayId}
+            showModal={showModal}
           />
         </Section>
       </Main>

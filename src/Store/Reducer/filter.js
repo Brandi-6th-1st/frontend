@@ -20,11 +20,11 @@ const initialState = {
   commonFilter: {
     homeFilterTitle: [
       {
-        id: 'seller_name',
+        id: 1,
         filterTitle: '셀러명',
       },
       {
-        id: 'attribute',
+        id: 2,
         filterTitle: '셀러속성',
         category: [
           {
@@ -62,7 +62,7 @@ const initialState = {
         ],
       },
       {
-        id: 'sales',
+        id: 3,
         filterTitle: '판매여부',
         category: [
           {
@@ -80,7 +80,7 @@ const initialState = {
         ],
       },
       {
-        id: 'display',
+        id: 4,
         filterTitle: '진열여부',
         category: [
           {
@@ -98,7 +98,7 @@ const initialState = {
         ],
       },
       {
-        id: 'discount',
+        id: 5,
         filterTitle: '할인여부',
         category: [
           {
