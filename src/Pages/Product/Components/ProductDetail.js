@@ -18,6 +18,8 @@ export default function ProductDetail({
   filters,
   setShowModal,
   sendData,
+  salesId,
+  displayId,
 }) {
   // 버튼의 클릭 상태를 나타내는 배열 생성
   const [isSelected, setIsSelected] = useState(
@@ -32,12 +34,12 @@ export default function ProductDetail({
     salesStatus: {
       id: '',
       // 판매여부가 담긴 필터 id
-      filterId: 3,
+      filterId: salesId,
     },
     displayStatus: {
       id: '',
       // 진열여부가 담긴 필터 id
-      filterId: 4,
+      filterId: displayId,
     },
   });
 
@@ -156,11 +158,11 @@ export default function ProductDetail({
       setchangeStatus({
         salesStatus: {
           id: '',
-          filterId: 3,
+          filterId: salesId,
         },
         displayStatus: {
           id: '',
-          filterId: 4,
+          filterId: displayId,
         },
       });
     }
@@ -219,7 +221,7 @@ export default function ProductDetail({
           {filters.homeFilterTitle &&
             filters.homeFilterTitle.map((el) => {
               return (
-                el.id === 3 &&
+                el.id === salesId &&
                 el.category.map((sub, i) => {
                   return (
                     i !== 0 && (
@@ -248,7 +250,7 @@ export default function ProductDetail({
           {filters.homeFilterTitle &&
             filters.homeFilterTitle.map((el) => {
               return (
-                el.id === 4 &&
+                el.id === displayId &&
                 el.category.map((sub, i) => {
                   return (
                     i !== 0 && (

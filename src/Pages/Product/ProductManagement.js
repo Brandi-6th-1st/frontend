@@ -32,6 +32,11 @@ export default function ProductManagement() {
   });
   // 현재 페이지 관리
   const [activePage, setActivePage] = useState(1);
+  const sellerNameId = 'seller_name';
+  const attributeId = 'attribute';
+  const salesId = 'sales';
+  const displayId = 'display';
+  const discountId = 'discount';
 
   // axios할 쿼리url 생성
   // const [queryUrl, setQueryUrl] = useState('');
@@ -94,14 +99,17 @@ export default function ProductManagement() {
       // 유저 타입이 마스터인 경우,
       if (userType) {
         // 셀러명 검색 필터만 분리하여 정의
+
         const masterData =
           commonFilter &&
-          commonFilter.homeFilterTitle.filter((el) => el.id === 1)[0];
+          commonFilter.homeFilterTitle.filter(
+            (el) => el.id === sellerNameId
+          )[0];
 
         const sellerData = {
           ...commonFilter,
           homeFilterTitle: commonFilter.homeFilterTitle.filter(
-            (el) => el.id !== 1
+            (el) => el.id !== sellerNameId
           ),
         };
 
@@ -152,7 +160,7 @@ export default function ProductManagement() {
   // 각 필터 선택시 true <-> false로 바꿔준다.
   const changeFilter = (id, idx, name, filterId) => {
     // 단일선택하는 필터인 경우
-    if (filterId !== 2) {
+    if (filterId !== attributeId) {
       setFilterStatus(
         filterStatus.map((el) =>
           !!el[name]
@@ -170,7 +178,7 @@ export default function ProductManagement() {
     }
 
     // 다중선택하는 필터인 경우
-    if (filterId === 2) {
+    if (filterId === attributeId) {
       // 필터 전체를 관리하는 배열에서 다중선택하는 필터인 셀러속성이 들어있는 배열만 가져온다.
       const multiFilter =
         filterStatus && filterStatus.filter((el) => el && !!el[name] && el)[0];
@@ -278,30 +286,30 @@ export default function ProductManagement() {
     const salse =
       filterStatus &&
       filterStatus.filter((el) => {
-        return el.id === 3 && el.selectedId;
+        return el.id === salesId && el.selectedId;
       })[0] &&
       filterStatus.filter((el) => {
-        return el.id === 3 && el.selectedId;
+        return el.id === salesId && el.selectedId;
       })[0].selectedId;
 
     // 진열여부의 현재 버튼이 눌린 상태
     const display =
       filterStatus &&
       filterStatus.filter((el) => {
-        return el.id === 4 && el.selectedId;
+        return el.id === displayId && el.selectedId;
       })[0] &&
       filterStatus.filter((el) => {
-        return el.id === 4 && el.selectedId;
+        return el.id === displayId && el.selectedId;
       })[0].selectedId;
 
     // 할인여부의 현재 버튼이 눌린 상태
     const discount =
       filterStatus &&
       filterStatus.filter((el) => {
-        return el.id === 5 && el.selectedId;
+        return el.id === discountId && el.selectedId;
       })[0] &&
       filterStatus.filter((el) => {
-        return el.id === 5 && el.selectedId;
+        return el.id === discountId && el.selectedId;
       })[0].selectedId;
 
     // 상태로 저장하고 있던 값을 params로 보내기 위해 data form 변경
@@ -406,7 +414,7 @@ export default function ProductManagement() {
             </FilterCategoryTitle>
             <FiltersCategoryTitle>
               {/* 마스터에만 있는 셀러명 필터 렌더 */}
-              {differentFilter && differentFilter.id === 1 && (
+              {differentFilter && differentFilter.id === sellerNameId && (
                 <SelectFilterCategory>
                   <FilterTitle>
                     {differentFilter && differentFilter.filterTitle}
@@ -495,7 +503,8 @@ export default function ProductManagement() {
             filters={filters}
             sendData={sendData}
             setShowModal={setShowModal}
-            showModal={showModal}
+            salesId={salesId}
+            displayId={displayId}
           />
         </Section>
       </Main>
