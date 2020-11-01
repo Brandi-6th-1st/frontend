@@ -18,100 +18,80 @@ export const clearFilter = () => ({
 
 const initialState = {
   commonFilter: {
-    homeFilterTitle: [
+    filter_list: [
       {
-        id: 1,
-        filterTitle: '셀러명',
-      },
-      {
-        id: 2,
-        filterTitle: '셀러속성',
-        category: [
-          {
-            category_id: '',
-            category_title: '전체',
-          },
-          {
-            category_id: 2,
-            category_title: '쇼핑몰',
-          },
-          {
-            category_id: 3,
-            category_title: '마켓',
-          },
-          {
-            category_id: 4,
-            category_title: '로드샵',
-          },
-          {
-            category_id: 5,
-            category_title: '디자이너브랜드',
-          },
-          {
-            category_id: 6,
-            category_title: '제너럴브랜드',
-          },
-          {
-            category_id: 7,
-            category_title: '내셔널브랜드',
-          },
-          {
-            category_id: 8,
-            category_title: '뷰티',
-          },
-        ],
-      },
-      {
-        id: 3,
         filterTitle: '판매여부',
+        id: 'sale',
         category: [
           {
             category_id: '',
             category_title: '전체',
           },
           {
-            category_id: 2,
+            category_id: 1,
             category_title: '판매',
           },
           {
-            category_id: 3,
+            category_id: 0,
             category_title: '미판매',
           },
         ],
       },
       {
-        id: 4,
         filterTitle: '진열여부',
+        id: 'display',
         category: [
           {
             category_id: '',
             category_title: '전체',
           },
           {
-            category_id: 2,
+            category_id: 1,
             category_title: '진열',
           },
           {
-            category_id: 3,
+            category_id: 0,
             category_title: '미진열',
           },
         ],
       },
       {
-        id: 5,
         filterTitle: '할인여부',
+        id: 'discount',
         category: [
           {
             category_id: '',
             category_title: '전체',
           },
           {
-            category_id: 2,
+            category_id: 1,
             category_title: '할인',
           },
           {
-            category_id: 3,
+            category_id: 0,
             category_title: '미할인',
+          },
+        ],
+      },
+      {
+        filterTitle: '셀러명',
+        id: 'seller_name',
+      },
+      {
+        filterTitle: '셀러속성',
+        id: 'attribute',
+        category: [
+          {
+            category_id: 0,
+            category_title: '전체',
+          },
+          {
+            category_id: 1,
+            category_title: '마켓',
+          },
+          {
+            category_id: 2,
+            category_title: '쇼핑몰',
           },
         ],
       },
