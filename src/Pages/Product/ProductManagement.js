@@ -59,9 +59,9 @@ export default function ProductManagement() {
   const userType = useSelector(({ userInfo }) => userInfo);
 
   // store에 있는 마스터 or 셀러 필터를 가져온다.
-  const { commonFilter } = useSelector(({ filter }) => ({
-    commonFilter: filter.commonFilter,
-    // commonFilter: filter.commonFilter,
+  const { filter_list } = useSelector(({ filter }) => ({
+    filter_list: filter.filter_list,
+    // filter_list: filter.filter_list,
   }));
 
   // get을 통하여 들어오는 필터의 상태별로 각 버튼의 boolean 생성
@@ -90,7 +90,10 @@ export default function ProductManagement() {
     try {
       const result = await axios.get(`/public/Data/DataProductManage.json`, {
         params: param,
-        timeout: 3000, //3초
+        timeout: 3000, //3초,
+        // paramsSerializer: function (params) {
+        //   return Qs.stringify(params, { arrayFormat: 'brackets' });
+        // },
       });
 
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
@@ -101,14 +104,11 @@ export default function ProductManagement() {
         // 셀러명 검색 필터만 분리하여 정의
 
         const masterData =
-          commonFilter &&
-          commonFilter.filter_list.filter((el) => el.id === sellerNameId)[0];
+          filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
 
         const sellerData = {
-          ...commonFilter,
-          filter_list: commonFilter.filter_list.filter(
-            (el) => el.id !== sellerNameId
-          ),
+          ...filter_list,
+          filter_list: filter_list.filter((el) => el.id !== sellerNameId),
         };
 
         // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
@@ -128,10 +128,10 @@ export default function ProductManagement() {
         // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
         // 각 필터별로 상태를 생성
-        setFilters(commonFilter);
+        setFilters(filter_list);
         // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
         if (!filterStatus) {
-          createFilter(commonFilter);
+          createFilter(filter_list);
         }
       }
     } catch (err) {
@@ -321,6 +321,9 @@ export default function ProductManagement() {
         return el.id === discountId && el.id;
       })[0].selectedId;
 
+    const test = query.sellerDetail;
+    console.log({ ...query });
+
     // 상태로 저장하고 있던 값을 params로 보내기 위해 data form 변경
     const queryObj = {
       ...query,
@@ -333,6 +336,9 @@ export default function ProductManagement() {
       salesStatus: salse !== '' ? salse : null,
       displayStatus: display !== '' ? display : null,
       discountStatus: discount !== '' ? discount : null,
+      [`${query.sellerDetail}`]: query.productDetail,
+      sellerDetail: null,
+      productDetail: null,
     };
 
     console.log('전송');
@@ -449,9 +455,9 @@ export default function ProductManagement() {
                   }
                 >
                   <option>Select</option>
-                  <option>상품명</option>
-                  <option>상품번호</option>
-                  <option>상품코드</option>
+                  <option value="product_name">상품명</option>
+                  <option value="product_number">상품번호</option>
+                  <option value="product_code">상품코드</option>
                 </select>
                 <SearchBox>
                   <ProductSearch
