@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 export default function SubList({
   active,
-  subcategory,
+  subTitle,
   categoryIdx,
   handlePage,
   sidebarSmall,
@@ -24,15 +24,15 @@ export default function SubList({
 
   return (
     <SubContainer sidebarSmall={sidebarSmall}>
-      {subcategory.map((el, idx) => (
+      {subTitle.map((el, idx) => (
         <Subcategory
           index={idx + 1}
           subActive={subActive}
-          key={el.id}
-          onClick={() => goToMenu(idx + 1, el.link)} // goToMenu의 두번째 인자로 map 돌릴때 이동할 백에서 nav 데이터에 포함해준 주소를 넣어주면 되겠죠! ex) /order/orderlist, /product/register
+          key={el.sub_menu_id}
+          onClick={() => goToMenu(idx + 1, el.sub_url)} // goToMenu의 두번째 인자로 map 돌릴때 이동할 백에서 nav 데이터에 포함해준 주소를 넣어주면 되겠죠! ex) /order/orderlist, /product/register
           sidebarSmall={sidebarSmall}
         >
-          {el.title}
+          {el.sub_menu_title}
         </Subcategory>
       ))}
     </SubContainer>

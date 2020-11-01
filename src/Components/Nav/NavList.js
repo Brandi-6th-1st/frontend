@@ -21,8 +21,8 @@ import {
 } from 'react-icons/ai';
 
 export default function NavList({
-  category,
-  subcategory,
+  menuTitle,
+  subTitle,
   index,
   subActive,
   active,
@@ -63,39 +63,39 @@ export default function NavList({
         hoverActive={index === isHoverActive}
       >
         <List>
-          {NAV_ICONS[category]}
+          {NAV_ICONS[menuTitle]}
           {/* 사이드바 사이즈에 따른 카테고리의 형태 변화 조건문 */}
           {sidebarSmall ? (
             <HoverContainer>
               <CategorySmall active={index === isHoverActive}>
-                <span>{category}</span>
+                <span>{menuTitle}</span>
               </CategorySmall>
-              {subcategory && index === isHoverActive && (
+              {subTitle && index === isHoverActive && (
                 <SubList
                   categoryIdx={index}
                   handlePage={handlePage}
-                  subcategory={subcategory}
+                  subTitle={subTitle}
                   active={active}
                   sidebarSmall={sidebarSmall}
                 />
               )}
             </HoverContainer>
           ) : (
-            <span>{category}</span>
+            <span>{menuTitle}</span>
           )}
         </List>
         {/* 사이드 바가 확장되어 있고 subcategory가 있는 경우에만 우측 화살표 아이콘 등장 */}
-        {!sidebarSmall && subcategory && (
+        {!sidebarSmall && subTitle && (
           <ArrowIcon isSubActive={isSubActive} isPageActive={isPageActive}>
             <KeyboardArrowLeft size={19} />
           </ArrowIcon>
         )}
       </NavElement>
-      {!sidebarSmall && isSubActive && subcategory && (
+      {!sidebarSmall && isSubActive && subTitle && (
         <SubList
           categoryIdx={index}
           handlePage={handlePage}
-          subcategory={subcategory}
+          subTitle={subTitle}
           active={active}
           sidebarSmall={sidebarSmall}
         />

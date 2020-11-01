@@ -77,7 +77,8 @@
           }
           ]
         },
-      "nav_list": [
+      "nav_list": 
+      [
           {
               "id": 1,
               "main_url": "home",
