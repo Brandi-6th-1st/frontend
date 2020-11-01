@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { ErrorMessage } from '@hookform/error-message';
 import { useForm } from 'react-hook-form';
+import InputMask from 'react-input-mask';
 import LoginFooter from '../Login/LoginFooter';
 import {
   TiUserOutline,
@@ -30,6 +31,13 @@ export default function Signup() {
       return false;
     }
   }
+
+  // const hadleRadioBtn = (event) => {
+  //   let obj = {};
+  //   obj[event.target.value] = event.target.checked;
+  //   setRadioGroup(obj);
+  // };
+  // console.log(radioGroup);
 
   return (
     <Container>
@@ -97,16 +105,13 @@ export default function Signup() {
             </InfoTitle>
             <IconInput className={errors.phone && 'ErrorInput'}>
               <TiPhoneOutline color={errors.phone ? '#b94a48' : null} />
-              <input
+              <InputMask
+                mask='999-9999-9999'
                 name='phone'
                 type='tel'
                 placeholder='핸드폰번호'
                 ref={register({
                   required: '필수 입력항목입니다.',
-                  // pattern: {
-                  //   value: /^[0-9]{11}}$/,
-                  //   message: '올바른 정보를 입력해주세요.',
-                  // },
                 })}
               />
             </IconInput>
@@ -231,46 +236,9 @@ export default function Signup() {
               />
             </IconInput>
             {errors.customerContact && <p>{errors.customerContact.message}</p>}
-            {/*             
-            {SIGNUP_INFO_LIST.map((info) => {
-              const { id, name, title, inputList } = info;
-              return (
-                <Fragment>
-                  {id === 2 ? (
-                    <InfoTitle>
-                      {title}
-                      <ExtraInfo fontSize="14px">
-                        (*실제 샵을 운영하시는 분)
-                      </ExtraInfo>
-                    </InfoTitle>
-                  ) : (
-                    <InfoTitle>{title}</InfoTitle>
-                  )}
-                  {inputList.map((input, i) => {
-                    const { icon, type, placeholder } = input;
-                    return (
-                      <IconInput>
-                        {icon}
-                        <Input
-                          name={name}
-                          type={type}
-                          placeholder={placeholder}
-                        />
-                      </IconInput>
-                    );
-                  })}
-                  {id === 2 ? (
-                    <ExtraInfo fontSize="12px">
-                      입점 신청 후 브랜디 담당자가 연락을 드릴 수 있으니 정확한
-                      정보를 기입해주세요.hsa
-                    </ExtraInfo>
-                  ) : null}
-                </Fragment>
-              );
-            })} */}
             <ButtonGroup>
               <Button primary type='submit' value='신청' />
-              <Button value='취소' type='submit' onClick={handleCancelBtn} />
+              <Button readOnly value='취소' onClick={handleCancelBtn} />
             </ButtonGroup>
           </form>
         </SignupBox>
@@ -293,6 +261,7 @@ const Content = styled.div`
   padding: 30px;
   background-color: #fff;
   overflow: auto;
+
   hr {
     width: 100%;
     margin-bottom: 20px;
@@ -317,6 +286,7 @@ const Title = styled.h3`
 const SignupBox = styled.div`
   ${({ theme }) => theme.flex('center', 'center', 'column')};
   width: 100%;
+
   p {
     margin-left: 5px;
     margin-bottom: 10px;
@@ -340,6 +310,7 @@ const InfoTitle = styled.div`
   ${({ theme }) => theme.flex(null, 'center')};
   margin: 30px 0 5px 0;
   font-size: 18px;
+
   span {
     color: #1e90ff;
     font-size: 14px;
@@ -366,10 +337,12 @@ const IconInput = styled.div`
   padding: 13px 16px;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
+
   svg {
     width: 18px;
     height: 18px;
   }
+
   input {
     margin-left: 10px;
   }
@@ -398,6 +371,7 @@ const ButtonGroup = styled.div`
 
 const Button = styled.input`
   padding: 6px 12px;
+  width: 49px;
   background-color: #d9534f;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;

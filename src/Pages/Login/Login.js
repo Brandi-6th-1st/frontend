@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
+import { sellerNav, masterNav } from '../../Store/Reducer/sideNav';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import api from '../../config';
 import LoginFooter from './LoginFooter';
 export default function Login() {
   const [inputValue, setInputValue] = useState({
@@ -39,39 +42,58 @@ export default function Login() {
   //seller
   // id: seller1
   //pw: PW1!seller1
-  const goToHome = (e) => {
+  const loggedIn = (e) => {
     e.preventDefault();
-    fetch('http://10.251.1.180:5000/account/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        identification: idValue,
-        password: pwValue,
-      }),
-    })
-      .then((response) => response.json())
-      // .then((result) => console.log(result));
-      // .then((response) => {
-      //   if (response.token) {
-      //     localStorage.setItem('wtw-token', response.token);
-      //   }
-      // });
-      // .then((result) => console.log('result: ', result));
-      .then((result) => {
-        if (result.data.Authorization) {
-          localStorage.setItem('token', result.data.Authorization);
-          alert('로그인 성공');
-          // history.push('./');
-        } else if (result.data.message === 'UNAUTHORIZED') {
-          alert('아이디와 비밀번호를 확인해주세요');
-        }
-      });
+    const postData = async () => {
+      const result = await axios.post(
+        `${api}/account/signin`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+        { identification: idValue, password: pwValue }
+      );
+    };
+
+    console.log(result);
+    // fetch('http://10.251.1.180:5000/account/signin', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     identification: idValue,
+    //     password: pwValue,
+    //   }),
+    // })
+    // .then((response) => response.json())
+    // .then((result) => console.log(result));
+    // .then((response) => {
+    //   if (response.token) {
+    //     localStorage.setItem('wtw-token', response.token);
+    //   }
+    // });
+    // .then((result) => console.log('result: ', result));
+    // .then((result) => {
+    //   if (result.data.Authorization) {
+    //     localStorage.setItem('token', result.data.Authorization);
+    //     alert('로그인 성공');
+    //     // history.push('./');
+    //   } else if (result.data.message === 'UNAUTHORIZED') {
+    //     alert('아이디와 비밀번호를 확인해주세요');
+    //   }
+    // });
   };
 
+  const dispatch = useDispatch();
+
+  const sideNav = useSelector(({ sideNav }) => sideNav);
+
+  console.log(sideNav);
   return (
     <Container>
+      {/* <button onClick={() => dispatch(sellerNav([]))}>1121212121212</button> */}
       <Content>
         <Logo alt='브랜디로고' src='/public/Images/logo2.png' />
         <LoginBox>
@@ -97,7 +119,7 @@ export default function Login() {
             {/* id와 password가 입력되지 않았을 때 나타날 오류 */}
             {errors.pwValue && <p>비밀번호를 입력해주세요</p>}
 
-            <Button onClick={goToHome}>로그인</Button>
+            <Button onClick={loggedIn}>로그인</Button>
             {/* <Button>로그인</Button> */}
             <Join>
               <p>아직 셀러가 아니신가요?</p>
@@ -122,6 +144,7 @@ const Content = styled.div`
   ${({ theme }) => theme.flex('center', 'center', 'column')}
   height: 100vh;
   padding: 65px 0 50px;
+
   p {
     margin-top: 5px;
     font-size: 12px;
@@ -152,6 +175,7 @@ const Input = styled.input`
   padding: 13px 16px;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
+
   &.ErrorInput {
     border: 1px solid #b94a48;
   }
@@ -189,6 +213,7 @@ const Button = styled.button`
 const Join = styled.div`
   ${({ theme }) => theme.flex('center', 'center')}
   margin-top: 20px;
+
   p {
     margin-right: 5px;
     font-size: 12px;

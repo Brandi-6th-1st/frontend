@@ -4,6 +4,7 @@ import NavList from './NavList';
 import { KeyboardArrowLeft } from '@styled-icons/material';
 import SELLER_NAV from './DataSellerNav';
 import MASTER_NAV from './DataMasterNav';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Nav() {
   const [active, setActive] = useState([0, 0]);
