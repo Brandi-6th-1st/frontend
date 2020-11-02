@@ -32,7 +32,6 @@ export default function NavList({
   link,
 }) {
   const history = useHistory();
-
   const isSubActive = index === subActive;
   const isPageActive = index === active[0];
   const [isHoverActive, setIsHoverActive] = useState(0);
@@ -42,10 +41,12 @@ export default function NavList({
     isSubActive ? setSubActive(0) : setSubActive(index);
   };
 
+  // nav바가 접혀있을 때, 호버시 효과
   const handleHover = (index) => {
     sidebarSmall && setIsHoverActive(index);
   };
 
+  // 해당 nav가 클릭되었을 때 토글바 실행
   const handleClick = (index, link) => {
     toggleSubNav(index);
     if (link === 'order') {
@@ -67,7 +68,7 @@ export default function NavList({
       >
         <List>
           {NAV_ICONS[menuTitle]}
-          {/* 사이드바 사이즈에 따른 카테고리의 형태 변화 조건문 */}
+          {/* 사이드바 사이즈에 따른 카테고리의 형태 변화*/}
           {sidebarSmall ? (
             <HoverContainer>
               <CategorySmall active={index === isHoverActive}>
@@ -87,7 +88,7 @@ export default function NavList({
             <span>{menuTitle}</span>
           )}
         </List>
-        {/* 사이드 바가 확장되어 있고 subcategory가 있는 경우에만 우측 화살표 아이콘 등장 */}
+        {/* 사이드 바가 확장되어 있고 subcategory가 있는 경우에만 우측 화살표 아이콘 출력 */}
         {!sidebarSmall && subTitle && (
           <ArrowIcon isSubActive={isSubActive} isPageActive={isPageActive}>
             <KeyboardArrowLeft size={19} />
