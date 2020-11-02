@@ -26,7 +26,7 @@ const initialState = {
         {
           sub_menu_id: 1,
           sub_menu_title: '홈',
-          sub_url: '',
+          sub_url: 'home',
         },
       ],
     },
@@ -44,33 +44,38 @@ const initialState = {
     },
     {
       id: 3,
-      main_url: 'order  ',
+      main_url: 'order',
       menu_title: '주문관리',
       sub_menus: [
         {
           sub_menu_id: 4,
           sub_menu_title: '상품준비관리',
           sub_url: 'prepareList',
+          // sub_url: 'prepareList',
         },
         {
           sub_menu_id: 5,
           sub_menu_title: '배송준비관리',
           sub_url: 'deliveryPrepareList',
+          // sub_url: 'deliveryPrepareList',
         },
         {
           sub_menu_id: 6,
           sub_menu_title: '배송중관리',
           sub_url: 'deliveryList',
+          // sub_url: 'deliveryList',
         },
         {
           sub_menu_id: 7,
           sub_menu_title: '배송완료관리',
           sub_url: 'deliveryCompleteList',
+          // sub_url: 'deliveryCompleteList',
         },
         {
           sub_menu_id: 8,
           sub_menu_title: '구매확정관리',
           sub_url: 'orderConfirmList',
+          // sub_url: 'orderConfirmList',
         },
       ],
     },
@@ -94,12 +99,13 @@ const initialState = {
         {
           sub_menu_id: 9,
           sub_menu_title: '상품관리',
-          sub_url: '',
+          sub_url: '/product',
         },
         {
           sub_menu_id: 10,
           sub_menu_title: '상품등록',
-          sub_url: 'register',
+          sub_url: '/product',
+          // sub_url: 'register',
         },
       ],
     },
@@ -140,7 +146,7 @@ const initialState = {
         {
           sub_menu_id: 15,
           sub_menu_title: '셀러 계정 관리',
-          sub_url: 'seller',
+          sub_url: '/seller',
         },
       ],
     },

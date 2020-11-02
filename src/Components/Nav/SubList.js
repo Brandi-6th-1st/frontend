@@ -15,9 +15,22 @@ export default function SubList({
   );
 
   const goToMenu = (subIdx, link) => {
+    console.log('asdads', categoryIdx, subIdx, link);
     // 두번째 인자 추가하기!
+
     handlePage(categoryIdx, subIdx);
     setSubActive(subIdx);
+
+    if (
+      link === 'prepareList' ||
+      link === 'deliveryPrepareList' ||
+      link === 'deliveryList' ||
+      link === 'deliveryCompleteList' ||
+      link === 'orderConfirmList'
+    ) {
+      console.log('같다');
+      return history.push('/order/' + link);
+    }
     // 여기에서 history push로 페이지 이동시켜주면 돼요!
     history.push(link);
   };

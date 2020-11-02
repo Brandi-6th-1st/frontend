@@ -48,7 +48,10 @@ export default function NavList({
 
   const handleClick = (index, link) => {
     toggleSubNav(index);
-    link && history.push(link);
+    if (link === 'order') {
+      return;
+    }
+    link && history.push('/' + link);
   };
 
   return (
