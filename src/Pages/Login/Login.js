@@ -4,9 +4,9 @@ import regeneratorRuntime from 'regenerator-runtime';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import { sellerNav, masterNav } from '../../Store/Reducer/sideNav';
-import { saveNav } from '../../Store/Reducer/nav';
-import { saveFilter } from '../../Store/Reducer/filter';
-import { isMaster } from '../../Store/Reducer/userInfo';
+// import { saveNav } from '../../Store/Reducer/nav';
+// import { saveFilter } from '../../Store/Reducer/filter';
+import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import API from '../../config';
@@ -50,25 +50,31 @@ export default function Login() {
   // id: seller1
   //pw: PW1!seller1
 
-  const userInfo = useSelector(({ userInfo }) => userInfo);
+  // const userInfo = useSelector(({ userInfo }) => userInfo);
 
-  // store에 있는 마스터 or 셀러 필터를 가져온다.
-  const { filter_list } = useSelector(({ filter }) => ({
-    filter_list: filter.filter_list,
-    // filter_list: filter.filter_list,
-  }));
+  // // store에 있는 마스터 or 셀러 필터를 가져온다.
+  // const { filter_list } = useSelector(({ filter }) => ({
+  //   filter_list: filter.filter_list,
+  //   // filter_list: filter.filter_list,
+  // }));
 
-  const { nav_list } = useSelector(({ nav }) => ({
-    nav_list: nav.nav_list,
-    // filter_list: filter.filter_list,
+  // const { nav_list } = useSelector(({ nav }) => ({
+  //   nav_list: nav.nav_list,
+  //   // filter_list: filter.filter_list,
+  // }));
+
+  const { isMaster, filter_list, nav_list } = useSelector(({ userInfo }) => ({
+    isMaster: userInfo.isMaster,
+    filter_list: userInfo.filter_list,
+    nav_list: userInfo.nav_list,
   }));
 
   const loggedIn = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     console.log('클릭', userInfo);
     try {
       const result = await axios.post(
-        `http://10.251.1.180:5000/account/signin`,
+        `http://192.168.7.47:5000/account/signin`,
         { identification: idValue, password: pwValue },
         {
           headers: {
@@ -76,9 +82,19 @@ export default function Login() {
           },
         }
       );
-      const is_master = await result.data.success.is_master;
-      const nav_list = await result.data.success.nav_list;
-      const filter_list = await result.data.success.filter_list;
+
+      // const { is_master, filter_list, nav_list } = loginInfo;
+      // const nextLoginInfo = {
+      //   ...loginInfo,
+      //   is_master: result.data.success.is_master,
+      //   filter_list: result.data.success.nav_list,
+      //   nav_list: result.data.success.filter_list,
+      // };
+
+      // const is_master = await result.data.success.is_master;
+      // const nav_list = await result.data.success.nav_list;
+      // const filter_list = await result.data.success.filter_list;
+
       // if (
       //   result.data.success.filter_list &&
       //   result.data.success.nav_list &&
@@ -89,20 +105,24 @@ export default function Login() {
       //   dispatch(isMaster(is_master));
       // }
 
-      console.log('2', userInfo);
-      console.log('2', filter_list);
-      console.log('2', nav_list);
+      // console.log('2', userInfo);
+      // console.log('2', filter_list);
+      // console.log('2', nav_list);
+      // console.log('1', login_info);
+      // console.log(login_info);
 
       if (result.data.success) {
         localStorage.setItem('token', result.data.success.Authorization);
-        dispatch(saveFilter(nav_list));
-        dispatch(saveNav(filter_list));
-        dispatch(isMaster(is_master));
+        dispatch();
+        // dispatch(saveFilter(nav_list));
+        // dispatch(saveNav(filter_list));
+        // dispatch(isMaster(is_master));
         history.push('/home');
       }
     } catch (err) {
       console.log(err);
     }
+
     // postData();
     // console.log(result);
     // dispatch(isMaster(true));
@@ -154,9 +174,6 @@ export default function Login() {
     // });
   };
 
-  const sideNav = useSelector(({ sideNav }) => sideNav);
-
-  console.log(sideNav);
   return (
     <Container>
       <Content>

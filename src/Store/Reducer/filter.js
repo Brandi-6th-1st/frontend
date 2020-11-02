@@ -1,5 +1,5 @@
 const SAVE_FILTER = 'filter/SAVE_FILTER';
-const IS_SELLER_FILTER = 'filter/IS_SELLER_FILTER';
+// const IS_SELLER_FILTER = 'filter/IS_SELLER_FILTER';
 const CLEAR_FILTER = 'filter/CLEAR_FILTER';
 
 export const saveFilter = (items) => ({
