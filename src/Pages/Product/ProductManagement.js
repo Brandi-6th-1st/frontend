@@ -100,7 +100,7 @@ export default function ProductManagement() {
       const { DataProductManage } = result.data;
 
       // 유저 타입이 마스터인 경우,
-      if (userType) {
+      if (userType && userType) {
         // 셀러명 검색 필터만 분리하여 정의
 
         const masterData =
@@ -149,6 +149,10 @@ export default function ProductManagement() {
       console.log(error.config);
     }
   };
+
+  useEffect(() => {
+    getData(null);
+  }, [userType, filter_list]);
 
   // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {
@@ -409,20 +413,20 @@ export default function ProductManagement() {
                 <SelectPeriod
                   selected={currentDate.startDate || ''}
                   locale={ko}
-                  dateFormat="yyyy-MM-dd"
+                  dateFormat='yyyy-MM-dd'
                   onChange={(date) => {
                     handleStartDate(date);
                   }}
-                  placeholderText="클릭해주세요."
+                  placeholderText='클릭해주세요.'
                   shouldCloseOnSelect={false}
                 />
                 <span>~</span>
                 <SelectPeriod
                   selected={currentDate.endDate || ''}
                   locale={ko}
-                  dateFormat="yyyy-MM-dd"
+                  dateFormat='yyyy-MM-dd'
                   onChange={(date) => handleEndDate(date)}
-                  placeholderText="클릭해주세요."
+                  placeholderText='클릭해주세요.'
                   shouldCloseOnSelect={false}
                 />
               </InquiryperiodBox>
@@ -436,13 +440,13 @@ export default function ProductManagement() {
                   </FilterTitle>
                   <SellerSearchBox>
                     <SellerSearch
-                      name="셀러이름"
+                      name='셀러이름'
                       value={query.sellerName || ''}
                       onChange={(e) =>
                         setQuery({ ...query, sellerName: e.target.value })
                       }
-                      type="text"
-                      placeholder="검색어를 입력하세요."
+                      type='text'
+                      placeholder='검색어를 입력하세요.'
                     ></SellerSearch>
                   </SellerSearchBox>
                 </SelectFilterCategory>
@@ -455,19 +459,19 @@ export default function ProductManagement() {
                   }
                 >
                   <option>Select</option>
-                  <option value="product_name">상품명</option>
-                  <option value="product_number">상품번호</option>
-                  <option value="product_code">상품코드</option>
+                  <option value='product_name'>상품명</option>
+                  <option value='product_number'>상품번호</option>
+                  <option value='product_code'>상품코드</option>
                 </select>
                 <SearchBox>
                   <ProductSearch
-                    name="productDetail"
+                    name='productDetail'
                     value={query.productDetail || ''}
                     onChange={(e) =>
                       setQuery({ ...query, productDetail: e.target.value })
                     }
-                    placeholder="검색어를 입력하세요."
-                    type="text"
+                    placeholder='검색어를 입력하세요.'
+                    type='text'
                   ></ProductSearch>
                 </SearchBox>
               </SelectFilterCategory>

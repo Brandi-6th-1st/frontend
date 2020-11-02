@@ -28,6 +28,8 @@ export default function Nav() {
     setActive([menuTitle, subTitle]);
   };
 
+  console.log(nav);
+
   return (
     <NavContainer sidebarSmall={sidebarSmall}>
       <SideToggler
