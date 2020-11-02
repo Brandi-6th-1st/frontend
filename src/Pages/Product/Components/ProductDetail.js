@@ -18,6 +18,8 @@ export default function ProductDetail({
   filters,
   setShowModal,
   sendData,
+  salesId,
+  displayId,
 }) {
   // 버튼의 클릭 상태를 나타내는 배열 생성
   const [isSelected, setIsSelected] = useState(
@@ -32,12 +34,12 @@ export default function ProductDetail({
     salesStatus: {
       id: '',
       // 판매여부가 담긴 필터 id
-      filterId: 3,
+      filterId: salesId,
     },
     displayStatus: {
       id: '',
       // 진열여부가 담긴 필터 id
-      filterId: 4,
+      filterId: displayId,
     },
   });
 
@@ -120,7 +122,7 @@ export default function ProductDetail({
       !!checkProduct.length
     ) {
       // 판매여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
-      const sales = filters.homeFilterTitle
+      const sales = filters.filter_list
         .filter((el) => el.id === changeStatus.salesStatus.filterId && el)[0]
         .category.filter(
           (item) =>
@@ -128,7 +130,7 @@ export default function ProductDetail({
         )[0].category_title;
 
       // 진열여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
-      const display = filters.homeFilterTitle
+      const display = filters.filter_list
         .filter((el) => el.id === changeStatus.displayStatus.filterId && el)[0]
         .category.filter(
           (item) =>
@@ -156,11 +158,11 @@ export default function ProductDetail({
       setchangeStatus({
         salesStatus: {
           id: '',
-          filterId: 3,
+          filterId: salesId,
         },
         displayStatus: {
           id: '',
-          filterId: 4,
+          filterId: displayId,
         },
       });
     }
@@ -216,10 +218,10 @@ export default function ProductDetail({
           }
         >
           <option>판매여부</option>
-          {filters.homeFilterTitle &&
-            filters.homeFilterTitle.map((el) => {
+          {filters.filter_list &&
+            filters.filter_list.map((el) => {
               return (
-                el.id === 3 &&
+                el.id === salesId &&
                 el.category.map((sub, i) => {
                   return (
                     i !== 0 && (
@@ -245,10 +247,10 @@ export default function ProductDetail({
           }
         >
           <option>진열여부</option>
-          {filters.homeFilterTitle &&
-            filters.homeFilterTitle.map((el) => {
+          {filters.filter_list &&
+            filters.filter_list.map((el) => {
               return (
-                el.id === 4 &&
+                el.id === displayId &&
                 el.category.map((sub, i) => {
                   return (
                     i !== 0 && (
