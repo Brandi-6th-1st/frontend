@@ -153,6 +153,10 @@ export default function ProductManagement() {
     }
   };
 
+  useEffect(() => {
+    getData(null);
+  }, [userType, filter_list]);
+
   // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {
     getData();
