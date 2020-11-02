@@ -11,9 +11,26 @@ import COMPONENT_ORDER from './DataOrderComponent';
 export default function OrderManagement() {
   // 주소에 있는 id 파라미터로 동일한 컴포넌트에서 다른 데이터를 사용하여 각 주문 상태에 따른 내용을 가져옵니다.
   const match = useParams();
-  const categoryId = match.id;
-  const pagetext = COMPONENT_ORDER[categoryId - 1];
-  console.log(match);
+  // 해당 주소가 담겨 오면 숫자로 리턴한다.
+  const categoryId = () => {
+    if (match.id === 'prepareList') {
+      return 1;
+    }
+    if (match.id === 'deliveryList') {
+      return 2;
+    }
+    if (match.id === 'deliveryPrepareList') {
+      return 2;
+    }
+    if (match.id === 'deliveryCompleteList') {
+      return 3;
+    }
+    if (match.id === 'orderConfirmList') {
+      return 4;
+    }
+    return match.id;
+  };
+  const pagetext = COMPONENT_ORDER[categoryId() - 1];
 
   // 현재 시간을 newData에 할당
   const newDate = new Date();
