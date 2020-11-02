@@ -1,46 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import axios from 'axios';
 import DateFilter from './DateFilter';
-import dateFormatChange from '../../Components/ChangeTimeFormat';
 
-export default function Filter({ pagetext }) {
-  const [params, setParams] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    searchKeyword: '',
-    searchOption: '',
-    periodButton: '',
-  });
-
-  const searchHandler = () => {
-    // 검색버튼 눌렀을때 검색유효성 검사
-    // 검색어는 있는데 검색 항목을 선택하지 않았을 경우
-    params.searchKeyword &&
-      !params.searchOption &&
-      alert('검색항목를 입력해주세요.');
-  };
-
-  // const searchFilterd = async () => {
-  //   const changeForm = {
-  //     ...params,
-  //     startDate: dateFormatChange(params.startDate),
-  //     endDate: dateFormatChange(params.endDate),
-  //   };
-  //   const getData = await axios.get(``, {
-  //     params: changeForm,
-  //   });
-  // };
-
-  useEffect(() => {
-    console.log(params.searchOption);
-  }, [params.searchOption]);
-
-  console.log(params);
+export default function Filter({
+  pagetext,
+  searchDate,
+  setSearchDate,
+  handleDate,
+  selectDate,
+  params,
+  setParams,
+  sendQuery,
+  filterReset,
+}) {
   return (
     <FilterContainer>
       <Div>
         <Select
+          value={params.searchOption || ''}
           onChange={(e) =>
             setParams({ ...params, searchOption: e.target.value })
           }
@@ -58,6 +35,7 @@ export default function Filter({ pagetext }) {
           onChange={(e) =>
             setParams({ ...params, searchKeyword: e.target.value })
           }
+          value={params.searchKeyword ? params.searchKeyword : ''}
           type="text"
           placeholder="검색어를 입력하세요."
         />
@@ -66,62 +44,61 @@ export default function Filter({ pagetext }) {
         <FilterBox>
           <span>{pagetext.filter_date} :</span>
           <DateBtn
+            idx={0}
+            selectDate={selectDate}
             type="button"
             value="전체"
-            onClick={(e) =>
-              setParams({ ...params, periodButton: e.target.value })
-            }
+            onClick={(e) => handleDate(e.target.value, 0)}
             selected={params.periodButton === '전체'}
           />
           <DateBtn
+            idx={1}
+            selectDate={selectDate}
             type="button"
             value="오늘"
-            onClick={(e) =>
-              setParams({ ...params, periodButton: e.target.value })
-            }
+            onClick={(e) => handleDate(e.target.value, 1)}
             selected={params.periodButton === '오늘'}
           />
           <DateBtn
+            idx={2}
+            selectDate={selectDate}
             type="button"
             value="3일"
-            onClick={(e) =>
-              setParams({ ...params, periodButton: e.target.value })
-            }
+            onClick={(e) => handleDate(e.target.value, 2)}
             selected={params.periodButton === '3일'}
           />
           <DateBtn
+            idx={3}
+            selectDate={selectDate}
             type="button"
             value="1주일"
-            onClick={(e) =>
-              setParams({ ...params, periodButton: e.target.value })
-            }
+            onClick={(e) => handleDate(e.target.value, 3)}
             selected={params.periodButton === '1주일'}
           />
           <DateBtn
+            idx={4}
+            selectDate={selectDate}
             type="button"
             value="1개월"
-            onClick={(e) =>
-              setParams({ ...params, periodButton: e.target.value })
-            }
+            onClick={(e) => handleDate(e.target.value, 4)}
             selected={params.periodButton === '1개월'}
           />
           <DateBtn
+            idx={5}
+            selectDate={selectDate}
             type="button"
             value="3개월"
-            onClick={(e) =>
-              setParams({ ...params, periodButton: e.target.value })
-            }
+            onClick={(e) => handleDate(e.target.value, 5)}
             selected={params.periodButton === '3개월'}
           />
         </FilterBox>
-
-        <DateFilter params={params} setParams={setParams} />
+        <DateFilter searchDate={searchDate} setSearchDate={setSearchDate} />
       </Divs>
       <Div>
-        <Button search onClick={searchHandler}>
+        <Button search onClick={() => sendQuery()}>
           검색
         </Button>
-        <Button>초기화</Button>
+        <Button onClick={filterReset}>초기화</Button>
       </Div>
     </FilterContainer>
   );
@@ -205,8 +182,9 @@ const DateBtn = styled.input`
     background: #e6e6e6;
     border-color: #adadad;
   }
-  ${({ selected }) =>
-    selected &&
+  ${({ selectDate, idx }) =>
+    selectDate &&
+    selectDate[idx] &&
     css`
       background: #428bca;
       color: white;

@@ -1,29 +1,28 @@
-const typeMaster = 'userInfo/isMaster';
-const typeSeller = 'userInfo/isSeller';
-const typeNone = 'userInfo/isNone';
-const typetoken = 'userInfo/token';
+const TYPE_MASTER = 'userInfo/isMaster';
+const TYPE_SELLER = 'userInfo/isSeller';
+const TYPE_NONE = 'userInfo/isNone';
 
 export const isMaster = () => ({
-  type: typeMaster,
+  type: TYPE_MASTER,
 });
 
 export const isSeller = () => ({
-  type: typeSeller,
+  type: TYPE_SELLER,
 });
 
 export const isUnknown = () => ({
-  type: typeNone,
+  type: TYPE_NONE,
 });
 
 const initialState = true;
 
 const userInfo = (state = initialState, { type }) => {
   switch (type) {
-    case typeMaster:
+    case TYPE_MASTER:
       return true;
-    case typeSeller:
+    case TYPE_SELLER:
       return false;
-    case typeNone:
+    case TYPE_NONE:
       return null;
     default:
       return state;
