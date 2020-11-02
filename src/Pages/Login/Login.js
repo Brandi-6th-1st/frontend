@@ -77,17 +77,12 @@ export default function Login() {
         dispatch(saveFilter(getFilterList));
         dispatch(saveNav(getNavList));
         dispatch(isMaster(getIsMaster));
-        console.log('22222211백엔드에서 받은 값', is_master);
-
-        console.log('11111백엔드에서 받은 값', is_master);
         history.push('/home');
       }
     } catch (err) {
       err;
     }
   };
-  console.log('filter_list', filter_list);
-  console.log('nav_list', nav_list);
   return (
     <Container>
       <Content>
