@@ -36,7 +36,7 @@ export default function OrderManagement() {
         <span>{pagetext.title} 관리</span>
         <div>
           {pagetext.description &&
-            pagetext.description.map((el) => <p>{el}</p>)}
+            pagetext.description.map((el, index) => <p key={index}>{el}</p>)}
         </div>
       </Title>
       <Filter pagetext={pagetext} />

@@ -17,7 +17,7 @@ export const clearNav = () => ({
 });
 
 const initialState = {
-  filter_list: [
+  nav_list: [
     {
       id: 1,
       main_url: 'home',
@@ -99,12 +99,12 @@ const initialState = {
         {
           sub_menu_id: 9,
           sub_menu_title: '상품관리',
-          sub_url: '/product',
+          sub_url: 'product',
         },
         {
           sub_menu_id: 10,
           sub_menu_title: '상품등록',
-          sub_url: '/product',
+          sub_url: 'product',
           // sub_url: 'register',
         },
       ],
@@ -146,7 +146,7 @@ const initialState = {
         {
           sub_menu_id: 15,
           sub_menu_title: '셀러 계정 관리',
-          sub_url: '/seller',
+          sub_url: 'seller',
         },
       ],
     },
