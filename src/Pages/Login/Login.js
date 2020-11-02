@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import regeneratorRuntime from 'regenerator-runtime';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import { sellerNav, masterNav } from '../../Store/Reducer/sideNav';
+import { saveNav } from '../../Store/Reducer/nav';
+import { saveFilter } from '../../Store/Reducer/filter';
+import { isMaster } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import api from '../../config';
+import API from '../../config';
 import LoginFooter from './LoginFooter';
 export default function Login() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const [inputValue, setInputValue] = useState({
-    idValue: '',
-    pwValue: '',
+    idValue: 'soojsooj',
+    pwValue: 'PW1!soojsooj',
   });
 
   const { register, handleSubmit, errors } = useForm();
-
-  const history = useHistory();
 
   const onSubmit = (data) => {
     console.log(data);
@@ -36,39 +41,102 @@ export default function Login() {
   };
 
   //master
-  //id:soojsooj
-  //pw:PW1!soojsooj
+  //id:
+  // soojsooj
+  //pw:
+  // PW1!soojsooj
 
   //seller
   // id: seller1
   //pw: PW1!seller1
-  const loggedIn = (e) => {
-    e.preventDefault();
-    const postData = async () => {
+
+  const userInfo = useSelector(({ userInfo }) => userInfo);
+
+  // store에 있는 마스터 or 셀러 필터를 가져온다.
+  const { filter_list } = useSelector(({ filter }) => ({
+    filter_list: filter.filter_list,
+    // filter_list: filter.filter_list,
+  }));
+
+  const { nav_list } = useSelector(({ nav }) => ({
+    nav_list: nav.nav_list,
+    // filter_list: filter.filter_list,
+  }));
+
+  const loggedIn = async (e) => {
+    // e.preventDefault();
+    console.log('클릭', userInfo);
+    try {
       const result = await axios.post(
-        `${api}/account/signin`,
+        `http://192.168.7.31:5000/account/signin`,
+        { identification: idValue, password: pwValue },
         {
           headers: {
             'Content-Type': 'application/json',
           },
-        },
-        { identification: idValue, password: pwValue }
+        }
       );
-    };
+      const is_master = await result.data.success.is_master;
+      const nav_list = await result.data.success.nav_list;
+      const filter_list = await result.data.success.filter_list;
+      // if (
+      //   result.data.success.filter_list &&
+      //   result.data.success.nav_list &&
+      //   result.data.success.is_master
+      // ) {
+      //   dispatch(saveFilter(nav_list));
+      //   dispatch(saveNav(filter_list));
+      //   dispatch(isMaster(is_master));
+      // }
 
-    console.log(result);
-    // fetch('http://10.251.1.180:5000/account/signin', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     identification: idValue,
-    //     password: pwValue,
-    //   }),
-    // })
-    // .then((response) => response.json())
-    // .then((result) => console.log(result));
+      // console.log('2', userInfo);
+      // console.log('2', filter_list);
+      // console.log('2', nav_list);
+
+      if (result.data.success) {
+        localStorage.setItem('token', result.data.success.Authorization);
+        dispatch(saveFilter(nav_list));
+        dispatch(saveNav(filter_list));
+        dispatch(isMaster(is_master));
+        history.push('/home');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    // postData();
+    // console.log(result);
+    // dispatch(isMaster(true));
+    // dispatch(saveNav());
+    // dispatch(saveFilter());
+
+    // const test = [1, 2, 3];
+
+    // dispatch(saveNav(test));
+    // console.log(nav);
+    // const getNav = () => {
+    //   dispatch(saveNav([1, 2, 3]));
+    // };
+    // getNav();
+    // console.log(nav);
+
+    // console.log(result);
+    // try {
+    //   fetch(`http://192.168.7.31:5000/account/signin`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       identification: idValue,
+    //       password: pwValue,
+    //     }),
+    //   })
+    //     // .then((response) => console.log(response));
+    //     .then((response) => response.json())
+    //     .then((result) => console.log(result));
+    // } catch (err) {
+    //   console.log(err);
+    // }
     // .then((response) => {
     //   if (response.token) {
     //     localStorage.setItem('wtw-token', response.token);
@@ -86,14 +154,11 @@ export default function Login() {
     // });
   };
 
-  const dispatch = useDispatch();
-
   const sideNav = useSelector(({ sideNav }) => sideNav);
 
   console.log(sideNav);
   return (
     <Container>
-      {/* <button onClick={() => dispatch(sellerNav([]))}>1121212121212</button> */}
       <Content>
         <Logo alt='브랜디로고' src='/public/Images/logo2.png' />
         <LoginBox>

@@ -4,6 +4,7 @@ import userInfo from './userInfo';
 import commonStatus from './commonStatus';
 import filter from './filter';
 import sideNav from './sideNav';
+import nav from './nav';
 
 export default combineReducers({
   login,
@@ -11,4 +12,5 @@ export default combineReducers({
   commonStatus,
   filter,
   sideNav,
+  nav,
 });
