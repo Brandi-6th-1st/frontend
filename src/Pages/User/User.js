@@ -1,13 +1,15 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import Header from '../../Components/Header/Header';
 import Nav from '../../Components/Nav/Nav';
-import SellerAccountManagement from './SellerAccountManagement';
+import AccountManagementTitle from './AccountManagementTitle';
 import SellerInfoManagement from './SellerInfoManagement';
 import Footer from '../../Components/Footer/Footer';
 
 export default function SellerInformation() {
   const [sellerInfo, setSellerInfo] = useState();
+  const [sellerList, setSellerList] = useState();
 
   const getSellerData = () => {
     fetch('public/Data/SellerStatus.json')
@@ -18,10 +20,22 @@ export default function SellerInformation() {
       .then((result) => setSellerInfo(result.seller_status_record[0]));
   };
 
+  const getSellerList = () => {
+    fetch(`public/Data/SellerListData.json`)
+      .then((response) => response.json())
+      .then((result) => setSellerList(result.seller_list));
+  };
   useEffect(() => {
     getSellerData();
+    getSellerList();
   }, []);
   // console.log(sellerInfo && sellerInfo[0].status_history[0].status);
+
+  // useEffect(async () => {
+  //   const fetchData = await axios.get(`public/Data/SellerListData.json`);
+  //   // .then((response) => console.log(response));
+  //   setSellerList(result.data);
+  // }, []);
 
   //img upload
   const [imgBase64, setImgBase64] = useState(''); // 업로드 될 이미지
@@ -53,26 +67,26 @@ export default function SellerInformation() {
       <Header />
       <Container>
         <Nav />
-        {/* <SellerAccountManagement /> */}
-        <SellerInfoManagement
+        <AccountManagementTitle sellerList={sellerList} />
+        {/* <SellerInfoManagement
           sellerInfo={sellerInfo}
           setSellerInfo={setSellerInfo}
-          // handleChangeFile={handleChangeFile}
-          // imgBase64={imgBase64}
-          // setImgBase64={setImgBase64}
-          // imgFile={imgFile}
-          // setImgFile={setImgFile}
+          handleChangeFile={handleChangeFile}
+          imgBase64={imgBase64}
+          setImgBase64={setImgBase64}
+          imgFile={imgFile}
+          setImgFile={setImgFile}
           // handleProfileImg={handleProfileImg}
-          profileImgBase64={profileImgBase64}
-          setProfileImgBase64={setProfileImgBase64}
-          profileImgFile={profileImgFile}
-          setProfileImgFile={setProfileImgFile}
+          // profileImgBase64={profileImgBase64}
+          // setProfileImgBase64={setProfileImgBase64}
+          // profileImgFile={profileImgFile}
+          // setProfileImgFile={setProfileImgFile}
           // handleBackgroundImg={handleBackgroundImg}
-          backgroundImgBase64={backgroundImgBase64}
-          setBackgroundImgBase64={setBackgroundImgBase64}
-          backgroundImgFile={backgroundImgFile}
-          setBackgroundImgFile={setBackgroundImgFile}
-        />
+          // backgroundImgBase64={backgroundImgBase64}
+          // setBackgroundImgBase64={setBackgroundImgBase64}
+          // backgroundImgFile={backgroundImgFile}
+          // setBackgroundImgFile={setBackgroundImgFile}
+        /> */}
       </Container>
       <Footer />
     </Fragment>
@@ -80,5 +94,6 @@ export default function SellerInformation() {
 }
 
 const Container = styled.div`
+  width: 100%;
   display: flex;
 `;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SellerList from './SellerList';
 import { AiOutlineHome } from 'react-icons/ai';
 
-function SellerAccountManagement() {
+function AccountManagementTitle({ sellerList }) {
   return (
     <Container>
       <PageTitle>
@@ -13,12 +13,14 @@ function SellerAccountManagement() {
         <AiOutlineHome />
         <p>회원관리 > 셀러 계정 관리 > 셀러 회원 리스트</p>
       </PageBar>
-      <SellerList />
+      <ABC>
+        <SellerList sellerList={sellerList} />
+      </ABC>
     </Container>
   );
 }
 
-export default SellerAccountManagement;
+export default AccountManagementTitle;
 
 const Container = styled.div`
   width: 100%;
@@ -44,4 +46,9 @@ const PageBar = styled.div`
   p {
     margin-left: 5px;
   }
+`;
+
+const ABC = styled.div`
+  width: calc(100%-215px);
+  flex: 1;
 `;

@@ -8,14 +8,14 @@ import { AiOutlineWarning } from 'react-icons/ai';
 function BasicInfo({
   sellerInfo,
   handleChangeFile,
-  profileImgBase64,
-  setProfileImgBase64,
-  profileImgFile,
-  setProfileImgFile,
-  // imgBase64,
-  // setImgBase64,
-  // imgFile,
-  // setImgFile,
+  // profileImgBase64,
+  // setProfileImgBase64,
+  // profileImgFile,
+  // setProfileImgFile,
+  imgBase64,
+  setImgBase64,
+  imgFile,
+  setImgFile,
   // handleProfileImg,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -55,17 +55,17 @@ function BasicInfo({
                   boxHeight='100px'
                   imgWidth='90px'
                   imgHeight='90px'
-                  // handleChangeFile={handleChangeFile}
-                  // imgBase64={imgBase64}
-                  // setImgBase64={setImgBase64}
-                  // imgFile={imgFile}
-                  // setImgFile={setImgFile}
+                  handleChangeFile={handleChangeFile}
+                  imgBase64={imgBase64}
+                  setImgBase64={setImgBase64}
+                  imgFile={imgFile}
+                  setImgFile={setImgFile}
                   imgId={imgId}
-                  handleChangeFile={handleProfileImg}
-                  imgBase64={profileImgBase64}
-                  setImgBase64={setProfileImgBase64}
-                  imgFile={profileImgFile}
-                  setImgFile={setProfileImgFile}
+                  // handleChangeFile={handleProfileImg}
+                  // imgBase64={profileImgBase64}
+                  // setImgBase64={setProfileImgBase64}
+                  // imgFile={profileImgFile}
+                  // setImgFile={setProfileImgFile}
                 />
                 <ExtraInfo>
                   <AiOutlineWarning />

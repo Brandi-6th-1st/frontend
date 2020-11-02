@@ -45,30 +45,30 @@ function SellerInfoMangement({
           <form onClick={handleClick}>
             <BasicInfo
               sellerInfo={sellerInfo}
-              // handleChangeFile={handleChangeFile}
-              // imgBase64={imgBase64}
-              // setImgBase64={setImgBase64}
-              // imgFile={imgFile}
-              // setImgFile={setImgFile}
+              handleChangeFile={handleChangeFile}
+              imgBase64={imgBase64}
+              setImgBase64={setImgBase64}
+              imgFile={imgFile}
+              setImgFile={setImgFile}
               // handleProfileImg={handleProfileImg}
-              profileImgBase64={profileImgBase64}
-              setProfileImgBase64={setProfileImgBase64}
-              profileImgFile={profileImgFile}
-              setProfileImgFile={setProfileImgFile}
+              // profileImgBase64={profileImgBase64}
+              // setProfileImgBase64={setProfileImgBase64}
+              // profileImgFile={profileImgFile}
+              // setProfileImgFile={setProfileImgFile}
             />
             <MoreInfo
               sellerInfo={sellerInfo}
               setSellerInfo={setSellerInfo}
-              // handleChangeFile={handleChangeFile}
-              // imgBase64={imgBase64}
-              // setImgBase64={setImgBase64}
-              // imgFile={imgFile}
-              // setImgFile={setImgFile}
+              handleChangeFile={handleChangeFile}
+              imgBase64={imgBase64}
+              setImgBase64={setImgBase64}
+              imgFile={imgFile}
+              setImgFile={setImgFile}
               // handleBackgroundImg={handleBackgroundImg}
-              backgroundImgBase64={backgroundImgBase64}
-              setBackgroundImgBase64={setBackgroundImgBase64}
-              backgroundImgFile={backgroundImgFile}
-              setBackgroundImgFile={setBackgroundImgFile}
+              // backgroundImgBase64={backgroundImgBase64}
+              // setBackgroundImgBase64={setBackgroundImgBase64}
+              // backgroundImgFile={backgroundImgFile}
+              // setBackgroundImgFile={setBackgroundImgFile}
             />
             <ButtonGroup>
               <Button primary type='submit' value='수정' />

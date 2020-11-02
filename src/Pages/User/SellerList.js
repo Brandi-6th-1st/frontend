@@ -1,35 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import PageRecord from './PageRecord';
+import SellerTable from './SellerTable';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
-import { AiOutlineLeft } from 'react-icons/ai';
-import { AiOutlineRight } from 'react-icons/ai';
 
-function SellerList() {
-  const [currentPage, setCurrentPage] = useState(1);
+function SellerList({ sellerList }) {
   return (
     <ListBox>
       <Title>
         <AiOutlineUnorderedList />
         <p>셀러 회원 리스트</p>
       </Title>
-      <PageRow>
-        <PagenationPannel>
-          <p>Page</p>
-          <PageButton>
-            <AiOutlineLeft />
-          </PageButton>
-          <PageInput value={currentPage} />
-          <PageButton>
-            <AiOutlineRight />
-          </PageButton>
-          <p>of 827 | view</p>
-        </PagenationPannel>
-      </PageRow>
-      <ListBody>
+      <Body>
+        <PageRecord />
         <Table>
-          <tbody></tbody>
+          <SellerTable sellerList={sellerList} />
         </Table>
-      </ListBody>
+        <PageRecord />
+      </Body>
     </ListBox>
   );
 }
@@ -38,6 +26,7 @@ export default SellerList;
 
 const ListBox = styled.div`
   margin-bottom: 25px;
+  width: 100%;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -56,41 +45,13 @@ const Title = styled.div`
   }
 `;
 
-const PageRow = styled.div`
+const Body = styled.div`
+  width: 100%;
   display: flex;
-`;
-
-const PagenationPannel = styled.div`
-  display: flex;
-  align-items: center;
-  p {
-    margin-right: 5px;
-    font-size: 13px;
-  }
-`;
-
-const PageButton = styled.div`
-  padding: 5px 10px;
-  width: 27px;
-  height: 30px;
-  background-color: #fff;
-  border: 1px solid #e5e5e5;
-  border-radius: 3px;
-  font-size: 12px;
-`;
-
-const PageInput = styled.input`
-  margin: 0 5px;
-  padding: 6px 10px;
-  width: 45px;
-  height: 30px;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  text-align: center;
-`;
-
-const ListBody = styled.div`
+  flex-direction: column;
   padding: 10px;
 `;
 
-const Table = styled.table``;
+const Table = styled.div`
+  width: 100%;
+`;

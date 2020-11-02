@@ -2,10 +2,11 @@ import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
 import InputMask from 'react-input-mask';
 import { useForm } from 'react-hook-form';
+import ImgBox from '../../Components/ImgBox/ImgBox';
+// import PostCode from './PostCode';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning, AiOutlineMail } from 'react-icons/ai';
 import { ImPhone } from 'react-icons/im';
-import ImgBox from '../../Components/ImgBox/ImgBox';
 // import IconInput from '../../Components/IconInput/IconInput';
 
 function MoreInfo({
@@ -175,6 +176,12 @@ function MoreInfo({
                 </td>
               </tr>
               <tr>
+                <td>
+                  택배 주소<span>*</span>
+                </td>
+                <td>{/* <PostCode /> */}</td>
+              </tr>
+              <tr>
                 <td>셀러 상태 변경 기록</td>
                 <td>
                   <MiniTable>
@@ -219,6 +226,7 @@ const InfoTitle = styled.div`
   padding: 10px 10px 2px 10px;
   background-color: #eee;
   font-size: 13px;
+
   svg {
     margin-right: 5px;
     width: 13px;
@@ -236,23 +244,28 @@ const Table = styled.table`
   line-height: 1.5;
   border-collapse: collapse;
   font-size: 13px;
+
   span {
     margin-left: 5px;
     vertical-align: middle;
     color: red;
   }
+
   tbody {
     vertical-align: middle;
     background-color: #fff;
+
     tr {
-      &:nth-child(even) {
+      &:nth-child(odd) {
         background-color: #f9f9f9;
       }
     }
+
     th,
     td {
       border: 1px solid #ddd;
     }
+
     td {
       padding: 8px;
       vertical-align: middle;
@@ -261,6 +274,7 @@ const Table = styled.table`
       }
     }
   }
+
   textarea {
     width: 41%;
     height: 100px;
@@ -275,6 +289,7 @@ const Table = styled.table`
 const ExtraInfo = styled.div`
   ${({ theme }) => theme.flex(null, 'center')}
   color: #1e90ff;
+
   svg {
     margin-right: 5px;
   }
@@ -288,14 +303,17 @@ const IconInput = styled.div`
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
+
   svg {
     width: 15px;
     height: 15px;
     color: gray;
   }
+
   input {
     margin-left: 10px;
   }
+
   &.ErrorInput {
     border: 1px solid #b94a48;
   }
