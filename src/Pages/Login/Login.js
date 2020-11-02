@@ -68,7 +68,7 @@ export default function Login() {
     console.log('클릭', userInfo);
     try {
       const result = await axios.post(
-        `http://192.168.7.31:5000/account/signin`,
+        `http://10.251.1.180:5000/account/signin`,
         { identification: idValue, password: pwValue },
         {
           headers: {
@@ -89,9 +89,9 @@ export default function Login() {
       //   dispatch(isMaster(is_master));
       // }
 
-      // console.log('2', userInfo);
-      // console.log('2', filter_list);
-      // console.log('2', nav_list);
+      console.log('2', userInfo);
+      console.log('2', filter_list);
+      console.log('2', nav_list);
 
       if (result.data.success) {
         localStorage.setItem('token', result.data.success.Authorization);
