@@ -55,13 +55,18 @@ export default function ProductManagement() {
     offset: 0,
   });
 
-  // store에서 유저타입과 토큰을 가져온다.
-  const userType = useSelector(({ userInfo }) => userInfo);
+  // // store에서 유저타입과 토큰을 가져온다.
+  // const userType = useSelector(({ userInfo }) => userInfo);
 
-  // store에 있는 마스터 or 셀러 필터를 가져온다.
-  const { filter_list } = useSelector(({ filter }) => ({
-    filter_list: filter.filter_list,
-    // filter_list: filter.filter_list,
+  // // store에 있는 마스터 or 셀러 필터를 가져온다.
+  // const { filter_list } = useSelector(({ filter }) => ({
+  //   filter_list: filter.filter_list,
+  //   // filter_list: filter.filter_list,
+  // }));
+
+  const { is_master, filter_list } = useSelector(({ userInfo }) => ({
+    is_master: userInfo.is_master,
+    filter_list: userInfo.filter_list,
   }));
 
   // get을 통하여 들어오는 필터의 상태별로 각 버튼의 boolean 생성
@@ -100,7 +105,7 @@ export default function ProductManagement() {
       const { DataProductManage } = result.data;
 
       // 유저 타입이 마스터인 경우,
-      if (userType && userType) {
+      if (is_master) {
         // 셀러명 검색 필터만 분리하여 정의
 
         const masterData =
@@ -124,7 +129,7 @@ export default function ProductManagement() {
         setFilters(sellerData);
       }
       // 유저 타입이 셀러인 경우,
-      if (!userType) {
+      if (!is_master) {
         // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
         // 각 필터별로 상태를 생성
@@ -149,10 +154,6 @@ export default function ProductManagement() {
       console.log(error.config);
     }
   };
-
-  useEffect(() => {
-    getData(null);
-  }, [userType, filter_list]);
 
   // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {

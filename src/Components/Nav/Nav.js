@@ -13,22 +13,24 @@ export default function Nav() {
   const [sidebarSmall, setSidebarSmall] = useState(false);
 
   // store에 있는 nav 정보를 가져온다.
-  const { nav } = useSelector(({ nav }) => ({
-    nav: nav.nav_list,
-    // filter_list: filter.filter_list,
+  const { nav_list, filter_list } = useSelector(({ userInfo }) => ({
+    nav_list: userInfo.nav_list,
+    filter_list: userInfo.filter_list,
   }));
 
   //nav가 변경되면 nav 데이터를 최신화
   useEffect(() => {
-    setNavData(nav);
-  }, [nav]);
+    setNavData(nav_list);
+    console.log(nav_list);
+    console.log('123123123123123', filter_list);
+  }, [nav_list]);
 
   // 네브가 눌렸을때, 페이지 이동 함수
   const handlePage = (menuTitle, subTitle) => {
     setActive([menuTitle, subTitle]);
   };
 
-  console.log(nav);
+  console.log(nav_list);
 
   return (
     <NavContainer sidebarSmall={sidebarSmall}>

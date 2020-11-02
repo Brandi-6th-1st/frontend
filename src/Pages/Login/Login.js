@@ -3,31 +3,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import regeneratorRuntime from 'regenerator-runtime';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
-import { sellerNav, masterNav } from '../../Store/Reducer/sideNav';
 // import { saveNav } from '../../Store/Reducer/nav';
 // import { saveFilter } from '../../Store/Reducer/filter';
 import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import API from '../../config';
 import LoginFooter from './LoginFooter';
 export default function Login() {
+  const [inputValue, setInputValue] = useState({
+    idValue: 'lovemono',
+    pwValue: 'PW1!lovemono',
+  });
+  // 구조화
+  const { idValue, pwValue } = inputValue;
+  const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [inputValue, setInputValue] = useState({
-    idValue: 'soojsooj',
-    pwValue: 'PW1!soojsooj',
-  });
-
-  const { register, handleSubmit, errors } = useForm();
-
+  //로그인 버튼 클릭시 입력된 데이터 출력
   const onSubmit = (data) => {
-    console.log(data);
+    console.log('로그인 data', data);
   };
-
-  // 구조화
-  const { idValue, pwValue } = inputValue;
 
   //id, password 입력 값 저장
   const handleInput = (e) => {
@@ -36,8 +32,6 @@ export default function Login() {
       [e.target.name]: e.target.value,
     };
     setInputValue(nextInputValue);
-    console.log('inputValue: ', inputValue);
-    console.log('idValue: ', idValue);
   };
 
   //master
@@ -46,134 +40,54 @@ export default function Login() {
   //pw:
   // PW1!soojsooj
 
+  // lovemono
+  // PW1!lovemono
+
   //seller
   // id: seller1
   //pw: PW1!seller1
 
-  // const userInfo = useSelector(({ userInfo }) => userInfo);
-
-  // // store에 있는 마스터 or 셀러 필터를 가져온다.
-  // const { filter_list } = useSelector(({ filter }) => ({
-  //   filter_list: filter.filter_list,
-  //   // filter_list: filter.filter_list,
-  // }));
-
-  // const { nav_list } = useSelector(({ nav }) => ({
-  //   nav_list: nav.nav_list,
-  //   // filter_list: filter.filter_list,
-  // }));
-
-  const { isMaster, filter_list, nav_list } = useSelector(({ userInfo }) => ({
-    isMaster: userInfo.isMaster,
+  const { is_master, filter_list, nav_list } = useSelector(({ userInfo }) => ({
+    is_master: userInfo.is_master,
     filter_list: userInfo.filter_list,
     nav_list: userInfo.nav_list,
   }));
 
   const loggedIn = async (e) => {
     e.preventDefault();
-    console.log('클릭', userInfo);
     try {
       const result = await axios.post(
-        `http://192.168.7.47:5000/account/signin`,
+        `http://10.58.7.141:5000/account/signin`,
         { identification: idValue, password: pwValue },
         {
           headers: {
             'Content-Type': 'application/json',
           },
+          timeout: 3000,
         }
       );
+      console.log(result.data.success);
 
-      // const { is_master, filter_list, nav_list } = loginInfo;
-      // const nextLoginInfo = {
-      //   ...loginInfo,
-      //   is_master: result.data.success.is_master,
-      //   filter_list: result.data.success.nav_list,
-      //   nav_list: result.data.success.filter_list,
-      // };
+      const getIsMaster = await result.data.success.is_master;
+      const getNavList = await result.data.success.nav_list;
+      const getFilterList = await result.data.success.filter_list;
 
-      // const is_master = await result.data.success.is_master;
-      // const nav_list = await result.data.success.nav_list;
-      // const filter_list = await result.data.success.filter_list;
-
-      // if (
-      //   result.data.success.filter_list &&
-      //   result.data.success.nav_list &&
-      //   result.data.success.is_master
-      // ) {
-      //   dispatch(saveFilter(nav_list));
-      //   dispatch(saveNav(filter_list));
-      //   dispatch(isMaster(is_master));
-      // }
-
-      // console.log('2', userInfo);
-      // console.log('2', filter_list);
-      // console.log('2', nav_list);
-      // console.log('1', login_info);
-      // console.log(login_info);
-
-      if (result.data.success) {
+      if (!!result.data.success.Authorization) {
         localStorage.setItem('token', result.data.success.Authorization);
-        dispatch();
-        // dispatch(saveFilter(nav_list));
-        // dispatch(saveNav(filter_list));
-        // dispatch(isMaster(is_master));
+        dispatch(saveFilter(getFilterList));
+        dispatch(saveNav(getNavList));
+        dispatch(isMaster(getIsMaster));
+        console.log('22222211백엔드에서 받은 값', is_master);
+
+        console.log('11111백엔드에서 받은 값', is_master);
         history.push('/home');
       }
     } catch (err) {
-      console.log(err);
+      err;
     }
-
-    // postData();
-    // console.log(result);
-    // dispatch(isMaster(true));
-    // dispatch(saveNav());
-    // dispatch(saveFilter());
-
-    // const test = [1, 2, 3];
-
-    // dispatch(saveNav(test));
-    // console.log(nav);
-    // const getNav = () => {
-    //   dispatch(saveNav([1, 2, 3]));
-    // };
-    // getNav();
-    // console.log(nav);
-
-    // console.log(result);
-    // try {
-    //   fetch(`http://192.168.7.31:5000/account/signin`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       identification: idValue,
-    //       password: pwValue,
-    //     }),
-    //   })
-    //     // .then((response) => console.log(response));
-    //     .then((response) => response.json())
-    //     .then((result) => console.log(result));
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    // .then((response) => {
-    //   if (response.token) {
-    //     localStorage.setItem('wtw-token', response.token);
-    //   }
-    // });
-    // .then((result) => console.log('result: ', result));
-    // .then((result) => {
-    //   if (result.data.Authorization) {
-    //     localStorage.setItem('token', result.data.Authorization);
-    //     alert('로그인 성공');
-    //     // history.push('./');
-    //   } else if (result.data.message === 'UNAUTHORIZED') {
-    //     alert('아이디와 비밀번호를 확인해주세요');
-    //   }
-    // });
   };
-
+  console.log('filter_list', filter_list);
+  console.log('nav_list', nav_list);
   return (
     <Container>
       <Content>
@@ -192,7 +106,6 @@ export default function Login() {
             {errors.idValue && errors.pwValue && <p>아이디를 입력해주세요</p>}
             <Input
               name='pwValue'
-              // ref={register({ required: true, pattern: /^[A-Za-z]+$/i })}
               ref={register({ required: true })}
               placeholder='셀러 비밀번호'
               className={errors.pwValue && 'ErrorInput'}
@@ -202,7 +115,6 @@ export default function Login() {
             {errors.pwValue && <p>비밀번호를 입력해주세요</p>}
 
             <Button onClick={loggedIn}>로그인</Button>
-            {/* <Button>로그인</Button> */}
             <Join>
               <p>아직 셀러가 아니신가요?</p>
               <p>
