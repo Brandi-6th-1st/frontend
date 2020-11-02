@@ -30,6 +30,7 @@ export default function OrderManagement() {
     }
     return match.id;
   };
+
   const pagetext = COMPONENT_ORDER[categoryId() - 1];
 
   // 현재 시간을 newData에 할당
@@ -87,8 +88,27 @@ export default function OrderManagement() {
   // axios.get 하게되는 함수이다. params를 따로 인자로 빼어 params만 넣어서 언제든 실행 가능
   const getProductInfo = async (params) => {
     try {
+      const url = () => {
+        if (categoryId() === 1) {
+          console.log('상품준비');
+          return `/public/Data/DataProductPreManage.json`;
+        }
+        if (categoryId() === 2) {
+          console.log('배송중');
+          return `/public/Data/DataShippingMansge.json`;
+        }
+        if (categoryId() === 3) {
+          console.log('배배완료송중');
+          return `/public/Data/DataDeliveryComplitedManage.json`;
+        }
+        if (categoryId() === 4) {
+          console.log('구매');
+          return `/public/Data/DataConfirmPurchase.json`;
+        }
+      };
       const result = await axios.get(
-        `/public/Data/DataProductPreManage.json`,
+        url(),
+        // `/public/Data/DataProductPreManage.json`,
         // `/public/Data/DataShippingMansge.json`,
         // `/public/Data/DataDeliveryComplitedManage.json`,
         // `/public/Data/DataConfirmPurchase.json`,
@@ -97,6 +117,7 @@ export default function OrderManagement() {
           timeout: 3000, //3초
         }
       );
+
       const { DataProductManage } = result.data;
       setOrderList(DataProductManage.productItem);
       console.log('패치', DataProductManage);
@@ -109,6 +130,11 @@ export default function OrderManagement() {
   useEffect(() => {
     getProductInfo();
   }, []);
+
+  useEffect(() => {
+    getProductInfo();
+    filterReset();
+  }, [categoryId()]);
 
   // 현재 클릭된 버튼에 따라 동작한다.
   const handleDate = (value, i) => {
