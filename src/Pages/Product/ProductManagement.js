@@ -55,9 +55,17 @@ export default function ProductManagement() {
     offset: 0,
   });
 
-  // store에 있는 마스터 or 셀러 필터를 가져온다.
-  const { isMaster, filter_list } = useSelector(({ userInfo }) => ({
-    isMaster: userInfo.isMaster,
+  // // store에서 유저타입과 토큰을 가져온다.
+  // const userType = useSelector(({ userInfo }) => userInfo);
+
+  // // store에 있는 마스터 or 셀러 필터를 가져온다.
+  // const { filter_list } = useSelector(({ filter }) => ({
+  //   filter_list: filter.filter_list,
+  //   // filter_list: filter.filter_list,
+  // }));
+
+  const { is_master, filter_list } = useSelector(({ userInfo }) => ({
+    is_master: userInfo.is_master,
     filter_list: userInfo.filter_list,
   }));
 
@@ -95,7 +103,7 @@ export default function ProductManagement() {
       console.log('!getData 안에 콘솔로그');
 
       // 유저 타입이 마스터인 경우,
-      if (isMaster) {
+      if (is_master) {
         // 셀러명 검색 필터만 분리하여 정의
 
         const masterData =
@@ -119,7 +127,7 @@ export default function ProductManagement() {
         console.log('111111112131231231');
       }
       // 유저 타입이 셀러인 경우,
-      if (!isMaster) {
+      if (!is_master) {
         // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
         // 각 필터별로 상태를 생성

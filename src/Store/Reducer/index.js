@@ -3,4 +3,6 @@ import login from './login';
 import userInfo from './userInfo';
 import commonStatus from './commonStatus';
 
-export default combineReducers({ login, userInfo, commonStatus });
+export default combineReducers({
+  userInfo,
+});

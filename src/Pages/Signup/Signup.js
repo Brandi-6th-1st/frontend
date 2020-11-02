@@ -15,14 +15,15 @@ import {
 import { AiOutlineWarning } from 'react-icons/ai';
 
 export default function Signup() {
+  const history = useHistory();
   const { register, errors, watch, handleSubmit } = useForm({ mode: 'all' });
+
   const onSubmit = (data) => {
     console.log(data);
     if (confirm('입력하신 정보로 셀러신청을 하시겠습니까?') === true) {
       history.push('/Login');
     }
   };
-  const history = useHistory();
 
   function handleCancelBtn() {
     if (confirm('브랜디 회원가입을 취소하시겠습니까?') === true) {
@@ -31,13 +32,6 @@ export default function Signup() {
       return false;
     }
   }
-
-  // const hadleRadioBtn = (event) => {
-  //   let obj = {};
-  //   obj[event.target.value] = event.target.checked;
-  //   setRadioGroup(obj);
-  // };
-  // console.log(radioGroup);
 
   return (
     <Container>
