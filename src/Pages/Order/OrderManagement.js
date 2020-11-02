@@ -202,8 +202,14 @@ export default function OrderManagement() {
 
   // 검색버튼 클릭시 파람스에 객체를 넣어 해당 쿼리로 get
   const sendQuery = () => {
-    console.log('전송될 파람스', params);
-    getProductInfo(params);
+    const changeParams = {
+      ...params,
+      [`${params.searchOption}`]: params.searchKeyword,
+      searchOption: null,
+      searchKeyword: null,
+    };
+    console.log('전송될', changeParams);
+    getProductInfo(changeParams);
   };
 
   // 현재 날짜가 변경되면 params도 최신화 시킨다.

@@ -91,9 +91,6 @@ export default function ProductManagement() {
       const result = await axios.get(`/public/Data/DataProductManage.json`, {
         params: param,
         timeout: 3000, //3초,
-        // paramsSerializer: function (params) {
-        //   return Qs.stringify(params, { arrayFormat: 'brackets' });
-        // },
       });
 
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.

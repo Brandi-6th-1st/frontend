@@ -4,7 +4,6 @@ import { KeyboardArrowRight, List } from '@styled-icons/material';
 import Table from './Table';
 
 export default function OrderList({ pagetext, orderList, setOrderList }) {
-  console.log('asdasdads', orderList);
   return (
     <div>
       <Pagebar>
