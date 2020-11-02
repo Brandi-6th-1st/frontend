@@ -1,4 +1,8 @@
 import { combineReducers } from 'redux';
-import cartReducer from './cartReducer';
+import login from './login';
+import userInfo from './userInfo';
+import commonStatus from './commonStatus';
+import filter from './filter';
+import nav from './nav';
 
-export default combineReducers({ cartReducer });
+export default combineReducers({ login, userInfo, commonStatus, filter, nav });
