@@ -122,6 +122,7 @@ export default function OrderManagement() {
       setOrderList(DataProductManage.productItem);
       console.log('패치', DataProductManage);
     } catch (err) {
+      //에러 처리 예정
       console.log(err);
     }
   };
