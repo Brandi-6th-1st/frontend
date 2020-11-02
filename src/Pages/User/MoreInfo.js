@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import InputMask from 'react-input-mask';
 import { useForm } from 'react-hook-form';
 import ImgBox from '../../Components/ImgBox/ImgBox';
-// import PostCode from './PostCode';
+import PostCode from './PostCode';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning, AiOutlineMail } from 'react-icons/ai';
 import { ImPhone } from 'react-icons/im';
@@ -179,7 +179,9 @@ function MoreInfo({
                 <td>
                   택배 주소<span>*</span>
                 </td>
-                <td>{/* <PostCode /> */}</td>
+                <td>
+                  <PostCode />
+                </td>
               </tr>
               <tr>
                 <td>셀러 상태 변경 기록</td>
