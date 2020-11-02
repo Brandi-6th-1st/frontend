@@ -13,6 +13,7 @@ import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import { GoGraph } from 'react-icons/go';
+import { API } from '../../config';
 
 export default function Home() {
   // axios시 받은 data를 data 상태로 관리한다.
@@ -21,10 +22,21 @@ export default function Home() {
   // Test : json형식 mock-data 생성
   // axios get을 사용하여 데이터를 받아온다.
   const getData = async () => {
+    const localToken = localStorage.getItem('token');
+    console.log(localToken);
+
     try {
-      const result = await axios.get(`/public/Data/DataHomeSeller.json`);
+      // const result = await axios.get(`/public/Data/DataHomeSeller.json`);
+      const result = await axios.get(`${API}/home`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localToken,
+        },
+        timeout: 3000,
+      });
+      console.log(result);
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
-      const { DataHomeSeller } = result.data;
+      const DataHomeSeller = result.data.success;
       setSellerStatus(DataHomeSeller);
     } catch (err) {
       console.log(err);
@@ -39,22 +51,22 @@ export default function Home() {
   // 매출 금액 차트에 들어가는 일별 Price
   const priceOfSales =
     sellerStatus &&
-    sellerStatus.chart_data.map((item) => {
-      return item.price;
+    sellerStatus.statistics.map((item) => {
+      return item.sales;
     });
 
   // 매출 건수 차트에 들어가는 일별 건수
   const numOfSales =
     sellerStatus &&
-    sellerStatus.chart_data.map((item) => {
-      return item.num;
+    sellerStatus.statistics.map((item) => {
+      return item.count;
     });
 
   // 매출 차트에 공통으로 사용되는 금액, 건수의 날짜
   const dateBySales =
     sellerStatus &&
-    sellerStatus.chart_data.map((item) => {
-      return item.date;
+    sellerStatus.statistics.map((item) => {
+      return item.datetime;
     });
 
   // 매출 금액에 들어가는 차트 데이터

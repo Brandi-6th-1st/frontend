@@ -23,7 +23,7 @@ export default function ProductDetail({
 }) {
   // 버튼의 클릭 상태를 나타내는 배열 생성
   const [isSelected, setIsSelected] = useState(
-    new Array(product && product.productItem.length).fill(false)
+    new Array(product && product.DataProductManage.length).fill(false)
   );
   // 전체 상품 체크 상태
   const [allCheck, setAllCheck] = useState(false);
@@ -47,12 +47,16 @@ export default function ProductDetail({
   const handleClickAll = () => {
     if (allCheck) {
       setAllCheck(!allCheck);
-      setIsSelected(new Array(product.productItem.length).fill(!allCheck));
+      setIsSelected(
+        new Array(product.DataProductManage.length).fill(!allCheck)
+      );
       setCheckProduct([]);
     } else {
       setAllCheck(!allCheck);
-      setIsSelected(new Array(product.productItem.length).fill(!allCheck));
-      setCheckProduct(product.productItem.map((el) => String(el.id)));
+      setIsSelected(
+        new Array(product.DataProductManage.length).fill(!allCheck)
+      );
+      setCheckProduct(product.DataProductManage.map((el) => String(el.id)));
     }
   };
 
@@ -95,7 +99,7 @@ export default function ProductDetail({
   // 상품의 갯수 변경시 해당 갯수만큼 불리언 배열 생성
   useEffect(() => {
     if (product) {
-      setIsSelected(new Array(product.productItem.length).fill(false));
+      setIsSelected(new Array(product.DataProductManage.length).fill(false));
     }
   }, [product]);
 
@@ -135,7 +139,7 @@ export default function ProductDetail({
       // 상품의 진열여부, 판매여부를 변경한다.
       setProduct({
         ...product,
-        productItem: product.productItem.map((item) => {
+        DataProductManage: product.DataProductManage.map((item) => {
           if (checkProduct.includes(String(item.id))) {
             return {
               ...item,
@@ -269,7 +273,8 @@ export default function ProductDetail({
       </ChangeContainer>
       <AllProductView>
         <span>
-          전체 조회건 수 : <b> {product && product.productItem.length}</b>건
+          전체 조회건 수 : <b> {product && product.DataProductManage.length}</b>
+          건
         </span>
       </AllProductView>
       <TableBox>
@@ -298,7 +303,7 @@ export default function ProductDetail({
           </ProductHead>
           <tbody>
             {product &&
-              product.productItem.map((cate, idx) => {
+              product.DataProductManage.map((cate, idx) => {
                 return (
                   <ProductLine idx={idx} key={idx}>
                     <ProductItem>
@@ -309,13 +314,9 @@ export default function ProductDetail({
                         onChange={(e) => selectProduct(e, idx)}
                       ></input>
                     </ProductItem>
-                    <ProductItem>{cate.registered_at}</ProductItem>
+                    <ProductItem>{cate.created_at}</ProductItem>
                     <ProductItem>
-                      <img
-                        src={cate.main_image_url}
-                        width="70px"
-                        height="70px"
-                      />
+                      <img src={cate.image_url} width="70px" height="70px" />
                     </ProductItem>
                     <ProductItem>{cate.product_name}</ProductItem>
                     <ProductItem>
@@ -323,10 +324,17 @@ export default function ProductDetail({
                     </ProductItem>
                     <ProductItem>{cate.product_number}</ProductItem>
                     <ProductItem>{cate.price}</ProductItem>
-                    <ProductItem> {cate.discount_price}</ProductItem>
-                    <ProductItem>{cate.is_on_sale}</ProductItem>
-                    <ProductItem>{cate.is_displayed}</ProductItem>
-                    <ProductItem>{cate.is_discounted}</ProductItem>
+                    <ProductItem>
+                      {Number(cate.price) *
+                        ((100 - Number(cate.discount_rate)) / 100)}
+                    </ProductItem>
+                    <ProductItem>
+                      {cate.is_on_sale ? '판매' : '미판매'}
+                    </ProductItem>
+                    <ProductItem>
+                      {cate.is_displayed ? '진열' : '미진열 '}
+                    </ProductItem>
+                    <ProductItem>{cate.discount_rate}</ProductItem>
                     <ProductItem>
                       <BuyBtn onClick={() => setShowModal(true)}>
                         구매하기

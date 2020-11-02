@@ -11,11 +11,11 @@ export default function Bookmark({ sellerStatus }) {
         </SalesCategory>
         <SalesCategory>
           <span>전체 상품 수:</span>
-          <b>{sellerStatus && sellerStatus.all_product} 건</b>
+          <b>{sellerStatus && sellerStatus.total_product} 건</b>
         </SalesCategory>
         <SalesCategory>
           <span>노출 상품 수:</span>
-          <b>{sellerStatus && sellerStatus.displayed_product} 건</b>
+          <b>{sellerStatus && sellerStatus.products_on_sale} 건</b>
         </SalesCategory>
       </SalesStatus>
     </SalesBox>

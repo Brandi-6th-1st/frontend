@@ -12,6 +12,7 @@ import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import Purchase from './Components/Purchase';
+import { API } from '../../config';
 
 export default function ProductManagement() {
   const dispatch = useDispatch();
@@ -92,15 +93,25 @@ export default function ProductManagement() {
   // axios get을 사용하여 데이터를 받아온다.
 
   const getData = async (param = null) => {
+    const localToken = localStorage.getItem('token');
+
     try {
       const result = await axios.get(`/public/Data/DataProductManage.json`, {
+        // const result = await axios.get(`${API}/product`, {
         params: param,
         timeout: 3000, //3초,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localToken,
+        },
       });
 
+      console.log('지금지금', result);
+
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
-      const { DataProductManage } = result.data;
+      const DataProductManage = result.data;
       console.log('!getData 안에 콘솔로그');
+      console.log(DataProductManage);
 
       // 유저 타입이 마스터인 경우,
       if (is_master) {
@@ -128,6 +139,7 @@ export default function ProductManagement() {
       }
       // 유저 타입이 셀러인 경우,
       if (!is_master) {
+        console.log('123123123123123123123', filter_list);
         // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
         // 각 필터별로 상태를 생성
