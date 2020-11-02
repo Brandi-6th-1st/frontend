@@ -87,15 +87,10 @@ export default function ProductDetail({
     });
   };
 
-  // limit 변경시 쿼리스트링 변경하여 get
+  // limit or page 변경시 쿼리스트링 변경하여 get
   useEffect(() => {
     sendData();
-  }, [query.limit]);
-
-  // page 변경시 쿼리스트링 변경하여 get
-  useEffect(() => {
-    sendData();
-  }, [activePage]);
+  }, [query.limit, activePage]);
 
   // 상품의 갯수 변경시 해당 갯수만큼 불리언 배열 생성
   useEffect(() => {

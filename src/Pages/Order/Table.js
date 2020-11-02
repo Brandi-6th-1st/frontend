@@ -17,6 +17,7 @@ export default function Table({ pagetext, orderList, setOrderList }) {
   // 전체 주문 리스트가 변경하게 되면 배열 새로 생성
   useEffect(() => {
     setIsSelected(new Array(orderList && orderList.length).fill(false));
+    setAllCheck(false);
   }, [orderList]);
 
   // 전체 버튼을 클릭했을 경우 실행
@@ -100,20 +101,25 @@ export default function Table({ pagetext, orderList, setOrderList }) {
       <TableContainer>
         <table>
           <thead>
-            <th className="checkbox">
-              <input
-                type="checkbox"
-                checked={allCheck ? 'checked' : ''}
-                onChange={handleClickAll}
-              />
-            </th>
-            {pagetext.table_header &&
-              pagetext.table_header.map((el) => <th>{el}</th>)}
+            <tr>
+              <th className="checkbox">
+                <input
+                  type="checkbox"
+                  checked={allCheck ? 'checked' : ''}
+                  onChange={handleClickAll}
+                  defaultValue=""
+                />
+              </th>
+              {pagetext.table_header &&
+                pagetext.table_header.map((el, index) => (
+                  <th key={index}>{el}</th>
+                ))}
+            </tr>
           </thead>
           <tbody>
             {orderList &&
               orderList.map((order, index) => (
-                <tr>
+                <tr key={index}>
                   <td className="checkbox">
                     <input
                       type="checkbox"
@@ -124,8 +130,8 @@ export default function Table({ pagetext, orderList, setOrderList }) {
                   </td>
                   {Object.values(order)
                     .slice(1)
-                    .map((el) => (
-                      <td>{el}</td>
+                    .map((el, index) => (
+                      <td key={index}>{el}</td>
                     ))}
                 </tr>
               ))}

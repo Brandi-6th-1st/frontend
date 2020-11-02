@@ -26,12 +26,10 @@ export default function OrderList({ pagetext, orderList, setOrderList }) {
             <option value="NEWEST">최신주문일순</option>
             <option value="OLDEST">주문일의 역순</option>
           </Select>
-          <Select>
+          <Select defaultValue="50_EACH">
             <option value="10_EACH">10개씩보기</option>
             <option value="20_EACH">20개씩보기</option>
-            <option value="50_EACH" selected>
-              50개씩보기
-            </option>
+            <option value="50_EACH">50개씩보기</option>
             <option value="100_EACH">100개씩보기</option>
             <option value="150_EACH">150개씩보기</option>
           </Select>

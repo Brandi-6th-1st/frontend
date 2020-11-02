@@ -1,11 +1,5 @@
-const SAVE_FILTER = 'filter/SAVE_FILTER';
 const IS_SELLER_FILTER = 'filter/IS_SELLER_FILTER';
 const CLEAR_FILTER = 'filter/CLEAR_FILTER';
-
-export const saveFilter = (items) => ({
-  type: SAVE_FILTER,
-  payload: items,
-});
 
 // export const sellerFilter = (items) => ({
 //   type: IS_SELLER_FILTER,
@@ -156,8 +150,6 @@ const initialState = {
 
 const filter = (state = initialState, { type, payload }) => {
   switch (type) {
-    case SAVE_FILTER:
-      return { filter_list: payload };
     // case IS_SELLER_FILTER:
     //   return { filter_list: payload };
     case CLEAR_FILTER:

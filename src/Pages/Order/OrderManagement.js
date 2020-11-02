@@ -90,19 +90,15 @@ export default function OrderManagement() {
     try {
       const url = () => {
         if (categoryId() === 1) {
-          console.log('상품준비');
           return `/public/Data/DataProductPreManage.json`;
         }
         if (categoryId() === 2) {
-          console.log('배송중');
           return `/public/Data/DataShippingMansge.json`;
         }
         if (categoryId() === 3) {
-          console.log('배배완료송중');
           return `/public/Data/DataDeliveryComplitedManage.json`;
         }
         if (categoryId() === 4) {
-          console.log('구매');
           return `/public/Data/DataConfirmPurchase.json`;
         }
       };
@@ -120,7 +116,6 @@ export default function OrderManagement() {
 
       const { DataProductManage } = result.data;
       setOrderList(DataProductManage.productItem);
-      console.log('패치', DataProductManage);
     } catch (err) {
       //에러 처리 예정
       console.log(err);

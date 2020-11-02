@@ -56,12 +56,13 @@ export default function ProductManagement() {
   });
 
   // store에서 유저타입과 토큰을 가져온다.
-  const userType = useSelector(({ userInfo }) => userInfo);
+  const { isMaster } = useSelector(({ userInfo }) => ({
+    isMaster: userInfo.isMaster,
+  }));
 
   // store에 있는 마스터 or 셀러 필터를 가져온다.
-  const { filter_list } = useSelector(({ filter }) => ({
-    filter_list: filter.filter_list,
-    // filter_list: filter.filter_list,
+  const { filter_list } = useSelector(({ userInfo }) => ({
+    filter_list: userInfo.filter_list,
   }));
 
   // get을 통하여 들어오는 필터의 상태별로 각 버튼의 boolean 생성
@@ -86,7 +87,7 @@ export default function ProductManagement() {
   // Test : json형식 mock-data 생성
   // axios get을 사용하여 데이터를 받아온다.
 
-  const getData = async (param) => {
+  const getData = async (param = null) => {
     try {
       const result = await axios.get(`/public/Data/DataProductManage.json`, {
         params: param,
@@ -95,16 +96,16 @@ export default function ProductManagement() {
 
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
       const { DataProductManage } = result.data;
+      console.log('!getData 안에 콘솔로그');
 
       // 유저 타입이 마스터인 경우,
-      if (userType) {
+      if (isMaster) {
         // 셀러명 검색 필터만 분리하여 정의
 
         const masterData =
           filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
 
         const sellerData = {
-          ...filter_list,
           filter_list: filter_list.filter((el) => el.id !== sellerNameId),
         };
 
@@ -119,9 +120,10 @@ export default function ProductManagement() {
         setProduct(DataProductManage);
         // 공용으로 사용하는 데이터 저장
         setFilters(sellerData);
+        console.log('111111112131231231');
       }
       // 유저 타입이 셀러인 경우,
-      if (!userType) {
+      if (!isMaster) {
         // 마스터와 셀러 공용 필터를 따로 저장
         setProduct(DataProductManage);
         // 각 필터별로 상태를 생성
@@ -133,23 +135,28 @@ export default function ProductManagement() {
       }
     } catch (err) {
       if (err.response) {
+        alert('서버 응답을 받았으나 성공하지 못했습니다.');
         console.log('서버 응답을 받았으나 성공하지 못했습니다.');
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
       } else if (error.request) {
+        alert('서버 응답 실패');
         console.log('서버 응답 실패');
         console.log(error.request);
       } else {
+        alert('에러 메세지 확인');
         console.log(error.message);
       }
+      alert('config 확인');
       console.log(error.config);
     }
   };
 
   // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {
-    getData(null);
+    getData();
+    console.log('!유즈이펙트 안의 콘솔로그');
   }, []);
 
   // 각 필터 선택시 true <-> false로 바꿔준다.
@@ -263,17 +270,6 @@ export default function ProductManagement() {
 
   // 검색 버튼일 눌리게 되면 동작할 함수.
   const sendData = () => {
-    console.log(
-      'test',
-      filterStatus &&
-        filterStatus.filter((el) => {
-          return el.id === salesId && el.id;
-        })[0] &&
-        filterStatus.filter((el) => {
-          return el.id === salesId && el.id;
-        })[0].selectedId
-    );
-
     // 셀러속성의 현재 버튼이 눌린 상태
     const attribute =
       filterStatus &&

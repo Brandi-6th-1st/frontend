@@ -5,4 +5,4 @@ import commonStatus from './commonStatus';
 import filter from './filter';
 import nav from './nav';
 
-export default combineReducers({ login, userInfo, commonStatus, filter, nav });
+export default combineReducers({ login, userInfo, commonStatus });
