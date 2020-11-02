@@ -23,7 +23,7 @@ export const isClear = () => ({
 });
 
 const initialState = {
-  isMaster: true,
+  is_master: true,
   filter_list: [],
   nav_list: [],
 };
