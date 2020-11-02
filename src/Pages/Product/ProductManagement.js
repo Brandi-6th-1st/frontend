@@ -55,13 +55,9 @@ export default function ProductManagement() {
     offset: 0,
   });
 
-  // store에서 유저타입과 토큰을 가져온다.
-  const { isMaster } = useSelector(({ userInfo }) => ({
-    isMaster: userInfo.isMaster,
-  }));
-
   // store에 있는 마스터 or 셀러 필터를 가져온다.
-  const { filter_list } = useSelector(({ userInfo }) => ({
+  const { isMaster, filter_list } = useSelector(({ userInfo }) => ({
+    isMaster: userInfo.isMaster,
     filter_list: userInfo.filter_list,
   }));
 
@@ -155,7 +151,7 @@ export default function ProductManagement() {
 
   useEffect(() => {
     getData(null);
-  }, [userType, filter_list]);
+  }, [filter_list]);
 
   // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {
