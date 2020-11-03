@@ -21,7 +21,7 @@ export default function Signup() {
     pwValue: '',
     accountTypeValue: 2,
     contactValue: '',
-    attributeValue: '',
+    attributeValue: 1,
     koNameValue: '',
     enNameValue: '',
     csContactValue: '',
@@ -62,31 +62,44 @@ export default function Signup() {
       ...signupForm,
       [e.target.name]: e.target.value,
     };
+    if (e.target.value === 'shoppingmall') {
+      attributeValue: 1;
+    }
+    if (e.target.value === 'market') {
+      attributeValue: 2;
+    }
     setSignrupForm(nextSignupForm);
   };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    const result = axios.post(
-      `http://10.58.7.141:5000/account/signin`,
-      {
-        identification: idValue,
-        password: pwValue,
-        account_type_id: accountTypeValue,
-        contact: contactValue,
-        attribute_id: attributeValue,
-        korean_name: koNameValue,
-        english_name: enNameValue,
-        cs_contact: csContactValue,
-        status_id: statusValue,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      const result = axios.post(
+        `10.251.1.196:5000/account/signup`,
+        {
+          identification: idValue,
+          password: pwValue,
+          account_type_id: accountTypeValue,
+          contact: contactValue,
+          attribute_id: attributeValue,
+          korean_name: koNameValue,
+          english_name: enNameValue,
+          cs_contact: csContactValue,
+          status_id: statusValue,
         },
-        timeout: 3000,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: 3000,
+        }
+      );
+      if (result.data) {
+        console.log(result);
       }
-    );
+    } catch (err) {
+      err;
+    }
   };
 
   // const onSubmitHandler = (e) => {
@@ -198,7 +211,6 @@ export default function Signup() {
               기입해주세요.
             </ExtraInfo>
             <InfoTitle>셀러 정보</InfoTitle>
-            {/* <IntputRadio onClick={handleRadioValue}> */}
             <IntputRadio onChange={handleSignupForm}>
               <label>
                 <input
@@ -218,51 +230,6 @@ export default function Signup() {
                   ref={register()}
                 />
                 마켓
-              </label>
-              <label>
-                <input
-                  name='attributeValue'
-                  value='roadshop'
-                  type='radio'
-                  ref={register()}
-                />
-                로드샵
-              </label>
-              <label>
-                <input
-                  name='attributeValue'
-                  value='designer'
-                  type='radio'
-                  ref={register()}
-                />
-                디자이너브랜드
-              </label>
-              <label>
-                <input
-                  name='attributeValue'
-                  value='general'
-                  type='radio'
-                  ref={register()}
-                />
-                제너럴브랜드
-              </label>
-              <label>
-                <input
-                  name='attributeValue'
-                  value='national'
-                  type='radio'
-                  ref={register()}
-                />
-                내셔널브랜드
-              </label>
-              <label>
-                <input
-                  name='attributeValue'
-                  value='beauty'
-                  type='radio'
-                  ref={register()}
-                />
-                뷰티
               </label>
             </IntputRadio>
             <IconInput className={errors.sellerName && 'ErrorInput'}>
