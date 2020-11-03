@@ -24,7 +24,6 @@ export default function Home() {
   // axios get을 사용하여 데이터를 받아온다.
   const getData = async () => {
     const localToken = localStorage.getItem('token');
-    console.log(localToken);
 
     try {
       // const result = await axios.get(`/public/Data/DataHomeSeller.json`);
@@ -35,10 +34,8 @@ export default function Home() {
         },
         timeout: 3000,
       });
-      console.log(result);
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
       const DataHomeSeller = result.data.success;
-      console.log(DataHomeSeller);
       setSellerStatus(DataHomeSeller);
     } catch (err) {
       console.log(err);
@@ -108,7 +105,7 @@ export default function Home() {
         labels: {
           // 차트에 월,일만 표기되도록 앞에 년도를 짤라서 출력 (데이터에 따른 수정 예정)
           formatter: function () {
-            return this.value.substring(3);
+            return this.value;
           },
         },
       },

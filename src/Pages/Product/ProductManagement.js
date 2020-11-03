@@ -97,7 +97,6 @@ export default function ProductManagement() {
 
   const getData = async (param = null) => {
     const localToken = localStorage.getItem('token');
-    console.log(is_master);
 
     try {
       // const result = await axios.get(`/public/Data/DataProductManage.json`, {
@@ -317,7 +316,6 @@ export default function ProductManagement() {
       })[0].selectedId;
 
     const test = query.sellerDetail;
-    console.log({ ...query });
 
     // 상태로 저장하고 있던 값을 params로 보내기 위해 data form 변경
     const queryObj = {
@@ -336,7 +334,6 @@ export default function ProductManagement() {
       productDetail: null,
     };
 
-    console.log('전송');
     console.log('전송된 파람스', queryObj);
     //변경된 form을 param에 넣어 get Data
     getData(queryObj);
