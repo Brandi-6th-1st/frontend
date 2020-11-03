@@ -1,5 +1,5 @@
 const TYPE_MASTER = 'userInfo/TYPE_MASTER';
-const TYPE_NONE = 'userInfo/TYPE_NONE';
+const TYPE_CLEAR = 'userInfo/TYPE_CLEAR';
 const SAVE_NAV = 'userInfo/SAVE_NAV';
 const SAVE_FILTER = 'userInfo/SAVE_FILTER';
 
@@ -23,9 +23,20 @@ export const isClear = () => ({
 });
 
 const initialState = {
-  is_master: true,
+  is_master: null,
   filter_list: [],
   nav_list: [],
+  //   attribute: "쇼핑몰"
+  // created_at: "Sun, 25 Oct 2020 21:54:53 GMT"
+  // discount_rate: null
+  // image_url: "https://image.brandi.me/cproduct/2020/10/25/21534186_1603617675_image1_M.jpg"
+  // is_displayed: 1
+  // is_on_sale: 1
+  // price: 20000
+  // product_code: 1
+  // product_name: "[대박예쁨/2C] 보카시 크롭 어깨 퍼프 숏 니트 _ 러브모노"
+  // product_number: 1
+  // seller_name: "러브모노"
   // filter_list: [
   //   {
   //     filterTitle: '판매여부',
@@ -244,12 +255,12 @@ const userInfo = (state = initialState, { type, payload }) => {
   console.log(type);
   switch (type) {
     case TYPE_MASTER:
-      return { ...state, isMaster: payload };
+      return { ...state, is_master: payload };
     case SAVE_FILTER:
       return { ...state, filter_list: payload };
     case SAVE_NAV:
       return { ...state, nav_list: payload };
-    case TYPE_NONE:
+    case TYPE_CLEAR:
       return {};
     default:
       return state;

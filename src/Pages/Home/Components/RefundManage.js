@@ -31,6 +31,10 @@ const SalesBox = styled.div`
   width: 33.3%;
   padding: 0 15px;
   margin-bottom: 22px;
+
+  @media only screen and (max-width: 750px) {
+    width: 100%;
+  }
 `;
 
 const SalesStatus = styled.div`

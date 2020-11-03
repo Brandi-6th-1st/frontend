@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import dateFormatChange from '../../Components/ChangeTimeFormat';
 import { ko } from 'date-fns/esm/locale';
@@ -15,7 +16,9 @@ import Purchase from './Components/Purchase';
 import { API } from '../../config';
 
 export default function ProductManagement() {
+  const history = useHistory();
   const dispatch = useDispatch();
+  const [isMounted, setIsMounted] = useState(false);
   // 모달창 출력 유무를 관리
   const [showModal, setShowModal] = useState(false);
   // 마스터에만 사용되는 데이터를 관리
@@ -43,15 +46,15 @@ export default function ProductManagement() {
   // const [queryUrl, setQueryUrl] = useState('');
   // 쿼리스트링을 만들 상태를 따로 관리
   const [query, setQuery] = useState({
-    startDate: null,
-    endDate: null,
-    sellerName: null,
+    from: null,
+    until: null,
+    seller_name: null,
     sellerDetail: null,
     productDetail: null,
-    sellerAttribute: [],
-    salesStatus: null,
-    displayStatus: null,
-    discountStatus: null,
+    attribute: [],
+    sale: null,
+    displayed: null,
+    discount: null,
     limit: 10,
     offset: 0,
   });
@@ -94,10 +97,11 @@ export default function ProductManagement() {
 
   const getData = async (param = null) => {
     const localToken = localStorage.getItem('token');
+    console.log(is_master);
 
     try {
-      const result = await axios.get(`/public/Data/DataProductManage.json`, {
-        // const result = await axios.get(`${API}/product`, {
+      // const result = await axios.get(`/public/Data/DataProductManage.json`, {
+      const result = await axios.get(`${API}/product`, {
         params: param,
         timeout: 3000, //3초,
         headers: {
@@ -105,63 +109,40 @@ export default function ProductManagement() {
           Authorization: localToken,
         },
       });
-
-      console.log('지금지금', result);
-
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
-      const DataProductManage = result.data;
-      console.log('!getData 안에 콘솔로그');
-      console.log(DataProductManage);
+      const DataProductManage = result.data.success;
 
-      // 유저 타입이 마스터인 경우,
-      if (is_master) {
-        // 셀러명 검색 필터만 분리하여 정의
+      const masterData =
+        filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
 
-        const masterData =
-          filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
+      const sellerData = {
+        filter_list: filter_list.filter((el) => el.id !== sellerNameId),
+      };
 
-        const sellerData = {
-          filter_list: filter_list.filter((el) => el.id !== sellerNameId),
-        };
-
-        // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
-        if (!filterStatus) {
-          createFilter(sellerData);
-        }
-
-        // 마스터에서만 사용하는 데이터 저장
-        setDifferentFilter(masterData);
-        // 상품 리스트에 보여줄 데이터를 저장
-        setProduct(DataProductManage);
-        // 공용으로 사용하는 데이터 저장
-        setFilters(sellerData);
-        console.log('111111112131231231');
+      // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
+      if (!filterStatus) {
+        createFilter(sellerData);
       }
-      // 유저 타입이 셀러인 경우,
-      if (!is_master) {
-        console.log('123123123123123123123', filter_list);
-        // 마스터와 셀러 공용 필터를 따로 저장
-        setProduct(DataProductManage);
-        // 각 필터별로 상태를 생성
-        setFilters(filter_list);
-        // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
-        if (!filterStatus) {
-          createFilter(filter_list);
-        }
-      }
+
+      // 마스터에서만 사용하는 데이터 저장
+      setDifferentFilter(masterData);
+      // 상품 리스트에 보여줄 데이터를 저장
+      setProduct(DataProductManage);
+      // 공용으로 사용하는 데이터 저장
+      setFilters(sellerData);
     } catch (err) {
       if (err.response) {
-        alert('서버 응답을 받았으나 성공하지 못했습니다.');
+        alert('서버 응답을 받았으나 성공하지 못했습니다.', err.response);
         console.log('서버 응답을 받았으나 성공하지 못했습니다.');
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
       } else if (error.request) {
-        alert('서버 응답 실패');
+        alert('서버에서 응답이 없습니다.', err.request);
         console.log('서버 응답 실패');
         console.log(error.request);
       } else {
-        alert('에러 메세지 확인');
+        alert('메세지 에러', err.message);
         console.log(error.message);
       }
       alert('config 확인');
@@ -170,13 +151,14 @@ export default function ProductManagement() {
   };
 
   useEffect(() => {
-    getData(null);
+    if (isMounted) {
+      getData();
+    }
   }, [filter_list]);
 
   // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {
-    getData();
-    console.log('!유즈이펙트 안의 콘솔로그');
+    setIsMounted(true);
   }, []);
 
   // 각 필터 선택시 true <-> false로 바꿔준다.
@@ -345,10 +327,10 @@ export default function ProductManagement() {
           ? (activePage - 1) * query.limit
           : null,
       limit: Number(query.limit) !== 10 ? query.limit : null,
-      sellerAttribute: attribute ? attribute : null,
-      salesStatus: salse !== '' ? salse : null,
-      displayStatus: display !== '' ? display : null,
-      discountStatus: discount !== '' ? discount : null,
+      attribute: attribute ? attribute : null,
+      sale: salse !== '' ? salse : null,
+      displayed: display !== '' ? display : null,
+      discount: discount !== '' ? discount : null,
       [`${query.sellerDetail}`]: query.productDetail,
       sellerDetail: null,
       productDetail: null,
@@ -370,15 +352,15 @@ export default function ProductManagement() {
     console.log('초기화');
     createFilter(filters);
     setQuery({
-      startDate: null,
-      endDate: null,
-      sellerName: null,
+      from: null,
+      until: null,
+      seller_name: null,
       sellerDetail: null,
       productDetail: null,
-      sellerAttribute: [],
-      salesStatus: null,
-      displayStatus: null,
-      discountStatus: null,
+      attribute: [],
+      sale: null,
+      displayed: null,
+      discount: null,
       limit: Number(query.limit),
       offset: Number(query.limit) ? Number(query.limit) : 10 * activePage,
     });
@@ -393,7 +375,7 @@ export default function ProductManagement() {
     setCurrentDate({ ...currentDate, endDate: date });
     setQuery({
       ...query,
-      endDate: dateFormatChange(date),
+      until: dateFormatChange(date),
     });
   };
 
@@ -402,7 +384,7 @@ export default function ProductManagement() {
     setCurrentDate({ ...currentDate, startDate: date });
     setQuery({
       ...query,
-      startDate: dateFormatChange(date),
+      from: dateFormatChange(date),
     });
   };
 
@@ -450,9 +432,9 @@ export default function ProductManagement() {
                   <SellerSearchBox>
                     <SellerSearch
                       name="셀러이름"
-                      value={query.sellerName || ''}
+                      value={query.seller_name || ''}
                       onChange={(e) =>
-                        setQuery({ ...query, sellerName: e.target.value })
+                        setQuery({ ...query, seller_name: e.target.value })
                       }
                       type="text"
                       placeholder="검색어를 입력하세요."
@@ -469,7 +451,7 @@ export default function ProductManagement() {
                 >
                   <option>Select</option>
                   <option value="product_name">상품명</option>
-                  <option value="product_number">상품번호</option>
+                  <option value="product_id">상품번호</option>
                   <option value="product_code">상품코드</option>
                 </select>
                 <SearchBox>

@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 import regeneratorRuntime from 'regenerator-runtime';
 import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
+// import HighchartsReact from 'highcharts-react-official';
+// import { GoGraph } from 'react-icons/go';
 import ProductManage from './Components/ProductManage';
 import RefundManage from './Components/RefundManage';
 import Bookmark from './Components/Bookmark';
@@ -12,7 +13,7 @@ import Notice from './Components/Notice';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-import { GoGraph } from 'react-icons/go';
+import Chart from './Components/Chart';
 import { API } from '../../config';
 
 export default function Home() {
@@ -37,6 +38,7 @@ export default function Home() {
       console.log(result);
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
       const DataHomeSeller = result.data.success;
+      console.log(DataHomeSeller);
       setSellerStatus(DataHomeSeller);
     } catch (err) {
       console.log(err);
@@ -127,7 +129,7 @@ export default function Home() {
           // axios에서 넘겨받은 날짜를 xx년 xx월 xx일 형식으로 바꾸기 위해서 split
           const splitDate = this.x.split('/');
           // 위에서 split한 Data를 각 Format에 맞게 넣어 출력한다.
-          var tooltipText = `${tooltipTitle} <br> <b> ${splitDate[0]}년 ${splitDate[1]}월  ${splitDate[2]}일 : ${this.y} ${tooltipUnit}</b>`;
+          var tooltipText = `${tooltipTitle} <br> <b> ${splitDate[0]}월  ${splitDate[1]}일 : ${this.y} ${tooltipUnit}</b>`;
           return tooltipText;
         },
       },
@@ -152,7 +154,9 @@ export default function Home() {
           </SalesContainer>
           <StaticsContainer>
             {/* 매출 통계 건수 차트 생성하여 컴포넌트 분리 예정 */}
-            <StaticsBox>
+            <Chart highcharts={Highcharts} options={numChart()} />
+            <Chart highcharts={Highcharts} options={priceChart()} />
+            {/* <StaticsBox>
               <StaticsStatus>
                 <StaticsTitle>
                   <GoGraph />
@@ -168,8 +172,9 @@ export default function Home() {
                 </StaticsGraph>
               </StaticsStatus>
             </StaticsBox>
+             */}
             {/* 매출 통계 금액 차트 생성하여 컴포넌트 분리 예정 */}
-            <StaticsBox>
+            {/* <StaticsBox>
               <StaticsStatus>
                 <StaticsTitle>
                   <GoGraph />
@@ -185,6 +190,7 @@ export default function Home() {
                 </StaticsGraph>
               </StaticsStatus>
             </StaticsBox>
+           */}
           </StaticsContainer>
           <StaticsContainer>
             {/* Q&A 차트 컴포넌트 */}
@@ -214,41 +220,53 @@ const Section = styled.div`
 
 const SalesContainer = styled.div`
   display: flex;
+
+  @media only screen and (max-width: 750px) {
+    ${({ theme }) => theme.flex('', '', 'column')}
+  }
 `;
 
 const StaticsContainer = styled.div`
   display: flex;
   margin-bottom: 22px;
-`;
 
-const StaticsBox = styled.div`
-  display: inline-block;
-  width: 50%;
-  min-height: 1px;
-  padding: 0px 10px;
-`;
-
-const StaticsStatus = styled.div`
-  border: 1px solid #dddddd;
-`;
-
-const StaticsTitle = styled.div`
-  padding: 10px 15px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #dddddd;
-
-  svg {
-    vertical-align: bottom;
-    color: gray;
-  }
-
-  span {
-    padding-left: 5px;
-    font-size: 13px;
-    color: gray;
+  @media only screen and (max-width: 750px) {
+    ${({ theme }) => theme.flex('', '', 'column')}
   }
 `;
 
-const StaticsGraph = styled.div`
-  padding: 10px;
-`;
+// const StaticsBox = styled.div`
+//   display: inline-block;
+//   width: 50%;
+//   min-height: 1px;
+//   padding: 0px 10px;
+
+//   @media only screen and (max-width: 750px) {
+//     width: 100%;
+//   }
+// `;
+
+// const StaticsStatus = styled.div`
+//   border: 1px solid #dddddd;
+// `;
+
+// const StaticsTitle = styled.div`
+//   padding: 10px 15px;
+//   background-color: #f5f5f5;
+//   border-bottom: 1px solid #dddddd;
+
+//   svg {
+//     vertical-align: bottom;
+//     color: gray;
+//   }
+
+//   span {
+//     padding-left: 5px;
+//     font-size: 13px;
+//     color: gray;
+//   }
+// `;
+
+// const StaticsGraph = styled.div`
+//   padding: 10px;
+// `;

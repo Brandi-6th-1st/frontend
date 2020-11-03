@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { isClear } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@styled-icons/material';
@@ -9,8 +9,13 @@ import { GoSignOut } from 'react-icons/go';
 export default function Header() {
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const { is_master } = useSelector(({ userInfo }) => ({
+    is_master: userInfo.is_master,
+  }));
+
   const logOut = () => {
-    history.push('/login');
+    history.push('/');
     localStorage.removeItem('token');
     dispatch(isClear());
   };
@@ -23,7 +28,7 @@ export default function Header() {
         </div>
       </Contents>
       <StatusBtn>
-        <LogoutBox>intern_master</LogoutBox>
+        <LogoutBox>{is_master ? 'intern_master' : 'intern_seller'}</LogoutBox>
         <KeyboardArrowDown size="15" color="#999ba2" />
         <div>
           <LogoutText onClick={logOut}>
@@ -102,6 +107,12 @@ const StatusBtn = styled.div`
       color: black;
       cursor: pointer;
 
+      span {
+        color: black;
+        display: block;
+        margin-top: 7px;
+      }
+
       &:hover {
         background-color: #eee;
         cursor: pointer;
@@ -112,4 +123,6 @@ const StatusBtn = styled.div`
 
 const LogoutText = styled.span`
   color: black;
+  display: block;
+  margin-top: 7px;
 `;

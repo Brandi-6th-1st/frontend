@@ -55,6 +55,10 @@ export default function Nav() {
 }
 
 const NavContainer = styled.div`
+  @media only screen and (max-width: 934px) {
+    display: none;
+  }
+
   width: 215px;
   height: 100vh;
   padding-top: 45px;
@@ -65,9 +69,6 @@ const NavContainer = styled.div`
     css`
       width: 40px;
     `}
-  @media only screen and (max-width: 934px) {
-    display: none;
-  }
 `;
 
 const NavBox = styled.ul`

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import regeneratorRuntime from 'regenerator-runtime';
 import styled from 'styled-components';
 import Pagination from 'react-js-pagination';
+import axios from 'axios';
+import { API } from '../../../config';
 import {
   GoListUnordered,
   GoChevronRight,
@@ -21,9 +24,10 @@ export default function ProductDetail({
   salesId,
   displayId,
 }) {
+  const [isMounted, setIsMounted] = useState(0);
   // 버튼의 클릭 상태를 나타내는 배열 생성
   const [isSelected, setIsSelected] = useState(
-    new Array(product && product.DataProductManage.length).fill(false)
+    new Array(product && product.length).fill(false)
   );
   // 전체 상품 체크 상태
   const [allCheck, setAllCheck] = useState(false);
@@ -47,16 +51,12 @@ export default function ProductDetail({
   const handleClickAll = () => {
     if (allCheck) {
       setAllCheck(!allCheck);
-      setIsSelected(
-        new Array(product.DataProductManage.length).fill(!allCheck)
-      );
+      setIsSelected(new Array(product.length).fill(!allCheck));
       setCheckProduct([]);
     } else {
       setAllCheck(!allCheck);
-      setIsSelected(
-        new Array(product.DataProductManage.length).fill(!allCheck)
-      );
-      setCheckProduct(product.DataProductManage.map((el) => String(el.id)));
+      setIsSelected(new Array(product.length).fill(!allCheck));
+      setCheckProduct(product.map((el) => String(el.product_number)));
     }
   };
 
@@ -99,9 +99,49 @@ export default function ProductDetail({
   // 상품의 갯수 변경시 해당 갯수만큼 불리언 배열 생성
   useEffect(() => {
     if (product) {
-      setIsSelected(new Array(product.DataProductManage.length).fill(false));
+      setIsSelected(new Array(product.length).fill(false));
     }
   }, [product]);
+
+  const changeProduct = async () => {
+    const localToken = localStorage.getItem('token');
+
+    const removeEl = () => {
+      const changeDetail = {
+        sales: !!changeStatus.salesStatus.id
+          ? Number(changeStatus.salesStatus.id)
+          : null,
+        displayed: !!changeStatus.displayStatus.id
+          ? Number(changeStatus.displayStatus.id)
+          : null,
+        product_ids: checkProduct.map((el) => Number(el)),
+      };
+
+      if (changeDetail.sales === null) {
+        delete changeDetail['sales'];
+      }
+      if (changeDetail.displayed === null) {
+        delete changeDetail['displayed'];
+      }
+      return changeDetail;
+    };
+
+    try {
+      const result = await axios.post(
+        `${API}/product`,
+        { ...removeEl() },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: localToken,
+          },
+          timeout: 3000,
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // 상품 판매 진열 상태 적용 버튼이 눌렸을 때 실행하는 함수
   const changedApply = (e) => {
@@ -126,7 +166,7 @@ export default function ProductDetail({
         .category.filter(
           (item) =>
             String(item.category_id) === changeStatus.salesStatus.id && item
-        )[0].category_title;
+        )[0].category_id;
 
       // 진열여부 필터에서 판매, 미판매 타이틀을 id 값으로 조회하여 찾아온다.
       const display = filters.filter_list
@@ -134,23 +174,28 @@ export default function ProductDetail({
         .category.filter(
           (item) =>
             String(item.category_id) === changeStatus.displayStatus.id && item
-        )[0].category_title;
+        )[0].category_id;
 
       // 상품의 진열여부, 판매여부를 변경한다.
-      setProduct({
-        ...product,
-        DataProductManage: product.DataProductManage.map((item) => {
-          if (checkProduct.includes(String(item.id))) {
+      setProduct(
+        // {
+        // ...product,
+        // DataProductManage:
+        product.map((item) => {
+          if (checkProduct.includes(String(item.product_number))) {
             return {
               ...item,
-              is_on_sale: sales !== '전체' ? sales : item.is_on_sale,
-              is_displayed: display !== '전체' ? display : item.is_displayed,
+              is_on_sale: sales !== '' ? sales : item.is_on_sale,
+              is_displayed: display !== '' ? display : item.is_displayed,
             };
           } else {
             return item;
           }
-        }),
-      });
+        })
+        // }
+      );
+      changeProduct();
+
       // 적용 후 모든 상태를 초기화시킨다.
       setAllCheck(false);
       setCheckProduct([]);
@@ -273,8 +318,7 @@ export default function ProductDetail({
       </ChangeContainer>
       <AllProductView>
         <span>
-          전체 조회건 수 : <b> {product && product.DataProductManage.length}</b>
-          건
+          전체 조회건 수 : <b> {product && product.length}</b>건
         </span>
       </AllProductView>
       <TableBox>
@@ -303,13 +347,13 @@ export default function ProductDetail({
           </ProductHead>
           <tbody>
             {product &&
-              product.DataProductManage.map((cate, idx) => {
+              product.map((cate, idx) => {
                 return (
                   <ProductLine idx={idx} key={idx}>
                     <ProductItem>
                       <input
                         type="checkbox"
-                        id={cate.id}
+                        id={cate.product_number}
                         checked={isSelected[idx] ? 'checked' : ''}
                         onChange={(e) => selectProduct(e, idx)}
                       ></input>

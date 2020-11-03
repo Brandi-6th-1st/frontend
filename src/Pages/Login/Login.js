@@ -13,6 +13,8 @@ import { API } from '../../config';
 
 export default function Login() {
   const [inputValue, setInputValue] = useState({
+    // idValue: 'soojsooj',
+    // pwValue: 'PW1!soojsooj',
     idValue: 'lovemono',
     pwValue: 'PW1!lovemono',
   });
@@ -82,9 +84,10 @@ export default function Login() {
         history.push('/home');
       }
     } catch (err) {
-      err;
+      console.log(err);
     }
   };
+
   return (
     <Container>
       <Content>
