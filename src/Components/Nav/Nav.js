@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NavList from './NavList';
 import { KeyboardArrowLeft } from '@styled-icons/material';
 // import SELLER_NAV from './DataSellerNav';
@@ -12,19 +12,25 @@ export default function Nav() {
   const [subActive, setSubActive] = useState(0);
   const [sidebarSmall, setSidebarSmall] = useState(false);
 
-  const { nav } = useSelector(({ nav }) => ({
-    nav: nav.filter_list,
-    // filter_list: filter.filter_list,
+  // store에 있는 nav 정보를 가져온다.
+  const { nav_list, filter_list } = useSelector(({ userInfo }) => ({
+    nav_list: userInfo.nav_list,
+    filter_list: userInfo.filter_list,
   }));
 
+  //nav가 변경되면 nav 데이터를 최신화
   useEffect(() => {
-    setNavData(nav);
-  }, [nav]);
+    setNavData(nav_list);
+    console.log(nav_list);
+    console.log('123123123123123', filter_list);
+  }, [nav_list]);
 
+  // 네브가 눌렸을때, 페이지 이동 함수
   const handlePage = (menuTitle, subTitle) => {
     setActive([menuTitle, subTitle]);
-    // 페이지 이동 함수 추가
   };
+
+  console.log(nav_list);
 
   return (
     <NavContainer sidebarSmall={sidebarSmall}>
@@ -35,7 +41,6 @@ export default function Nav() {
         <KeyboardArrowLeft size={20} />
       </SideToggler>
       <NavBox>
-        {/* 백에서 보내주는 Nav 데이터를 넣어주기만 하면 아이콘 알아서 반영됩니다! */}
         {navData &&
           navData.map((el, idx) => (
             <NavList

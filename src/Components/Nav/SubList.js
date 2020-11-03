@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
@@ -15,12 +15,10 @@ export default function SubList({
   );
 
   const goToMenu = (subIdx, link) => {
-    console.log('asdads', categoryIdx, subIdx, link);
-    // 두번째 인자 추가하기!
-
     handlePage(categoryIdx, subIdx);
     setSubActive(subIdx);
 
+    // order 페이지로 이동해야되는 url에는 order를 붙여준다.
     if (
       link === 'prepareList' ||
       link === 'deliveryPrepareList' ||
@@ -28,7 +26,6 @@ export default function SubList({
       link === 'deliveryCompleteList' ||
       link === 'orderConfirmList'
     ) {
-      console.log('같다');
       return history.push('/order/' + link);
     }
     // 여기에서 history push로 페이지 이동시켜주면 돼요!
@@ -42,7 +39,7 @@ export default function SubList({
           index={idx + 1}
           subActive={subActive}
           key={el.sub_menu_id}
-          onClick={() => goToMenu(idx + 1, el.sub_url)} // goToMenu의 두번째 인자로 map 돌릴때 이동할 백에서 nav 데이터에 포함해준 주소를 넣어주면 되겠죠! ex) /order/orderlist, /product/register
+          onClick={() => goToMenu(idx + 1, el.sub_url)}
           sidebarSmall={sidebarSmall}
         >
           {el.sub_menu_title}
