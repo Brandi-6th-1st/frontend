@@ -67,8 +67,8 @@ export default function SellerInformation() {
       <Header />
       <Container>
         <Nav />
-        {/* <AccountManagementTitle sellerList={sellerList} /> */}
-        <SellerInfoManagement
+        <AccountManagementTitle sellerList={sellerList} />
+        {/* <SellerInfoManagement
           sellerInfo={sellerInfo}
           setSellerInfo={setSellerInfo}
           handleChangeFile={handleChangeFile}
@@ -86,7 +86,7 @@ export default function SellerInformation() {
           // setBackgroundImgBase64={setBackgroundImgBase64}
           // backgroundImgFile={backgroundImgFile}
           // setBackgroundImgFile={setBackgroundImgFile}
-        />
+        /> */}
       </Container>
       <Footer />
     </Fragment>

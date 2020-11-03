@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import DatePicker from 'react-datepicker';
+import { MdDateRange } from 'react-icons/md';
 import './react-datepicker.css';
 
 function SellerTable({ sellerList }) {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
 
+  const openStartDatePicker = () => {
+    this._calendar.setOpen(true);
+  };
   console.log(startDate);
 
   return (
@@ -74,21 +78,32 @@ function SellerTable({ sellerList }) {
             </td>
             <td>
               <DateGroup>
-                <DatePicker
-                  className='datePickerStyle'
-                  selected={startDate}
-                  placeholderText='From'
-                  dateFormat='yyyy/MM/dd'
-                  onChange={(date) => setStartDate(date)}
-                />
-                <DatePicker
-                  className='datePickerStyle'
-                  selected={endDate}
-                  placeholderText='To'
-                  locale='ko'
-                  dateFormat='yyyy/MM/dd'
-                  onChange={(date) => setEndDate(date)}
-                />
+                <StartDateGroup>
+                  <DatePicker
+                    className='datePickerStyle'
+                    id='startDatePicker'
+                    selected={startDate}
+                    placeholderText='From'
+                    dateFormat='yyyy/MM/dd'
+                    onChange={(date) => setStartDate(date)}
+                  />
+                  <label htmlFor='startDatePicker'>
+                    <MdDateRange />
+                  </label>
+                </StartDateGroup>
+                <EndDateGroup>
+                  <DatePicker
+                    className='datePickerStyle'
+                    id='endDatePicker'
+                    selected={endDate}
+                    placeholderText='To'
+                    dateFormat='yyyy/MM/dd'
+                    onChange={(date) => setEndDate(date)}
+                  />
+                  <label htmlFor='endDatePicker'>
+                    <MdDateRange />
+                  </label>
+                </EndDateGroup>
               </DateGroup>
             </td>
             <td>
@@ -196,9 +211,26 @@ const Table = styled.table`
 const DateGroup = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
+`;
 
-  &.datePickerStyle {
-    background-color: #eeeeee;
+const StartDateGroup = styled.div`
+  svg {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    width: 20px;
+    height: 20px;
+  }
+`;
+
+const EndDateGroup = styled.div`
+  svg {
+    position: absolute;
+    right: 4px;
+    top: 34px;
+    width: 20px;
+    height: 20px;
   }
 `;
 

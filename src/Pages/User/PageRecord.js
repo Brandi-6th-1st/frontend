@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
 
 function PageRecord() {
+  const [limit, setLimit] = useState('');
+  const [offset, setOffset] = useState('');
+
+  const getMoreSeller = async () => {
+    const nextOffset = Limit + offset;
+    const result = await axios.get(
+      `http://10.22.222.22:5000/account?limit=${limit}&offset=${offset}`
+    );
+    const 
+  };
+
   return (
     <Container>
       <Page>

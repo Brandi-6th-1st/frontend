@@ -23,7 +23,7 @@ function AccountManagementTitle({ sellerList }) {
 export default AccountManagementTitle;
 
 const Container = styled.div`
-  width: 100%;
+  /* width: 100%; */
   margin-top: 50px;
   padding: 25px 20px 20px 20px;
   background-color: #fafafa;
