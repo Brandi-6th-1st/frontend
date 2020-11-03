@@ -57,7 +57,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const result = await axios.post(
-        `http://10.58.7.141:5000/account/signin`,
+        `http://192.168.7.47:5000/account/signin`,
         { identification: idValue, password: pwValue },
         {
           headers: {

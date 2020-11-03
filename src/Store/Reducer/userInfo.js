@@ -23,7 +23,7 @@ export const isClear = () => ({
 });
 
 const initialState = {
-  is_master: true,
+  is_master: null,
   filter_list: [],
   nav_list: [],
 };
@@ -32,7 +32,7 @@ const userInfo = (state = initialState, { type, payload }) => {
   console.log(type);
   switch (type) {
     case TYPE_MASTER:
-      return { ...state, isMaster: payload };
+      return { ...state, is_master: payload };
     case SAVE_FILTER:
       return { ...state, filter_list: payload };
     case SAVE_NAV:
