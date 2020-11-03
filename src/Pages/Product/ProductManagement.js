@@ -111,6 +111,8 @@ export default function ProductManagement() {
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
       const DataProductManage = result.data.success;
 
+      console.log('11123123123123123', DataProductManage);
+
       const masterData =
         filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
 

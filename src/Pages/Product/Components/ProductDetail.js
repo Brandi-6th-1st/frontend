@@ -27,7 +27,7 @@ export default function ProductDetail({
   const [isMounted, setIsMounted] = useState(0);
   // 버튼의 클릭 상태를 나타내는 배열 생성
   const [isSelected, setIsSelected] = useState(
-    new Array(product && product.length).fill(false)
+    new Array(product && product.data && product.data.length).fill(false)
   );
   // 전체 상품 체크 상태
   const [allCheck, setAllCheck] = useState(false);
@@ -51,12 +51,12 @@ export default function ProductDetail({
   const handleClickAll = () => {
     if (allCheck) {
       setAllCheck(!allCheck);
-      setIsSelected(new Array(product.length).fill(!allCheck));
+      setIsSelected(new Array(product.data.length).fill(!allCheck));
       setCheckProduct([]);
     } else {
       setAllCheck(!allCheck);
-      setIsSelected(new Array(product.length).fill(!allCheck));
-      setCheckProduct(product.map((el) => String(el.product_number)));
+      setIsSelected(new Array(product.data.length).fill(!allCheck));
+      setCheckProduct(product.data.map((el) => String(el.product_number)));
     }
   };
 
@@ -98,8 +98,8 @@ export default function ProductDetail({
 
   // 상품의 갯수 변경시 해당 갯수만큼 불리언 배열 생성
   useEffect(() => {
-    if (product) {
-      setIsSelected(new Array(product.length).fill(false));
+    if (product && product.data) {
+      setIsSelected(new Array(product.data.length).fill(false));
     }
   }, [product]);
 
@@ -318,7 +318,7 @@ export default function ProductDetail({
       </ChangeContainer>
       <AllProductView>
         <span>
-          전체 조회건 수 : <b> {product && product.length}</b>건
+          전체 조회건 수 : <b> {product && product.total_product}</b>건
         </span>
       </AllProductView>
       <TableBox>
@@ -347,7 +347,8 @@ export default function ProductDetail({
           </ProductHead>
           <tbody>
             {product &&
-              product.map((cate, idx) => {
+              product.data &&
+              product.data.map((cate, idx) => {
                 return (
                   <ProductLine idx={idx} key={idx}>
                     <ProductItem>
@@ -369,8 +370,12 @@ export default function ProductDetail({
                     <ProductItem>{cate.product_number}</ProductItem>
                     <ProductItem>{cate.price}</ProductItem>
                     <ProductItem>
-                      {Number(cate.price) *
-                        ((100 - Number(cate.discount_rate)) / 100)}
+                      {cate.price}
+                      <DiscountPrice>
+                        {cate.discount_rate &&
+                          Number(cate.price) *
+                            ((100 - Number(cate.discount_rate)) / 100)}
+                      </DiscountPrice>
                     </ProductItem>
                     <ProductItem>
                       {cate.is_on_sale ? '판매' : '미판매'}
@@ -394,7 +399,9 @@ export default function ProductDetail({
         <Pagination
           activePage={activePage}
           itemsCountPerPage={Number(query.limit)}
-          totalItemsCount={450}
+          totalItemsCount={
+            product && product.total_product && product.total_product
+          }
           pageRangeDisplayed={5}
           onChange={(pageNumber) => {
             setActivePage(pageNumber);
@@ -539,6 +546,11 @@ const ProductItem = styled.th`
       text-decoration: revert;
     }
   }
+`;
+
+const DiscountPrice = styled.span`
+  display: block;
+  color: red;
 `;
 
 const BuyBtn = styled.button`
