@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
 
@@ -23,13 +24,17 @@ function PageRecord() {
   const [offset, setOffset] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const getMoreSeller = async () => {
-    const nextOffset = Limit + offset;
-    const result = await axios.get(
-      `http://10.22.222.22:5000/account?limit=${limit}&offset=${offset}`
-    );
-    const
-  };
+  useEffect(() => {
+    const getMoreSeller = async () => {
+      const result = await axios.get(
+        `http://${api}/account?limit=${limit}&offset=${offset}`,
+        {
+          headers: {},
+        }
+      );
+    };
+    getMoreSeller();
+  }, [limit, offset]);
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -41,6 +46,7 @@ function PageRecord() {
       setCurrentPage(1);
     }
     setOffset(currentPage * limit - limit);
+    getMoreSeller();
   };
 
   const handleLimit = (e) => {

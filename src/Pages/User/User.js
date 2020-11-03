@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import regeneratorRuntime from 'regenerator-runtime';
 import Header from '../../Components/Header/Header';
 import Nav from '../../Components/Nav/Nav';
 import AccountManagementTitle from './AccountManagementTitle';
