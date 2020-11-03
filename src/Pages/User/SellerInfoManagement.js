@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import BasicInfo from './BasicInfo';
 import MoreInfo from './MoreInfo';
 import { AiOutlineHome } from 'react-icons/ai';
+import { AiOutlineRight } from 'react-icons/ai';
 import { FaUserAlt } from 'react-icons/fa';
 
 function SellerInfoMangement({
@@ -40,7 +41,11 @@ function SellerInfoMangement({
           </PageTitle>
           <PageBar>
             <AiOutlineHome />
-            <p>회원관리 > 셀러정보 관리 > 셀러정보 조회 / 수정</p>
+            <p>회원관리</p>
+            <AiOutlineRight />
+            <p>셀러 정보 관리</p>
+            <AiOutlineRight />
+            <p>셀러 정보 조회 / 수정</p>
           </PageBar>
           <form onClick={handleClick}>
             <BasicInfo

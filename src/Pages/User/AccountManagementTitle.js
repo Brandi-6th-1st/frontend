@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SellerList from './SellerList';
 import { AiOutlineHome } from 'react-icons/ai';
+import { AiOutlineRight } from 'react-icons/ai';
 
 function AccountManagementTitle({ sellerList }) {
   return (
@@ -11,7 +12,11 @@ function AccountManagementTitle({ sellerList }) {
       </PageTitle>
       <PageBar>
         <AiOutlineHome />
-        <p>회원관리 > 셀러 계정 관리 > 셀러 회원 리스트</p>
+        <p>회원관리</p>
+        <AiOutlineRight />
+        <p>셀러 계정 관리</p>
+        <AiOutlineRight />
+        <p>셀러 회원 리스트</p>
       </PageBar>
       <ABC>
         <SellerList sellerList={sellerList} />

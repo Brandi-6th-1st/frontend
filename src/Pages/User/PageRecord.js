@@ -6,14 +6,25 @@ import { AiOutlineRight } from 'react-icons/ai';
 function PageRecord() {
   const [limit, setLimit] = useState('');
   const [offset, setOffset] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const getMoreSeller = async () => {
-    const nextOffset = Limit + offset;
-    const result = await axios.get(
-      `http://10.22.222.22:5000/account?limit=${limit}&offset=${offset}`
-    );
-    const 
+  // const getMoreSeller = async () => {
+  //   const nextOffset = Limit + offset;
+  //   const result = await axios.get(
+  //     `http://10.22.222.22:5000/account?limit=${limit}&offset=${offset}`
+  //   );
+  //   const
+  // };
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
   };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  console.log('currentPage', currentPage);
 
   return (
     <Container>
@@ -22,7 +33,12 @@ function PageRecord() {
         <PageButton>
           <AiOutlineLeft />
         </PageButton>
-        <PageInput type='text' defaultValue='1' />
+        <PageInput
+          type='number'
+          value={currentPage}
+          min='1'
+          onChange={handlePage}
+        />
         <PageButton>
           <AiOutlineRight />
         </PageButton>
