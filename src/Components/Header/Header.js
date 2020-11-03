@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { isClear } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@styled-icons/material';
 import { GoSignOut } from 'react-icons/go';
 
 export default function Header() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const logOut = () => {
     history.push('/login');
+    localStorage.removeItem('token');
+    dispatch(isClear());
   };
   return (
     <HeaderContainer>
