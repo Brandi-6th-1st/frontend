@@ -57,7 +57,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const result = await axios.post(
-        `http://10.58.7.141:5000/account/signin`,
+        `http://192.168.7.47:5000/account/signin`,
         { identification: idValue, password: pwValue },
         {
           headers: {
@@ -66,7 +66,7 @@ export default function Login() {
           timeout: 3000,
         }
       );
-      console.log(result.data.success);
+      // console.log(result.data.success);
 
       const getIsMaster = await result.data.success.is_master;
       const getNavList = await result.data.success.nav_list;
@@ -83,6 +83,7 @@ export default function Login() {
       err;
     }
   };
+
   return (
     <Container>
       <Content>
