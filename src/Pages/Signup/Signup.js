@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { ErrorMessage } from '@hookform/error-message';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 import InputMask from 'react-input-mask';
 import LoginFooter from '../Login/LoginFooter';
 import {
@@ -16,113 +15,24 @@ import {
 import { AiOutlineWarning } from 'react-icons/ai';
 
 export default function Signup() {
-  const [signupForm, setSignrupForm] = useState({
-    idValue: '',
-    pwValue: '',
-    accountTypeValue: 2,
-    contactValue: '',
-    attributeValue: 1,
-    koNameValue: '',
-    enNameValue: '',
-    csContactValue: '',
-    statusValue: 1,
-  });
-
   const history = useHistory();
   const { register, errors, watch, handleSubmit } = useForm({ mode: 'all' });
-  const {
-    idValue,
-    pwValue,
-    accountTypeValue,
-    contactValue,
-    attributeValue,
-    koNameValue,
-    enNameValue,
-    csContactValue,
-    statusValue,
-  } = signupForm;
 
   const onSubmit = (data) => {
     console.log(data);
     if (confirm('입력하신 정보로 셀러신청을 하시겠습니까?') === true) {
-      history.push('/');
+      history.push('/Login');
     }
   };
 
   function handleCancelBtn() {
     if (confirm('브랜디 회원가입을 취소하시겠습니까?') === true) {
-      history.push('/');
+      history.push('/Login');
     } else {
       return false;
     }
   }
 
-  const handleSignupForm = (e) => {
-    const nextSignupForm = {
-      ...signupForm,
-      [e.target.name]: e.target.value,
-    };
-    if (e.target.value === 'shoppingmall') {
-      attributeValue: 1;
-    }
-    if (e.target.value === 'market') {
-      attributeValue: 2;
-    }
-    setSignrupForm(nextSignupForm);
-  };
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    try {
-      const result = axios.post(
-        `10.251.1.196:5000/account/signup`,
-        {
-          identification: idValue,
-          password: pwValue,
-          account_type_id: accountTypeValue,
-          contact: contactValue,
-          attribute_id: attributeValue,
-          korean_name: koNameValue,
-          english_name: enNameValue,
-          cs_contact: csContactValue,
-          status_id: statusValue,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          timeout: 3000,
-        }
-      );
-      if (result.data) {
-        console.log(result);
-      }
-    } catch (err) {
-      err;
-    }
-  };
-
-  // const onSubmitHandler = (e) => {
-  //   e.preventDefault();
-  //   if (
-  //     id &&
-  //     password &&
-  //     phone &&
-  //     sellerAttribute &&
-  //     sellerEnName &&
-  //     sellerKoName
-  //   ) {
-  //     let body = signupForm;
-  //     dispatch(registerUser(body)).then((res) => {
-  //       alert('가입이 정상적으로 완료되었습니다');
-  //       props.history.push('/');
-  //     });
-  //   } else {
-  //     alert('비밀번호가 일치하지 않습니다');
-  //   }
-  // };
-
-  console.log(signupForm);
   return (
     <Container>
       <Content>
@@ -132,14 +42,13 @@ export default function Signup() {
         <SignupBox>
           <SubTitle>정보입력</SubTitle>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* <form> */}
             <InfoTitle>가입 정보</InfoTitle>
             {/*id를 입력하지 않거나 5글자 미만으로 입력한 경우, border에 색을 주기 위해 className 활용*/}
             <IconInput className={errors.id && 'ErrorInput'}>
               {/* id에 에러가 발생할 경우, */}
               <TiUserOutline color={errors.id ? '#b94a48' : null} />
               <input
-                name='idValue'
+                name='id'
                 type='text'
                 placeholder='아이디'
                 ref={register({
@@ -149,14 +58,13 @@ export default function Signup() {
                     message: '아이디의 최소 길이는 5글자 입니다.',
                   },
                 })}
-                onChange={handleSignupForm}
               />
             </IconInput>
             {errors.id && <p>{errors.id.message}</p>}
             <IconInput className={errors.password && 'ErrorInput'}>
               <TiLockClosedOutline color={errors.password ? '#b94a48' : null} />
               <input
-                name='pwValue'
+                name='password'
                 type='password'
                 placeholder='비밀번호'
                 ref={register({
@@ -168,7 +76,6 @@ export default function Signup() {
                       '비밀번호는 8~20글자의 영문대소문자, 숫자, 특수문자를 조합해야 합니다.',
                   },
                 })}
-                onChange={handleSignupForm}
               />
             </IconInput>
             {errors.password && <p>{errors.password.message}</p>}
@@ -180,10 +87,9 @@ export default function Signup() {
                 placeholder='비밀번호 재입력'
                 ref={register({
                   validate: (value) =>
-                    value === watch('pwValue') ||
+                    value === watch('password') ||
                     '비밀번호가 일치하지 않습니다',
                 })}
-                onChange={handleSignupForm}
               />
             </IconInput>
             {errors.rePw && <p>{errors.rePw.message}</p>}
@@ -195,13 +101,12 @@ export default function Signup() {
               <TiPhoneOutline color={errors.phone ? '#b94a48' : null} />
               <InputMask
                 mask='999-9999-9999'
-                name='contactValue'
+                name='phone'
                 type='tel'
                 placeholder='핸드폰번호'
                 ref={register({
                   required: '필수 입력항목입니다.',
                 })}
-                onChange={handleSignupForm}
               />
             </IconInput>
             {errors.phone && <p>{errors.phone.message}</p>}
@@ -211,11 +116,12 @@ export default function Signup() {
               기입해주세요.
             </ExtraInfo>
             <InfoTitle>셀러 정보</InfoTitle>
-            <IntputRadio onChange={handleSignupForm}>
+            {/* <IntputRadio onClick={handleRadioValue}> */}
+            <IntputRadio>
               <label>
                 <input
-                  name='attributeValue'
-                  value='shoppingmall'
+                  name='seller'
+                  name='shoppingmall'
                   type='radio'
                   defaultChecked='checked'
                   ref={register()}
@@ -224,12 +130,57 @@ export default function Signup() {
               </label>
               <label>
                 <input
-                  name='attributeValue'
-                  value='market'
+                  name='seller'
+                  name='market'
                   type='radio'
                   ref={register()}
                 />
                 마켓
+              </label>
+              <label>
+                <input
+                  name='seller'
+                  name='roadshop'
+                  type='radio'
+                  ref={register()}
+                />
+                로드샵
+              </label>
+              <label>
+                <input
+                  name='seller'
+                  name='designer'
+                  type='radio'
+                  ref={register()}
+                />
+                디자이너브랜드
+              </label>
+              <label>
+                <input
+                  name='seller'
+                  name='general'
+                  type='radio'
+                  ref={register()}
+                />
+                제너럴브랜드
+              </label>
+              <label>
+                <input
+                  name='seller'
+                  name='national'
+                  type='radio'
+                  ref={register()}
+                />
+                내셔널브랜드
+              </label>
+              <label>
+                <input
+                  name='seller'
+                  name='beauty'
+                  type='radio'
+                  ref={register()}
+                />
+                뷰티
               </label>
             </IntputRadio>
             <IconInput className={errors.sellerName && 'ErrorInput'}>
@@ -237,7 +188,7 @@ export default function Signup() {
                 color={errors.sellerName ? '#b94a48' : null}
               />
               <input
-                name='koNameValue'
+                name='sellerName'
                 placeholder='셀러명 (상호)'
                 ref={register({
                   required: '필수 입력항목입니다.',
@@ -246,7 +197,6 @@ export default function Signup() {
                     message: '한글,영문,숫자만 입력해주세요.',
                   },
                 })}
-                onChange={handleSignupForm}
               />
             </IconInput>
             {errors.sellerName && <p>{errors.sellerName.message}</p>}
@@ -255,7 +205,7 @@ export default function Signup() {
                 color={errors.engSellerName ? '#b94a48' : null}
               />
               <input
-                name='enNameValue'
+                name='engSellerName'
                 placeholder='영문 셀러명 (영문상호)'
                 ref={register({
                   required: '필수 입력항목입니다.',
@@ -264,7 +214,6 @@ export default function Signup() {
                     message: '셀러 영문명은 소문자만 입력가능합니다.',
                   },
                 })}
-                onChange={handleSignupForm}
               />
             </IconInput>
             {errors.engSellerName && <p>{errors.engSellerName.message}</p>}
@@ -273,17 +222,16 @@ export default function Signup() {
                 color={errors.customerContact ? '#b94a48' : null}
               />
               <input
-                name='csContactValue'
+                name='customerContact'
                 placeholder='고객센터 전화번호'
                 ref={register({
                   required: '필수 입력항목입니다.',
                 })}
-                onChange={handleSignupForm}
               />
             </IconInput>
             {errors.customerContact && <p>{errors.customerContact.message}</p>}
             <ButtonGroup>
-              <Button primary onClick={onSubmitHandler} value='신청' />
+              <Button primary type='submit' value='신청' />
               <Button readOnly value='취소' onClick={handleCancelBtn} />
             </ButtonGroup>
           </form>
