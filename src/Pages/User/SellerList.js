@@ -4,7 +4,14 @@ import PageRecord from './PageRecord';
 import SellerTable from './SellerTable';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 
-function SellerList({ sellerList }) {
+function SellerList({
+  sellerList,
+  filter,
+  setFilter,
+  currentPage,
+  setCurrentPage,
+  handleSellerData,
+}) {
   return (
     <ListBox>
       <Title>
@@ -12,11 +19,26 @@ function SellerList({ sellerList }) {
         <p>셀러 회원 리스트</p>
       </Title>
       <Body>
-        <PageRecord />
+        <PageRecord
+          filter={filter}
+          setFilter={setFilter}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
         <Table>
-          <SellerTable sellerList={sellerList} />
+          <SellerTable
+            sellerList={sellerList}
+            filter={filter}
+            setFilter={setFilter}
+            handleSellerData={handleSellerData}
+          />
         </Table>
-        <PageRecord />
+        <PageRecord
+          filter={filter}
+          setFilter={setFilter}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </Body>
     </ListBox>
   );

@@ -12,9 +12,9 @@ function Routes() {
   return (
     <Router>
       <Switch>
-        <Route exact path='/login' component={Login} />
+        <Route exact path='/' component={Login} />
         <Route exact path='/signup' component={Signup} />
-        <Route exact path='/' component={Main} />
+        <Route exact path='/main' component={Main} />
         <Route exact path='/home' component={Home} />
         <Route exact path='/order/:id' component={Order} />
         <Route exact path='/user' component={User} />

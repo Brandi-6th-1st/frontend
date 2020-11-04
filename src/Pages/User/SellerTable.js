@@ -1,17 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import DatePicker from 'react-datepicker';
 import { MdDateRange } from 'react-icons/md';
 import './react-datepicker.css';
+import dateFormatChange from '../../Components/ChangeTimeFormat';
 
-function SellerTable({ sellerList }) {
+function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const {
+    id,
+    identification,
+    seller_name_en,
+    seller_name_ko,
+    manager_name,
+    seller_status,
+    manager_contact,
+    manager_email,
+    seller_attribute,
+    limit,
+    offset,
+    start_date,
+    end_date,
+  } = filter;
 
-  const openStartDatePicker = () => {
-    this._calendar.setOpen(true);
+  const handleSellerStatus = (e) => {
+    e.persist();
+    const value = e.target.value;
+    const nextFilter = {
+      ...filter,
+      seller_status: value,
+    };
+    setFilter(nextFilter);
   };
-  console.log(startDate);
+
+  const handleSellerAttribute = (e) => {
+    e.persist();
+    const value = e.target.value;
+    const nextFilter = {
+      ...filter,
+      seller_attribute: value,
+    };
+    setFilter(nextFilter);
+  };
+
+  const handleInputChange = (e) => {
+    e.persist();
+    const nextFilter = {
+      ...filter,
+      [e.target.name]: e.target.value,
+    };
+    setFilter(nextFilter);
+  };
+
+  const handleDate = () => {
+    const nextFilter = {
+      ...filter,
+      start_date: dateFormatChange(startDate),
+      end_date: dateFormatChange(endDate),
+    };
+    setFilter(nextFilter);
+  };
+
+  // useEffect(() => {
+  //   handleSellerStatus();
+  //   handleSellerAttribute();
+  //   handleInputChange();
+  //   handleDate();
+  // }, [filter]);
+
+  // useEffect(() => {
+  //   handleSellerStatus();
+  // }, [seller_status]);
+
+  // useEffect(() => {
+  //   handleSellerAttribute();
+  // }, [seller_attribute]);
+
+  // useEffect(() => {
+  //   handleInputChange();
+  // }, []);
+
+  useEffect(() => {
+    handleDate();
+  }, [startDate, endDate]);
+
+  console.log('sellerTable_filter', filter);
 
   return (
     <Container>
@@ -36,44 +110,68 @@ function SellerTable({ sellerList }) {
           <tr>
             <td></td>
             <td>
-              <input type='text' />
+              <input name='id' type='text' onChange={handleInputChange} />
             </td>
             <td>
-              <input type='text' />
+              <input
+                name='identification'
+                type='text'
+                onChange={handleInputChange}
+              />
             </td>
             <td>
-              <input type='text' />
+              <input
+                name='seller_name_en'
+                type='text'
+                onChange={handleInputChange}
+              />
             </td>
             <td>
-              <input type='text' />
+              <input
+                name='seller_name_ko'
+                type='text'
+                onChange={handleInputChange}
+              />
             </td>
             <td>
-              <input type='text' />
+              <input
+                name='manager_name'
+                type='text'
+                onChange={handleInputChange}
+              />
             </td>
             <td>
-              <select>
-                <option selected>Select</option>
-                <option value='입점대기'>입점대기</option>
-                <option value='입점'>입점</option>
-                <option value='퇴점'>퇴점</option>
-                <option value='퇴점대기'>퇴점대기</option>
-                <option value='휴점'>휴점</option>
+              <select value={seller_status || ''} onChange={handleSellerStatus}>
+                <option value=''>Select</option>
+                <option value='1'>입점대기</option>
+                <option value='2'>입점</option>
+                <option value='5'>퇴점</option>
+                <option value='4'>퇴점대기</option>
+                <option value='3'>휴점</option>
               </select>
             </td>
             <td>
-              <input type='tel' />
+              <input
+                name='manager_contact'
+                type='tel'
+                onChange={handleInputChange}
+              />
             </td>
             <td>
-              <input type='text' />
+              <input
+                name='manager_email'
+                type='text'
+                onChange={handleInputChange}
+              />
             </td>
             <td>
-              <select>
-                <option>Select</option>
-                <option>쇼핑몰</option>
-                <option>로드샵</option>
-                <option>디자이너브랜드</option>
-                <option>내셔널브랜드</option>
-                <option>뷰티</option>
+              <select
+                value={seller_attribute || ''}
+                onChange={handleSellerAttribute}
+              >
+                <option value='select'>Select</option>
+                <option value='1'>쇼핑몰</option>
+                <option value='2'>로드샵</option>
               </select>
             </td>
             <td>
@@ -81,7 +179,6 @@ function SellerTable({ sellerList }) {
                 <StartDateGroup>
                   <DatePicker
                     className='datePickerStyle'
-                    id='startDatePicker'
                     selected={startDate}
                     placeholderText='From'
                     dateFormat='yyyy/MM/dd'
@@ -95,6 +192,7 @@ function SellerTable({ sellerList }) {
                   <DatePicker
                     className='datePickerStyle'
                     id='endDatePicker'
+                    name='end_date'
                     selected={endDate}
                     placeholderText='To'
                     dateFormat='yyyy/MM/dd'
@@ -108,7 +206,9 @@ function SellerTable({ sellerList }) {
             </td>
             <td>
               <ButtonGroup>
-                <Button>Serarch</Button>
+                <Button onClick={(filter) => handleSellerData(filter)}>
+                  Serarch
+                </Button>
                 <Button primary>Reset</Button>
               </ButtonGroup>
             </td>

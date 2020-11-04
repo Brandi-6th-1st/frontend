@@ -4,7 +4,14 @@ import SellerList from './SellerList';
 import { AiOutlineHome } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
 
-function AccountManagementTitle({ sellerList }) {
+function AccountManagementTitle({
+  sellerList,
+  filter,
+  setFilter,
+  currentPage,
+  setCurrentPage,
+  handleSellerData,
+}) {
   return (
     <Container>
       <PageTitle>
@@ -19,7 +26,14 @@ function AccountManagementTitle({ sellerList }) {
         <p>셀러 회원 리스트</p>
       </PageBar>
       <ABC>
-        <SellerList sellerList={sellerList} />
+        <SellerList
+          sellerList={sellerList}
+          filter={filter}
+          setFilter={setFilter}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          handleSellerData={handleSellerData}
+        />
       </ABC>
     </Container>
   );
@@ -33,6 +47,8 @@ const Container = styled.div`
   padding: 25px 20px 20px 20px;
   background-color: #fafafa;
   border-radius: 0 0 0 4px;
+  flex: 1;
+  width: calc(100% - 215px);
 `;
 
 const PageTitle = styled.h3`

@@ -3,39 +3,15 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
+import API from '../../config';
 
-function PageRecord() {
-  const [filter, setFilter] = useState({
-    limit: 10,
-    offset: 0,
-    id: '',
-    identification: '',
-    seller_name_en: '',
-    seller_name_ko: '',
-    manager_name: '',
-    seller_status: '',
-    manager_contact: '',
-    manager_email: '',
-    seller_attribute: '',
-    created_at: '',
-  });
+function PageRecord({ filter, setFilter, currentPage, setCurrentPage }) {
+  // const { limit, offset } = filter;
+  // const [currentPage, setCurrentPage] = useState(1);
 
-  const [limit, setLimit] = useState('');
-  const [offset, setOffset] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    const getMoreSeller = async () => {
-      const result = await axios.get(
-        `http://${api}/account?limit=${limit}&offset=${offset}`,
-        {
-          headers: {},
-        }
-      );
-    };
-    getMoreSeller();
-  }, [limit, offset]);
-
+  //limit: limt != 10 ? limit : null,
+  //   offset:
+  //     (currentPage - 1) * limit !== 0 ? (currentPage - 1) * limit : null,
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -45,12 +21,15 @@ function PageRecord() {
     if (currentPage <= 1) {
       setCurrentPage(1);
     }
-    setOffset(currentPage * limit - limit);
-    getMoreSeller();
   };
 
   const handleLimit = (e) => {
-    setLimit(e.target.value);
+    e.persist();
+    const nextFilter = {
+      ...filter,
+      limit: Number(e.target.value),
+    };
+    setFilter(nextFilter);
   };
 
   return (
@@ -60,7 +39,12 @@ function PageRecord() {
         <PageButton onClick={handlePrevPage}>
           <AiOutlineLeft />
         </PageButton>
-        <PageInput type='number' value={currentPage} min='1' />
+        <PageInput
+          type='text'
+          value={currentPage ? currentPage : ''}
+          min='1'
+          readOnly
+        />
         <PageButton onClick={handleNextPage}>
           <AiOutlineRight />
         </PageButton>
@@ -69,7 +53,7 @@ function PageRecord() {
       <ViewRecords>
         <span>View</span>
         <Select onChange={handleLimit}>
-          <option selected>10</option>
+          <option value='10'>10</option>
           <option value='20'>20</option>
           <option value='50'>50</option>
           <option value='100'>100</option>
