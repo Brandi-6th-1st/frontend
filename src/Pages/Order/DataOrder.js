@@ -14,6 +14,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '이지형',
       receiver_contact: '010-2017-9999',
       order_status: '상품준비',
+      order_status_id: 3,
     },
     {
       id: 2,
@@ -26,6 +27,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '김상준',
       receiver_contact: '010-9937-1234',
       order_status: '상품준비',
+      order_status_id: 3,
     },
     {
       id: 3,
@@ -38,6 +40,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '김도길',
       receiver_contact: '010-9937-1234',
       order_status: '상품준비',
+      order_status_id: 3,
     },
   ],
   [
@@ -52,6 +55,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '정다솜',
       receiver_contact: '010-2017-9999',
       order_status: '배송중',
+      order_status_id: 4,
     },
     {
       id: 2,
@@ -63,6 +67,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '나지은',
       receiver_contact: '010-2017-9999',
       order_status: '배송중',
+      order_status_id: 4,
     },
   ],
   [
@@ -77,6 +82,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '손종일',
       receiver_contact: '010-2017-9999',
       order_status: '배송완료',
+      order_status_id: 4,
     },
     {
       id: 2,
@@ -88,6 +94,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '김수정',
       receiver_contact: '010-2017-9999',
       order_status: '배송완료',
+      order_status_id: 4,
     },
   ],
   [
@@ -104,6 +111,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '홍성은',
       receiver_contact: '010-2017-9999',
       order_status: '구매확정',
+      order_status_id: 5,
     },
     {
       id: 2,
@@ -117,6 +125,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '김호균',
       receiver_contact: '010-9937-1234',
       order_status: '구매확정',
+      order_status_id: 5,
     },
     {
       id: 3,
@@ -130,6 +139,7 @@ const ORDER_EXAMPLE = [
       receiver_name: '장주희',
       receiver_contact: '010-9937-1234',
       order_status: '구매확정',
+      order_status_id: 5,
     },
   ],
   [],

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import regeneratorRuntime from 'regenerator-runtime';
+import axios from 'axios';
+import { API } from '../../config';
 import ORDER_EXAMPLE from './DataOrder';
 
 export default function Table({ pagetext, orderList, setOrderList }) {
@@ -13,6 +16,12 @@ export default function Table({ pagetext, orderList, setOrderList }) {
   const [isSelected, setIsSelected] = useState(
     new Array(orderList && orderList.length).fill(false)
   );
+
+  const [changeId, setChangeId] = useState();
+
+  useEffect(() => {
+    console.log(checkOrder);
+  }, [checkOrder]);
 
   // 전체 주문 리스트가 변경하게 되면 배열 새로 생성
   useEffect(() => {
@@ -34,10 +43,10 @@ export default function Table({ pagetext, orderList, setOrderList }) {
   };
 
   //개별 버튼을 클릭했을 경우 실행
-  const selectProduct = (e, idx) => {
+  const selectProduct = (e, idx, orderId) => {
     const { checked, id } = e.target;
     const newSelceted = isSelected.map((el, i) => (idx === i ? !el : el));
-
+    setChangeId(orderId);
     setIsSelected(newSelceted);
 
     // 모든 버튼이 눌렸을 경우
@@ -52,6 +61,27 @@ export default function Table({ pagetext, orderList, setOrderList }) {
       setCheckOrder(checkOrder.concat(id));
     } else {
       setCheckOrder(checkOrder.filter((el) => el !== id));
+    }
+  };
+
+  const sendChangeProduct = async (changeData) => {
+    const localToken = localStorage.getItem('token');
+    console.log('보내즌ㄴ 데이터', changeData);
+
+    try {
+      const result = await axios.post(
+        `${API}/product`,
+        { ...changeData },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: localToken,
+          },
+          timeout: 3000,
+        }
+      );
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -75,6 +105,12 @@ export default function Table({ pagetext, orderList, setOrderList }) {
         })
       );
 
+      console.log('123123123123', changeId, checkOrder);
+      const changeQuery = {
+        id: checkOrder.map((el) => Number(el)),
+        status_id: changeId,
+      };
+      sendChangeProduct(changeQuery);
       // 적용 후 모든 상태를 초기화시킨다.
       setAllCheck(false);
       setCheckOrder([]);
@@ -125,7 +161,9 @@ export default function Table({ pagetext, orderList, setOrderList }) {
                       type="checkbox"
                       id={order.id}
                       checked={isSelected[index] ? 'checked' : ''}
-                      onChange={(e) => selectProduct(e, index)}
+                      onChange={(e) =>
+                        selectProduct(e, index, order.order_status_id)
+                      }
                     />
                   </td>
                   {Object.values(order)

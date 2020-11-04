@@ -9,13 +9,19 @@ import DatePicker from 'react-datepicker';
 import '../../Styles/datepick.css';
 import styled from 'styled-components';
 import ProductDetail from './Components/ProductDetail';
+import CallendarManage from '../../Components/CallendarManage';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-import Purchase from './Components/Purchase';
+import Purchase from '../../Components/Purchase';
+import SelectSearch from '../../Components/SelectSearch';
+import FilterBox from '../../Components/FilterBox';
+import SellerSearchFilter from '../../Components/SellerSearchFilter';
+import FiltersContainer from './Components/FiltersContainer';
 import { API } from '../../config';
 
 export default function ProductManagement() {
+  // 히스토리, dispatch 선언
   const history = useHistory();
   const dispatch = useDispatch();
   const [isMounted, setIsMounted] = useState(false);
@@ -36,6 +42,7 @@ export default function ProductManagement() {
   });
   // 현재 페이지 관리
   const [activePage, setActivePage] = useState(1);
+
   const sellerNameId = 'seller_name';
   const attributeId = 'attribute';
   const salesId = 'sale';
@@ -68,8 +75,7 @@ export default function ProductManagement() {
   //   // filter_list: filter.filter_list,
   // }));
 
-  const { is_master, filter_list } = useSelector(({ userInfo }) => ({
-    is_master: userInfo.is_master,
+  const { filter_list } = useSelector(({ userInfo }) => ({
     filter_list: userInfo.filter_list,
   }));
 
@@ -99,8 +105,8 @@ export default function ProductManagement() {
     const localToken = localStorage.getItem('token');
 
     try {
-      // const result = await axios.get(`/public/Data/DataProductManage.json`, {
-      const result = await axios.get(`${API}/product`, {
+      const result = await axios.get(`/public/Data/DataProductManage.json`, {
+        // const result = await axios.get(`${API}/product`, {
         params: param,
         timeout: 3000, //3초,
         headers: {
@@ -110,8 +116,6 @@ export default function ProductManagement() {
       });
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
       const DataProductManage = result.data.success;
-
-      console.log('11123123123123123', DataProductManage);
 
       const masterData =
         filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
@@ -395,106 +399,55 @@ export default function ProductManagement() {
         <Section>
           <Purchase showModal={showModal} setShowModal={setShowModal} />
           <h3>상품 관리</h3>
-          <FilterContainer>
+          <FiltersContainer
+            currentDate={currentDate}
+            handleStartDate={handleStartDate}
+            handleEndDate={handleEndDate}
+            differentFilter={differentFilter}
+            setQuery={setQuery}
+            query={query}
+            filters={filters}
+            changeFilter={changeFilter}
+            filterStatus={filterStatus}
+            handleSearch={handleSearch}
+            resetFilter={resetFilter}
+          />
+          {/* <FilterContainer>
             <FilterCategoryTitle>
               <FilterTitle>조회 기간</FilterTitle>
-              {/* 조회 가긴의 캘린더 렌더 */}
-              <InquiryperiodBox>
-                <SelectPeriod
-                  selected={currentDate.startDate || ''}
-                  locale={ko}
-                  dateFormat="yyyy-MM-dd"
-                  onChange={(date) => {
-                    handleStartDate(date);
-                  }}
-                  placeholderText="클릭해주세요."
-                  shouldCloseOnSelect={false}
-                />
-                <span>~</span>
-                <SelectPeriod
-                  selected={currentDate.endDate || ''}
-                  locale={ko}
-                  dateFormat="yyyy-MM-dd"
-                  onChange={(date) => handleEndDate(date)}
-                  placeholderText="클릭해주세요."
-                  shouldCloseOnSelect={false}
-                />
-              </InquiryperiodBox>
+              시작일, 마감일을 출력하는 date picker 컴포넌트
+              <CallendarManage
+                currentDate={currentDate}
+                handleStartDate={handleStartDate}
+                handleEndDate={handleEndDate}
+              />
             </FilterCategoryTitle>
             <FiltersCategoryTitle>
-              {/* 마스터에만 있는 셀러명 필터 렌더 */}
+              마스터에만 있는 셀러명 필터 렌더
               {differentFilter && differentFilter.id === sellerNameId && (
-                <SelectFilterCategory>
-                  <FilterTitle>
-                    {differentFilter && differentFilter.filterTitle}
-                  </FilterTitle>
-                  <SellerSearchBox>
-                    <SellerSearch
-                      name="셀러이름"
-                      value={query.seller_name || ''}
-                      onChange={(e) =>
-                        setQuery({ ...query, seller_name: e.target.value })
-                      }
-                      type="text"
-                      placeholder="검색어를 입력하세요."
-                    ></SellerSearch>
-                  </SellerSearchBox>
-                </SelectFilterCategory>
+                셀러명 필터를 출력하는 컴포넌트
+                <SellerSearchFilter
+                  differentFilter={differentFilter}
+                  setQuery={setQuery}
+                  query={query}
+                />
               )}
               <SelectFilterCategory>
-                <select
-                  value={query.sellerDetail || ''}
-                  onChange={(e) =>
-                    setQuery({ ...query, sellerDetail: e.target.value })
-                  }
-                >
-                  <option>Select</option>
-                  <option value="product_name">상품명</option>
-                  <option value="product_id">상품번호</option>
-                  <option value="product_code">상품코드</option>
-                </select>
-                <SearchBox>
-                  <ProductSearch
-                    name="productDetail"
-                    value={query.productDetail || ''}
-                    onChange={(e) =>
-                      setQuery({ ...query, productDetail: e.target.value })
-                    }
-                    placeholder="검색어를 입력하세요."
-                    type="text"
-                  ></ProductSearch>
-                </SearchBox>
+                상품카테고리 선택 후 검색하는 컴포넌트
+                <SelectSearch query={query} setQuery={setQuery} />
               </SelectFilterCategory>
             </FiltersCategoryTitle>
-            {/* 각 필터별로 다른 name을 가지기 때문에 각각 렌더 */}
+            각 필터별로 다른 name을 가지기 때문에 각각 렌더
             {filters.filter_list &&
               filters.filter_list.map((cate, i) => {
                 return (
-                  <SelectFilterCategory cate={cate.category.length} key={i}>
-                    <SelectFilterTitle>{cate.filterTitle} :</SelectFilterTitle>
-                    <FilterBtnBox>
-                      {cate.category.map((sub, idx) => {
-                        return (
-                          <SelectBtn
-                            key={idx}
-                            onClick={() =>
-                              changeFilter(
-                                sub.category_id,
-                                idx,
-                                cate.filterTitle,
-                                cate.id
-                              )
-                            }
-                            idx={idx}
-                            filterStatus={filterStatus}
-                            name={cate.filterTitle}
-                          >
-                            {sub.category_title}
-                          </SelectBtn>
-                        );
-                      })}
-                    </FilterBtnBox>
-                  </SelectFilterCategory>
+                  <FilterBox
+                    key={i}
+                    cate={cate}
+                    i={i}
+                    changeFilter={changeFilter}
+                    filterStatus={filterStatus}
+                  />
                 );
               })}
             <SearchContainer>
@@ -502,6 +455,7 @@ export default function ProductManagement() {
               <CanclehBtn onClick={resetFilter}>초기화</CanclehBtn>
             </SearchContainer>
           </FilterContainer>
+           */}
           <ProductDetail
             product={product}
             setProduct={setProduct}
@@ -587,103 +541,6 @@ const FilterTitle = styled.div`
   color: #222222;
   text-overflow: hidden;
   white-space: nowrap;
-`;
-
-const SelectFilterTitle = styled(FilterTitle)`
-  display: inline-flex;
-`;
-
-const InquiryperiodBox = styled.div`
-  display: table;
-  border: 1px solid #e5e5e5;
-  width: 25%;
-  margin: 0 15px;
-
-  @media only screen and (max-width: 934px) {
-    width: 100%;
-  }
-
-  span {
-    display: table-cell;
-    padding: 6px 12px;
-    background: #e5e5e5;
-  }
-`;
-
-const PeriodBox = styled.input`
-  width: 100%;
-  display: table-cell;
-  padding: 6px 12px;
-  cursor: pointer;
-
-  ::placeholder {
-    text-align: center;
-  }
-`;
-
-const SelectPeriod = styled(DatePicker)`
-  text-align: center;
-  cursor: pointer;
-`;
-
-const SearchBox = styled(InquiryperiodBox)`
-  width: 51%;
-  margin: 0;
-
-  @media only screen and (max-width: 934px) {
-    width: 100%;
-  }
-`;
-
-const SellerSearchBox = styled(InquiryperiodBox)`
-  width: 51%;
-  margin: 0 0 0 15px;
-
-  @media only screen and (max-width: 934px) {
-    width: 100%;
-  }
-`;
-
-const SellerSearch = styled(PeriodBox)`
-  width: 100%;
-`;
-
-const ProductSearch = styled(PeriodBox)`
-  cursor: inherit;
-`;
-
-const FilterBtnBox = styled.div`
-  margin: 0px 15px;
-`;
-
-const SelectBtn = styled.button`
-  background-color: ${({ name, filterStatus, idx }) =>
-    name &&
-    filterStatus &&
-    filterStatus.map((el) => !!el[name] && el[name][idx] && '#428bca')};
-
-  &:hover {
-    background-color: ${({ name, filterStatus, idx }) =>
-      name &&
-      filterStatus &&
-      filterStatus.map((el) => !!el[name] && el[name][idx] && '#3071a9')};
-
-    background-color: ${({ name, filterStatus, idx }) =>
-      name &&
-      filterStatus &&
-      filterStatus.map((el) => !!el[name] && !el[name][idx] && '#e6e6e6')};
-  }
-
-  color: ${({ name, filterStatus, idx }) =>
-    name &&
-    filterStatus &&
-    filterStatus.map((el) => !!el[name] && el[name][idx] && 'white')};
-
-  margin-right: 3px;
-  padding: 6px 12px;
-  border: 1px solid #adadad;
-  border-radius: 4px;
-  cursor: pointer;
 `;
 
 const SearchContainer = styled(FilterCategoryTitle)`

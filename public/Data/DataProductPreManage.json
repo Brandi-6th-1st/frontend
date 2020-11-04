@@ -12,7 +12,8 @@
         "quantity": 1,
         "receiver_name": "이지형",
         "receiver_contact": "010-2017-9999",
-        "order_status": "상품준비"
+        "order_status": "상품준비",
+        "order_status_id": 7
       },
       {
         "id": 2,
@@ -24,7 +25,8 @@
         "quantity": 1,
         "receiver_name": "김상준",
         "receiver_contact": "010-9937-1234",
-        "order_status": "상품준비"
+        "order_status": "상품준비",
+        "order_status_id": 7
       },
       {
         "id": 3,
@@ -36,7 +38,8 @@
         "quantity": 1,
         "receiver_name": "김도길",
         "receiver_contact": "010-9937-1234",
-        "order_status": "상품준비"
+        "order_status": "상품준비",
+        "order_status_id": 7
       }
     ]
   }
