@@ -1,0 +1,18 @@
+{
+  "seller_status_record": [
+    {
+      "seller_id": 1,
+      "attribute": "쇼핑몰",
+      "identification": "abc123",
+      "seller_name_kr": "브랜디",
+      "seller_name_en": "brandi",
+      "manager_name": "이이이",
+      "manager_contact": "010-0111-2111",
+      "manager_email": "adsf@gmail.com",
+      "status_history": [
+        { "status": "입점승인", "changed_at": "2020-09-04-18-20" },
+        { "status": "휴점대기", "changed_at": "2020-09-04-20-20" }
+      ]
+    }
+  ]
+}

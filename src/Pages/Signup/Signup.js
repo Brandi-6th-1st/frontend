@@ -374,7 +374,7 @@ const Button = styled.input`
   color: #fff;
   ${(props) =>
     props.primary &&
-    css`
+    css`g
       background-color: #5bc0de;
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
