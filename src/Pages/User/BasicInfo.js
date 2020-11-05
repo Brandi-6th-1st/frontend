@@ -8,15 +8,10 @@ import { AiOutlineWarning } from 'react-icons/ai';
 function BasicInfo({
   sellerInfo,
   handleChangeFile,
-  // profileImgBase64,
-  // setProfileImgBase64,
-  // profileImgFile,
-  // setProfileImgFile,
   imgBase64,
   setImgBase64,
   imgFile,
   setImgFile,
-  // handleProfileImg,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -30,10 +25,6 @@ function BasicInfo({
 
   const { identification, seller_name_en } = sellerInfo;
   const imgId = 'profileImg';
-
-  const handleProfileImg = (event) => {
-    handleChangeFile(event, setProfileImgBase64, setProfileImgFile);
-  };
 
   return (
     <BasicInfoBox>
@@ -61,11 +52,6 @@ function BasicInfo({
                   imgFile={imgFile}
                   setImgFile={setImgFile}
                   imgId={imgId}
-                  // handleChangeFile={handleProfileImg}
-                  // imgBase64={profileImgBase64}
-                  // setImgBase64={setProfileImgBase64}
-                  // imgFile={profileImgFile}
-                  // setImgFile={setProfileImgFile}
                 />
                 <ExtraInfo>
                   <AiOutlineWarning />

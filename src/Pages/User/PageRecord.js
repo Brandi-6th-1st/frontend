@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
-import API from '../../config';
 
-function PageRecord({ filter, setFilter, currentPage, setCurrentPage }) {
+function PageRecord({
+  sellerList,
+  filter,
+  setFilter,
+  currentPage,
+  setCurrentPage,
+}) {
   // const { limit, offset } = filter;
   // const [currentPage, setCurrentPage] = useState(1);
 
@@ -48,7 +52,10 @@ function PageRecord({ filter, setFilter, currentPage, setCurrentPage }) {
         <PageButton onClick={handleNextPage}>
           <AiOutlineRight />
         </PageButton>
-        <span>of 55</span>
+        {/*계산계산*/}
+        <p>
+          of <span>{sellerList && sellerList.length}</span>{' '}
+        </p>
       </Page>
       <ViewRecords>
         <span>View</span>
@@ -63,7 +70,8 @@ function PageRecord({ filter, setFilter, currentPage, setCurrentPage }) {
       </ViewRecords>
       <FoundRecords>
         <span>Found Total</span>
-        <span>8,219</span>
+        {/*total 계산*/}
+        <span>{sellerList && sellerList.length}</span>
         <span>records</span>
       </FoundRecords>
     </Container>
@@ -112,6 +120,7 @@ const ViewRecords = styled.div`
 `;
 
 const PageButton = styled.button`
+  margin-right: 5px;
   padding: 5px 10px;
   width: 27px;
   height: 30px;

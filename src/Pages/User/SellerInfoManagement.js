@@ -11,26 +11,12 @@ function SellerInfoMangement({
   sellerInfo,
   setSellerInfo,
   handleChangeFile,
-  handleProfileImg,
-  handleBackgroundImg,
-  profileImgBase64,
-  setProfileImgBase64,
-  profileImgFile,
-  setProfileImgFile,
-  backgroundImgBase64,
-  setBackgroundImgBase64,
-  backgroundImgFile,
-  setBackgroundImgFile,
   imgBase64,
   setImgBase64,
   imgFile,
   setImgFile,
 }) {
   const onSubmit = (data) => console.log(data);
-
-  const handleClick = () => {
-    console.log('dddddd');
-  };
 
   return (
     <Fragment>
@@ -47,7 +33,7 @@ function SellerInfoMangement({
             <AiOutlineRight />
             <p>셀러 정보 조회 / 수정</p>
           </PageBar>
-          <form onClick={handleClick}>
+          <form>
             <BasicInfo
               sellerInfo={sellerInfo}
               handleChangeFile={handleChangeFile}
@@ -55,26 +41,8 @@ function SellerInfoMangement({
               setImgBase64={setImgBase64}
               imgFile={imgFile}
               setImgFile={setImgFile}
-              // handleProfileImg={handleProfileImg}
-              // profileImgBase64={profileImgBase64}
-              // setProfileImgBase64={setProfileImgBase64}
-              // profileImgFile={profileImgFile}
-              // setProfileImgFile={setProfileImgFile}
             />
-            <MoreInfo
-              sellerInfo={sellerInfo}
-              setSellerInfo={setSellerInfo}
-              handleChangeFile={handleChangeFile}
-              imgBase64={imgBase64}
-              setImgBase64={setImgBase64}
-              imgFile={imgFile}
-              setImgFile={setImgFile}
-              // handleBackgroundImg={handleBackgroundImg}
-              // backgroundImgBase64={backgroundImgBase64}
-              // setBackgroundImgBase64={setBackgroundImgBase64}
-              // backgroundImgFile={backgroundImgFile}
-              // setBackgroundImgFile={setBackgroundImgFile}
-            />
+            <MoreInfo />
             <ButtonGroup>
               <Button primary type='submit' value='수정' />
               <Button type='button' value='취소' />

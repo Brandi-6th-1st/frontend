@@ -20,6 +20,7 @@ function SellerList({
       </Title>
       <Body>
         <PageRecord
+          sellerList={sellerList}
           filter={filter}
           setFilter={setFilter}
           currentPage={currentPage}

@@ -51,15 +51,11 @@ function MoreInfo({
   // };
 
   const handleInputValue = (e) => {
-    console.log('123123123123', sellerInfo, e.target.name);
     const nextSellerInfo = {
       ...sellerInfo,
       [e.target.name]: e.target.value,
     };
-    console.log('1', nextSellerInfo);
-    console.log('3', sellerInfo);
     setSellerInfo(nextSellerInfo);
-    console.log('2', sellerInfo);
   };
 
   const { register, errors, watch, handleSubmit } = useForm({ mode: 'submit' });
@@ -85,23 +81,6 @@ function MoreInfo({
               <tr>
                 <td>셀러페이지 배경이미지</td>
                 <td>
-                  <ImgBox
-                    boxWidth='130px'
-                    boxHeight='100px'
-                    imgWidth='90px'
-                    imgHeight='90px'
-                    // handleChangeFile={handleChangeFile}
-                    // imgBase64={imgBase64}
-                    // setImgBase64={setImgBase64}
-                    // imgFile={imgFile}
-                    // setImgFile={setImgFile}
-                    imgBase64={backgroundImgBase64}
-                    setImgBase64={setBackgroundImgBase64}
-                    imgFile={backgroundImgFile}
-                    setImgFile={setBackgroundImgFile}
-                    handleChangeFile={handleBackgroundImg}
-                    imgId={imgId}
-                  />
                   <ExtraInfo>
                     <AiOutlineWarning />
                     <p>

@@ -10,6 +10,7 @@ function AccountManagementTitle({
   setFilter,
   currentPage,
   setCurrentPage,
+  sellerPerPage,
   handleSellerData,
 }) {
   return (
@@ -25,16 +26,17 @@ function AccountManagementTitle({
         <AiOutlineRight />
         <p>셀러 회원 리스트</p>
       </PageBar>
-      <ABC>
+      <Fragment>
         <SellerList
           sellerList={sellerList}
           filter={filter}
           setFilter={setFilter}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          sellerPerPage={sellerPerPage}
           handleSellerData={handleSellerData}
         />
-      </ABC>
+      </Fragment>
     </Container>
   );
 }
@@ -69,7 +71,7 @@ const PageBar = styled.div`
   }
 `;
 
-const ABC = styled.div`
+const Fragment = styled.div`
   width: calc(100%-215px);
   flex: 1;
 `;
