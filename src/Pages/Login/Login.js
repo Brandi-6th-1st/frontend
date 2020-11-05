@@ -9,7 +9,7 @@ import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import LoginFooter from './LoginFooter';
-import API from '../../config';
+import { API } from '../../config';
 
 export default function Login() {
   const [inputValue, setInputValue] = useState({
