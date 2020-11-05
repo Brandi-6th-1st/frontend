@@ -9,8 +9,12 @@ import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import LoginFooter from './LoginFooter';
+import { API } from '../../config';
+
 export default function Login() {
   const [inputValue, setInputValue] = useState({
+    // idValue: 'soojsooj',
+    // pwValue: 'PW1!soojsooj',
     idValue: 'lovemono',
     pwValue: 'PW1!lovemono',
   });
@@ -57,7 +61,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const result = await axios.post(
-        `http://10.58.7.141:5000/account/signin`,
+        `${API}/account/signin`,
         { identification: idValue, password: pwValue },
         {
           headers: {
@@ -80,29 +84,30 @@ export default function Login() {
         history.push('/home');
       }
     } catch (err) {
-      err;
+      console.log(err);
     }
   };
+
   return (
     <Container>
       <Content>
-        <Logo alt='브랜디로고' src='/public/Images/logo2.png' />
+        <Logo alt="브랜디로고" src="/public/Images/logo2.png" />
         <LoginBox>
           <LoginTitle>브랜디 어드민 로그인</LoginTitle>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
-              name='idValue'
+              name="idValue"
               ref={register({ required: true })}
-              placeholder='셀러 아이디'
+              placeholder="셀러 아이디"
               className={errors.idValue && 'ErrorInput'}
               onChange={handleInput}
             />
             {/* id와 password가 입력되지 않았을 때 나타날 오류 */}
             {errors.idValue && errors.pwValue && <p>아이디를 입력해주세요</p>}
             <Input
-              name='pwValue'
+              name="pwValue"
               ref={register({ required: true })}
-              placeholder='셀러 비밀번호'
+              placeholder="셀러 비밀번호"
               className={errors.pwValue && 'ErrorInput'}
               onChange={handleInput}
             />
@@ -113,7 +118,7 @@ export default function Login() {
             <Join>
               <p>아직 셀러가 아니신가요?</p>
               <p>
-                <Link to='/Signup'>회원가입하기</Link>
+                <Link to="/Signup">회원가입하기</Link>
               </p>
             </Join>
           </form>

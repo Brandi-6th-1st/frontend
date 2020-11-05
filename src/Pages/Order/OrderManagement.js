@@ -45,7 +45,7 @@ export default function OrderManagement() {
   };
 
   // datePicker에서 현재 가지고 있는 상태
-  const [searchDate, setSearchDate] = useState({
+  const [currentDate, setCurrentDate] = useState({
     startDate: changeDate(3, 0),
     endDate: new Date(),
   });
@@ -71,8 +71,17 @@ export default function OrderManagement() {
     false,
   ]);
 
+  const handleEndDate = (date) => {
+    setCurrentDate({ ...currentDate, endDate: date });
+  };
+
+  // DatePicker 라이브러리에서 지원하는 form과 관리하는 form이 달라서 따로 관리해주었다.
+  const handleStartDate = (date) => {
+    setCurrentDate({ ...currentDate, startDate: date });
+  };
+
   const filterReset = () => {
-    setSearchDate({
+    setCurrentDate({
       startDate: changeDate(3, 0),
       endDate: new Date(),
     });
@@ -90,19 +99,15 @@ export default function OrderManagement() {
     try {
       const url = () => {
         if (categoryId() === 1) {
-          console.log('상품준비');
           return `/public/Data/DataProductPreManage.json`;
         }
         if (categoryId() === 2) {
-          console.log('배송중');
           return `/public/Data/DataShippingMansge.json`;
         }
         if (categoryId() === 3) {
-          console.log('배배완료송중');
           return `/public/Data/DataDeliveryComplitedManage.json`;
         }
         if (categoryId() === 4) {
-          console.log('구매');
           return `/public/Data/DataConfirmPurchase.json`;
         }
       };
@@ -120,7 +125,6 @@ export default function OrderManagement() {
 
       const { DataProductManage } = result.data;
       setOrderList(DataProductManage.productItem);
-      console.log('패치', DataProductManage);
     } catch (err) {
       //에러 처리 예정
       console.log(err);
@@ -145,14 +149,14 @@ export default function OrderManagement() {
 
     if (value === '전체') {
       setParams({ ...params, startDate: null, endDate: null });
-      setSearchDate({ startDate: null, endDate: null });
+      setCurrentDate({ startDate: null, endDate: null });
     } else if (value === '오늘') {
       setParams({
         ...params,
         startDate: dateFormatChange(newDate),
         endDate: dateFormatChange(newDate),
       });
-      setSearchDate({
+      setCurrentDate({
         startDate: new Date(),
         endDate: new Date(),
       });
@@ -163,7 +167,7 @@ export default function OrderManagement() {
         startDate: dateFormatChange(changeDate(3, 0)),
         endDate: dateFormatChange(newDate),
       });
-      setSearchDate({
+      setCurrentDate({
         startDate: changeDate(3, 0),
         endDate: new Date(),
       });
@@ -173,7 +177,7 @@ export default function OrderManagement() {
         startDate: dateFormatChange(changeDate(7, 0)),
         endDate: dateFormatChange(newDate),
       });
-      setSearchDate({
+      setCurrentDate({
         startDate: changeDate(7, 0),
         endDate: new Date(),
       });
@@ -183,7 +187,7 @@ export default function OrderManagement() {
         startDate: dateFormatChange(changeDate(0, 1)),
         endDate: dateFormatChange(newDate),
       });
-      setSearchDate({
+      setCurrentDate({
         startDate: changeDate(0, 1),
         endDate: new Date(),
       });
@@ -193,7 +197,7 @@ export default function OrderManagement() {
         startDate: dateFormatChange(changeDate(0, 3)),
         endDate: dateFormatChange(newDate),
       });
-      setSearchDate({
+      setCurrentDate({
         startDate: changeDate(0, 3),
         endDate: new Date(),
       });
@@ -202,18 +206,24 @@ export default function OrderManagement() {
 
   // 검색버튼 클릭시 파람스에 객체를 넣어 해당 쿼리로 get
   const sendQuery = () => {
-    console.log('전송될 파람스', params);
-    getProductInfo(params);
+    const changeParams = {
+      ...params,
+      [`${params.searchOption}`]: params.searchKeyword,
+      searchOption: null,
+      searchKeyword: null,
+    };
+    console.log('전송될', changeParams);
+    getProductInfo(changeParams);
   };
 
   // 현재 날짜가 변경되면 params도 최신화 시킨다.
   useEffect(() => {
     setParams({
       ...params,
-      startDate: dateFormatChange(searchDate.startDate),
-      endDate: dateFormatChange(searchDate.endDate),
+      startDate: dateFormatChange(currentDate.startDate),
+      endDate: dateFormatChange(currentDate.endDate),
     });
-  }, [searchDate]);
+  }, [currentDate]);
 
   return (
     <ManagementContainer>
@@ -226,9 +236,11 @@ export default function OrderManagement() {
         </div>
       </Title>
       <Filter
+        handleStartDate={handleStartDate}
+        handleEndDate={handleEndDate}
         pagetext={pagetext}
-        searchDate={searchDate}
-        setSearchDate={setSearchDate}
+        currentDate={currentDate}
+        setCurrentDate={setCurrentDate}
         handleDate={handleDate}
         selectDate={selectDate}
         params={params}

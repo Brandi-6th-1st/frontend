@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import DateFilter from './DateFilter';
+import CallendarManage from '../../Components/CallendarManage';
 
 export default function Filter({
   pagetext,
-  searchDate,
-  setSearchDate,
+  currentDate,
+  setCurrentDate,
   handleDate,
   selectDate,
   params,
   setParams,
   sendQuery,
   filterReset,
+  handleStartDate,
+  handleEndDate,
 }) {
   return (
     <FilterContainer>
@@ -22,9 +25,7 @@ export default function Filter({
             setParams({ ...params, searchOption: e.target.value })
           }
         >
-          <option value="" selected>
-            Select..
-          </option>
+          <option value="">Select..</option>
           <option value="ORDER_DETAIL_NO">주문상세번호</option>
           <option value="ORDER_NO">주문번호</option>
           <option value="ORDRR_NAME">주문자명</option>
@@ -49,7 +50,6 @@ export default function Filter({
             type="button"
             value="전체"
             onClick={(e) => handleDate(e.target.value, 0)}
-            selected={params.periodButton === '전체'}
           />
           <DateBtn
             idx={1}
@@ -57,7 +57,6 @@ export default function Filter({
             type="button"
             value="오늘"
             onClick={(e) => handleDate(e.target.value, 1)}
-            selected={params.periodButton === '오늘'}
           />
           <DateBtn
             idx={2}
@@ -65,7 +64,6 @@ export default function Filter({
             type="button"
             value="3일"
             onClick={(e) => handleDate(e.target.value, 2)}
-            selected={params.periodButton === '3일'}
           />
           <DateBtn
             idx={3}
@@ -73,7 +71,6 @@ export default function Filter({
             type="button"
             value="1주일"
             onClick={(e) => handleDate(e.target.value, 3)}
-            selected={params.periodButton === '1주일'}
           />
           <DateBtn
             idx={4}
@@ -81,7 +78,6 @@ export default function Filter({
             type="button"
             value="1개월"
             onClick={(e) => handleDate(e.target.value, 4)}
-            selected={params.periodButton === '1개월'}
           />
           <DateBtn
             idx={5}
@@ -89,10 +85,14 @@ export default function Filter({
             type="button"
             value="3개월"
             onClick={(e) => handleDate(e.target.value, 5)}
-            selected={params.periodButton === '3개월'}
           />
         </FilterBox>
-        <DateFilter searchDate={searchDate} setSearchDate={setSearchDate} />
+        <CallendarManage
+          currentDate={currentDate}
+          setCurrentDate={setCurrentDate}
+          handleStartDate={handleStartDate}
+          handleEndDate={handleEndDate}
+        />
       </Divs>
       <Div>
         <Button search onClick={() => sendQuery()}>
@@ -122,8 +122,9 @@ const Div = styled.div`
     padding-right: 100px;
   }
   span {
-    width: 90px;
+    /* width: 90px; */
     margin-right: 35px;
+    text-align: center;
     font-size: 14px;
     color: #222;
   }

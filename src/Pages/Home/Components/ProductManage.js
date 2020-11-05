@@ -7,7 +7,7 @@ export default function ProductManage({ sellerStatus }) {
       <SalesStatus>
         <SalesCategory>
           <span>상품 준비 : </span>
-          <b>{sellerStatus && sellerStatus.product_preparation}건 </b>
+          <b>{sellerStatus && sellerStatus.order_preparing}건 </b>
         </SalesCategory>
         <SalesCategory>
           <span>배송 준비 : </span>
@@ -19,7 +19,7 @@ export default function ProductManage({ sellerStatus }) {
         </SalesCategory>
         <SalesCategory>
           <span>배송 완료 : </span>
-          <b>{sellerStatus && sellerStatus.delivery_completed}건 </b>
+          <b>{sellerStatus && sellerStatus.order_delivered}건 </b>
         </SalesCategory>
         <SalesCategory>
           <span>구매 확정 : </span>
@@ -35,6 +35,10 @@ const SalesBox = styled.div`
   width: 33.3%;
   padding: 0 15px;
   margin-bottom: 22px;
+
+  @media only screen and (max-width: 750px) {
+    width: 100%;
+  }
 `;
 
 const SalesStatus = styled.div`

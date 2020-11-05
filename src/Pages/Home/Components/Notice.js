@@ -34,6 +34,10 @@ const StaticsBox = styled.div`
   width: 50%;
   min-height: 1px;
   padding: 0px 10px;
+
+  @media only screen and (max-width: 750px) {
+    width: 100%;
+  }
 `;
 
 const StaticsStatus = styled.div`

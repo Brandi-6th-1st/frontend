@@ -28,7 +28,7 @@ export default function SubList({
     ) {
       return history.push('/order/' + link);
     }
-    // 여기에서 history push로 페이지 이동시켜주면 돼요!
+    // 세부 메뉴 클릭시 페이지 이동
     history.push(link);
   };
 

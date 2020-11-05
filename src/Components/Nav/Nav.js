@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
 import NavList from './NavList';
 import { KeyboardArrowLeft } from '@styled-icons/material';
-// import SELLER_NAV from './DataSellerNav';
-// import MASTER_NAV from './DataMasterNav';
 
 export default function Nav() {
   const [active, setActive] = useState([0, 0]);
@@ -15,22 +13,17 @@ export default function Nav() {
   // store에 있는 nav 정보를 가져온다.
   const { nav_list, filter_list } = useSelector(({ userInfo }) => ({
     nav_list: userInfo.nav_list,
-    filter_list: userInfo.filter_list,
   }));
 
   //nav가 변경되면 nav 데이터를 최신화
   useEffect(() => {
     setNavData(nav_list);
-    console.log(nav_list);
-    console.log('123123123123123', filter_list);
   }, [nav_list]);
 
   // 네브가 눌렸을때, 페이지 이동 함수
   const handlePage = (menuTitle, subTitle) => {
     setActive([menuTitle, subTitle]);
   };
-
-  console.log(nav_list);
 
   return (
     <NavContainer sidebarSmall={sidebarSmall}>
@@ -62,6 +55,10 @@ export default function Nav() {
 }
 
 const NavContainer = styled.div`
+  @media only screen and (max-width: 934px) {
+    display: none;
+  }
+
   width: 215px;
   height: 100vh;
   padding-top: 45px;
@@ -72,9 +69,6 @@ const NavContainer = styled.div`
     css`
       width: 40px;
     `}
-  @media only screen and (max-width: 934px) {
-    display: none;
-  }
 `;
 
 const NavBox = styled.ul`

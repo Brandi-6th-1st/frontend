@@ -1,49 +1,56 @@
-import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
+import React from 'react';
 import styled from 'styled-components';
-import './datepick.css';
+import DatePicker from 'react-datepicker';
+import '../../src/Styles/datepick.css';
+import { ko } from 'date-fns/esm/locale';
 
-export default function DateFilter({ handleStartDate, handleEndDate }) {
+export default function CallendarManage({
+  currentDate,
+  handleStartDate,
+  handleEndDate,
+}) {
   return (
     <InquiryperiodBox>
       <SelectPeriod
-        selected={searchDate.startDate}
-        onChange={(date) => handleStartDate(date)}
+        selected={currentDate.startDate || ''}
+        locale={ko}
         dateFormat="yyyy-MM-dd"
+        onChange={(date) => {
+          handleStartDate(date);
+        }}
         placeholderText="클릭해주세요."
         shouldCloseOnSelect={false}
       />
       <span>~</span>
       <SelectPeriod
-        selected={searchDate.endDate}
-        onChange={(date) => handleEndDate(date)}
+        selected={currentDate.endDate || ''}
+        locale={ko}
         dateFormat="yyyy-MM-dd"
+        onChange={(date) => handleEndDate(date)}
         placeholderText="클릭해주세요."
         shouldCloseOnSelect={false}
       />
     </InquiryperiodBox>
   );
 }
-
 const InquiryperiodBox = styled.div`
-  ${({ theme }) => theme.flex('center', 'center')};
   display: table;
-  width: 22%;
-  height: 34px;
-  margin: 0 15px;
-  background: white;
   border: 1px solid #e5e5e5;
-  border-radius: 4px;
+  width: 25%;
+  margin: 0 15px;
+
+  @media only screen and (max-width: 934px) {
+    width: 100%;
+  }
+
   span {
     display: table-cell;
-    padding: 8px 12px;
+    padding: 6px 12px;
     background: #e5e5e5;
-    text-align: center;
   }
 `;
 
 const SelectPeriod = styled(DatePicker)`
   text-align: center;
-  font-size: 14px;
   cursor: pointer;
 `;

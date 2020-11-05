@@ -1,20 +1,29 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import dateFormatChange from '../../Components/ChangeTimeFormat';
-import { ko } from 'date-fns/esm/locale';
-import DatePicker from 'react-datepicker';
-import '../../Styles/datepick.css';
+// import { ko } from 'date-fns/esm/locale';
+// import '../../Styles/datepick.css';
 import styled from 'styled-components';
 import ProductDetail from './Components/ProductDetail';
+// import CallendarManage from '../../Components/CallendarManage';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-import Purchase from './Components/Purchase';
+import Purchase from '../../Components/Purchase';
+// import SelectSearch from '../../Components/SelectSearch';
+// import FilterBox from '../../Components/FilterBox';
+// import SellerSearchFilter from '../../Components/SellerSearchFilter';
+import FiltersContainer from './Components/FiltersContainer';
+import { API } from '../../config';
 
 export default function ProductManagement() {
+  // 히스토리, dispatch 선언
+  const history = useHistory();
   const dispatch = useDispatch();
+  const [isMounted, setIsMounted] = useState(false);
   // 모달창 출력 유무를 관리
   const [showModal, setShowModal] = useState(false);
   // 마스터에만 사용되는 데이터를 관리
@@ -32,6 +41,7 @@ export default function ProductManagement() {
   });
   // 현재 페이지 관리
   const [activePage, setActivePage] = useState(1);
+
   const sellerNameId = 'seller_name';
   const attributeId = 'attribute';
   const salesId = 'sale';
@@ -42,15 +52,15 @@ export default function ProductManagement() {
   // const [queryUrl, setQueryUrl] = useState('');
   // 쿼리스트링을 만들 상태를 따로 관리
   const [query, setQuery] = useState({
-    startDate: null,
-    endDate: null,
-    sellerName: null,
+    from: null,
+    until: null,
+    seller_name: null,
     sellerDetail: null,
     productDetail: null,
-    sellerAttribute: [],
-    salesStatus: null,
-    displayStatus: null,
-    discountStatus: null,
+    attribute: [],
+    sale: null,
+    displayed: null,
+    discount: null,
     limit: 10,
     offset: 0,
   });
@@ -64,8 +74,7 @@ export default function ProductManagement() {
   //   // filter_list: filter.filter_list,
   // }));
 
-  const { is_master, filter_list } = useSelector(({ userInfo }) => ({
-    is_master: userInfo.is_master,
+  const { filter_list } = useSelector(({ userInfo }) => ({
     filter_list: userInfo.filter_list,
   }));
 
@@ -91,73 +100,69 @@ export default function ProductManagement() {
   // Test : json형식 mock-data 생성
   // axios get을 사용하여 데이터를 받아온다.
 
-  const getData = async (param) => {
+  const getData = async (param = null) => {
+    const localToken = localStorage.getItem('token');
+
     try {
-      const result = await axios.get(`/public/Data/DataProductManage.json`, {
+      // const result = await axios.get(`/public/Data/DataProductManage.json`, {
+      const result = await axios.get(`${API}/product`, {
         params: param,
         timeout: 3000, //3초,
-        // paramsSerializer: function (params) {
-        //   return Qs.stringify(params, { arrayFormat: 'brackets' });
-        // },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localToken,
+        },
       });
-
       // 받아온 데이터를 비구조 할당하여 data에 저장한다.
-      const { DataProductManage } = result.data;
+      const DataProductManage = result.data.success;
 
-      // 유저 타입이 마스터인 경우,
-      if (is_master) {
-        // 셀러명 검색 필터만 분리하여 정의
+      const masterData =
+        filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
 
-        const masterData =
-          filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
+      const sellerData = {
+        filter_list: filter_list.filter((el) => el.id !== sellerNameId),
+      };
 
-        const sellerData = {
-          ...filter_list,
-          filter_list: filter_list.filter((el) => el.id !== sellerNameId),
-        };
-
-        // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
-        if (!filterStatus) {
-          createFilter(sellerData);
-        }
-
-        // 마스터에서만 사용하는 데이터 저장
-        setDifferentFilter(masterData);
-        // 상품 리스트에 보여줄 데이터를 저장
-        setProduct(DataProductManage);
-        // 공용으로 사용하는 데이터 저장
-        setFilters(sellerData);
+      // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
+      if (!filterStatus) {
+        createFilter(sellerData);
       }
-      // 유저 타입이 셀러인 경우,
-      if (!is_master) {
-        // 마스터와 셀러 공용 필터를 따로 저장
-        setProduct(DataProductManage);
-        // 각 필터별로 상태를 생성
-        setFilters(filter_list);
-        // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
-        if (!filterStatus) {
-          createFilter(filter_list);
-        }
-      }
+
+      // 마스터에서만 사용하는 데이터 저장
+      setDifferentFilter(masterData);
+      // 상품 리스트에 보여줄 데이터를 저장
+      setProduct(DataProductManage);
+      // 공용으로 사용하는 데이터 저장
+      setFilters(sellerData);
     } catch (err) {
       if (err.response) {
+        alert('서버 응답을 받았으나 성공하지 못했습니다.', err.response);
         console.log('서버 응답을 받았으나 성공하지 못했습니다.');
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
       } else if (error.request) {
+        alert('서버에서 응답이 없습니다.', err.request);
         console.log('서버 응답 실패');
         console.log(error.request);
       } else {
+        alert('메세지 에러', err.message);
         console.log(error.message);
       }
+      alert('config 확인');
       console.log(error.config);
     }
   };
 
+  useEffect(() => {
+    if (isMounted) {
+      getData();
+    }
+  }, [filter_list]);
+
   // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
   useEffect(() => {
-    getData(null);
+    setIsMounted(true);
   }, []);
 
   // 각 필터 선택시 true <-> false로 바꿔준다.
@@ -271,17 +276,6 @@ export default function ProductManagement() {
 
   // 검색 버튼일 눌리게 되면 동작할 함수.
   const sendData = () => {
-    console.log(
-      'test',
-      filterStatus &&
-        filterStatus.filter((el) => {
-          return el.id === salesId && el.id;
-        })[0] &&
-        filterStatus.filter((el) => {
-          return el.id === salesId && el.id;
-        })[0].selectedId
-    );
-
     // 셀러속성의 현재 버튼이 눌린 상태
     const attribute =
       filterStatus &&
@@ -327,7 +321,6 @@ export default function ProductManagement() {
       })[0].selectedId;
 
     const test = query.sellerDetail;
-    console.log({ ...query });
 
     // 상태로 저장하고 있던 값을 params로 보내기 위해 data form 변경
     const queryObj = {
@@ -337,16 +330,15 @@ export default function ProductManagement() {
           ? (activePage - 1) * query.limit
           : null,
       limit: Number(query.limit) !== 10 ? query.limit : null,
-      sellerAttribute: attribute ? attribute : null,
-      salesStatus: salse !== '' ? salse : null,
-      displayStatus: display !== '' ? display : null,
-      discountStatus: discount !== '' ? discount : null,
+      attribute: attribute ? attribute : null,
+      sale: salse !== '' ? salse : null,
+      displayed: display !== '' ? display : null,
+      discount: discount !== '' ? discount : null,
       [`${query.sellerDetail}`]: query.productDetail,
       sellerDetail: null,
       productDetail: null,
     };
 
-    console.log('전송');
     console.log('전송된 파람스', queryObj);
     //변경된 form을 param에 넣어 get Data
     getData(queryObj);
@@ -362,15 +354,15 @@ export default function ProductManagement() {
     console.log('초기화');
     createFilter(filters);
     setQuery({
-      startDate: null,
-      endDate: null,
-      sellerName: null,
+      from: null,
+      until: null,
+      seller_name: null,
       sellerDetail: null,
       productDetail: null,
-      sellerAttribute: [],
-      salesStatus: null,
-      displayStatus: null,
-      discountStatus: null,
+      attribute: [],
+      sale: null,
+      displayed: null,
+      discount: null,
       limit: Number(query.limit),
       offset: Number(query.limit) ? Number(query.limit) : 10 * activePage,
     });
@@ -385,7 +377,7 @@ export default function ProductManagement() {
     setCurrentDate({ ...currentDate, endDate: date });
     setQuery({
       ...query,
-      endDate: dateFormatChange(date),
+      until: dateFormatChange(date),
     });
   };
 
@@ -394,7 +386,7 @@ export default function ProductManagement() {
     setCurrentDate({ ...currentDate, startDate: date });
     setQuery({
       ...query,
-      startDate: dateFormatChange(date),
+      from: dateFormatChange(date),
     });
   };
 
@@ -406,113 +398,19 @@ export default function ProductManagement() {
         <Section>
           <Purchase showModal={showModal} setShowModal={setShowModal} />
           <h3>상품 관리</h3>
-          <FilterContainer>
-            <FilterCategoryTitle>
-              <FilterTitle>조회 기간</FilterTitle>
-              {/* 조회 가긴의 캘린더 렌더 */}
-              <InquiryperiodBox>
-                <SelectPeriod
-                  selected={currentDate.startDate || ''}
-                  locale={ko}
-                  dateFormat='yyyy-MM-dd'
-                  onChange={(date) => {
-                    handleStartDate(date);
-                  }}
-                  placeholderText='클릭해주세요.'
-                  shouldCloseOnSelect={false}
-                />
-                <span>~</span>
-                <SelectPeriod
-                  selected={currentDate.endDate || ''}
-                  locale={ko}
-                  dateFormat='yyyy-MM-dd'
-                  onChange={(date) => handleEndDate(date)}
-                  placeholderText='클릭해주세요.'
-                  shouldCloseOnSelect={false}
-                />
-              </InquiryperiodBox>
-            </FilterCategoryTitle>
-            <FiltersCategoryTitle>
-              {/* 마스터에만 있는 셀러명 필터 렌더 */}
-              {differentFilter && differentFilter.id === sellerNameId && (
-                <SelectFilterCategory>
-                  <FilterTitle>
-                    {differentFilter && differentFilter.filterTitle}
-                  </FilterTitle>
-                  <SellerSearchBox>
-                    <SellerSearch
-                      name='셀러이름'
-                      value={query.sellerName || ''}
-                      onChange={(e) =>
-                        setQuery({ ...query, sellerName: e.target.value })
-                      }
-                      type='text'
-                      placeholder='검색어를 입력하세요.'
-                    ></SellerSearch>
-                  </SellerSearchBox>
-                </SelectFilterCategory>
-              )}
-              <SelectFilterCategory>
-                <select
-                  value={query.sellerDetail || ''}
-                  onChange={(e) =>
-                    setQuery({ ...query, sellerDetail: e.target.value })
-                  }
-                >
-                  <option>Select</option>
-                  <option value='product_name'>상품명</option>
-                  <option value='product_number'>상품번호</option>
-                  <option value='product_code'>상품코드</option>
-                </select>
-                <SearchBox>
-                  <ProductSearch
-                    name='productDetail'
-                    value={query.productDetail || ''}
-                    onChange={(e) =>
-                      setQuery({ ...query, productDetail: e.target.value })
-                    }
-                    placeholder='검색어를 입력하세요.'
-                    type='text'
-                  ></ProductSearch>
-                </SearchBox>
-              </SelectFilterCategory>
-            </FiltersCategoryTitle>
-            {/* 각 필터별로 다른 name을 가지기 때문에 각각 렌더 */}
-            {filters.filter_list &&
-              filters.filter_list.map((cate, i) => {
-                return (
-                  <SelectFilterCategory cate={cate.category.length} key={i}>
-                    <SelectFilterTitle>{cate.filterTitle} :</SelectFilterTitle>
-                    <FilterBtnBox>
-                      {cate.category.map((sub, idx) => {
-                        return (
-                          <SelectBtn
-                            key={idx}
-                            onClick={() =>
-                              changeFilter(
-                                sub.category_id,
-                                idx,
-                                cate.filterTitle,
-                                cate.id
-                              )
-                            }
-                            idx={idx}
-                            filterStatus={filterStatus}
-                            name={cate.filterTitle}
-                          >
-                            {sub.category_title}
-                          </SelectBtn>
-                        );
-                      })}
-                    </FilterBtnBox>
-                  </SelectFilterCategory>
-                );
-              })}
-            <SearchContainer>
-              <SearchBtn onClick={handleSearch}>검색</SearchBtn>
-              <CanclehBtn onClick={resetFilter}>초기화</CanclehBtn>
-            </SearchContainer>
-          </FilterContainer>
+          <FiltersContainer
+            currentDate={currentDate}
+            handleStartDate={handleStartDate}
+            handleEndDate={handleEndDate}
+            differentFilter={differentFilter}
+            setQuery={setQuery}
+            query={query}
+            filters={filters}
+            changeFilter={changeFilter}
+            filterStatus={filterStatus}
+            handleSearch={handleSearch}
+            resetFilter={resetFilter}
+          />
           <ProductDetail
             product={product}
             setProduct={setProduct}
@@ -550,176 +448,5 @@ const Section = styled.div`
     margin-bottom: 15px;
     font-weight: 300;
     color: #666;
-  }
-`;
-
-const FilterContainer = styled.div`
-  width: 100%;
-  border: 3px solid #eee;
-  background-color: #fff;
-  margin-bottom: 20px;
-`;
-
-const FilterCategoryTitle = styled.div`
-  ${({ theme }) => theme.flex('', 'center')}
-  margin-top: 10px;
-  margin-bottom: 5px;
-  padding-right: 15px;
-
-  select {
-    ${({ theme }) => theme.flex('', 'center')}
-    width: 100px;
-    height: 30px;
-    margin-left: 15px;
-    border: 1px solid #e5e5e5;
-  }
-`;
-
-const FiltersCategoryTitle = styled(FilterCategoryTitle)`
-  @media only screen and (max-width: 934px) {
-    ${({ theme }) => theme.flex('', 'center', 'column')}
-  }
-`;
-
-const SelectFilterCategory = styled(FilterCategoryTitle)`
-  display: inline-flex;
-  width: ${({ cate }) => (cate > 5 ? '100%' : '50%')};
-
-  @media only screen and (max-width: 940px) {
-    width: 100%;
-  }
-`;
-
-const FilterTitle = styled.div`
-  ${({ theme }) => theme.flex('', 'center')}
-  width: 100px;
-  height: 25px;
-  padding-left: 15px;
-  color: #222222;
-  text-overflow: hidden;
-  white-space: nowrap;
-`;
-
-const SelectFilterTitle = styled(FilterTitle)`
-  display: inline-flex;
-`;
-
-const InquiryperiodBox = styled.div`
-  display: table;
-  border: 1px solid #e5e5e5;
-  width: 25%;
-  margin: 0 15px;
-
-  @media only screen and (max-width: 934px) {
-    width: 100%;
-  }
-
-  span {
-    display: table-cell;
-    padding: 6px 12px;
-    background: #e5e5e5;
-  }
-`;
-
-const PeriodBox = styled.input`
-  width: 100%;
-  display: table-cell;
-  padding: 6px 12px;
-  cursor: pointer;
-
-  ::placeholder {
-    text-align: center;
-  }
-`;
-
-const SelectPeriod = styled(DatePicker)`
-  text-align: center;
-  cursor: pointer;
-`;
-
-const SearchBox = styled(InquiryperiodBox)`
-  width: 51%;
-  margin: 0;
-
-  @media only screen and (max-width: 934px) {
-    width: 100%;
-  }
-`;
-
-const SellerSearchBox = styled(InquiryperiodBox)`
-  width: 51%;
-  margin: 0 0 0 15px;
-
-  @media only screen and (max-width: 934px) {
-    width: 100%;
-  }
-`;
-
-const SellerSearch = styled(PeriodBox)`
-  width: 100%;
-`;
-
-const ProductSearch = styled(PeriodBox)`
-  cursor: inherit;
-`;
-
-const FilterBtnBox = styled.div`
-  margin: 0px 15px;
-`;
-
-const SelectBtn = styled.button`
-  background-color: ${({ name, filterStatus, idx }) =>
-    name &&
-    filterStatus &&
-    filterStatus.map((el) => !!el[name] && el[name][idx] && '#428bca')};
-
-  &:hover {
-    background-color: ${({ name, filterStatus, idx }) =>
-      name &&
-      filterStatus &&
-      filterStatus.map((el) => !!el[name] && el[name][idx] && '#3071a9')};
-
-    background-color: ${({ name, filterStatus, idx }) =>
-      name &&
-      filterStatus &&
-      filterStatus.map((el) => !!el[name] && !el[name][idx] && '#e6e6e6')};
-  }
-
-  color: ${({ name, filterStatus, idx }) =>
-    name &&
-    filterStatus &&
-    filterStatus.map((el) => !!el[name] && el[name][idx] && 'white')};
-
-  margin-right: 3px;
-  padding: 6px 12px;
-  border: 1px solid #adadad;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
-const SearchContainer = styled(FilterCategoryTitle)`
-  ${({ theme }) => theme.flex('center')}
-`;
-
-const CanclehBtn = styled.button`
-  padding: 6px 50px;
-  border: 1px solid #adadad;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #e6e6e6;
-  }
-`;
-
-const SearchBtn = styled.button`
-  padding: 6px 50px;
-  border: 1px solid #adadad;
-  margin-right: 4px;
-  background-color: #428bca;
-  color: white;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #3071a9;
   }
 `;
