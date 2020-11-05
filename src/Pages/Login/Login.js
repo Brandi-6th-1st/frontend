@@ -70,21 +70,41 @@ export default function Login() {
           timeout: 3000,
         }
       );
+      console.log(result);
       console.log(result.data.success);
 
-      const getIsMaster = await result.data.success.is_master;
-      const getNavList = await result.data.success.nav_list;
-      const getFilterList = await result.data.success.filter_list;
+      if (result.status === 200) {
+        const getIsMaster = await result.data.success.is_master;
+        const getNavList = await result.data.success.nav_list;
+        const getFilterList = await result.data.success.filter_list;
 
-      if (!!result.data.success.Authorization) {
-        localStorage.setItem('token', result.data.success.Authorization);
-        dispatch(saveFilter(getFilterList));
-        dispatch(saveNav(getNavList));
-        dispatch(isMaster(getIsMaster));
-        history.push('/home');
+        if (!!result.data.success.Authorization) {
+          localStorage.setItem('token', result.data.success.Authorization);
+          dispatch(saveFilter(getFilterList));
+          dispatch(saveNav(getNavList));
+          dispatch(isMaster(getIsMaster));
+          history.push('/home');
+        }
+      } else {
+        return alert(result.data.client_message);
       }
     } catch (err) {
-      console.log(err);
+      console.log('erer', err);
+      if (err.response) {
+        if (err.response.statusText === 'UNAUTHORIZED') {
+          alert(err.response.data.client_message);
+        }
+      } else if (error.request) {
+        alert('서버에서 응답이 없습니다.', err.request);
+        console.log('서버 응답 실패');
+        console.log(error.request);
+      } else {
+        alert('메세지 에러', err.message);
+        console.log(error.message);
+        if (error.message === '[INVILD_MESSAGE]') {
+          alert('무슨 응답을 받았습니다.', error.message);
+        }
+      }
     }
   };
 

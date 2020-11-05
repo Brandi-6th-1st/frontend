@@ -3,25 +3,30 @@ const TYPE_CLEAR = 'userInfo/TYPE_CLEAR';
 const SAVE_NAV = 'userInfo/SAVE_NAV';
 const SAVE_FILTER = 'userInfo/SAVE_FILTER';
 
+// 마스터인지 셀러인지
 export const isMaster = (items) => ({
   type: TYPE_MASTER,
   payload: items,
 });
 
+// nav Data
 export const saveNav = (items) => ({
   type: SAVE_NAV,
   payload: items,
 });
 
+// filter Data
 export const saveFilter = (items) => ({
   type: SAVE_FILTER,
   payload: items,
 });
 
+// 로그아웃시 clear
 export const isClear = () => ({
   type: TYPE_CLEAR,
 });
 
+// 기본값
 const initialState = {
   is_master: null,
   filter_list: [],
@@ -252,7 +257,6 @@ const initialState = {
 };
 
 const userInfo = (state = initialState, { type, payload }) => {
-  console.log(type);
   switch (type) {
     case TYPE_MASTER:
       return { ...state, is_master: payload };

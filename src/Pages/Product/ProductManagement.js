@@ -4,18 +4,12 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import dateFormatChange from '../../Components/ChangeTimeFormat';
-// import { ko } from 'date-fns/esm/locale';
-// import '../../Styles/datepick.css';
 import styled from 'styled-components';
 import ProductDetail from './Components/ProductDetail';
-// import CallendarManage from '../../Components/CallendarManage';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import Purchase from '../../Components/Purchase';
-// import SelectSearch from '../../Components/SelectSearch';
-// import FilterBox from '../../Components/FilterBox';
-// import SellerSearchFilter from '../../Components/SellerSearchFilter';
 import FiltersContainer from './Components/FiltersContainer';
 import { API } from '../../config';
 
@@ -23,6 +17,7 @@ export default function ProductManagement() {
   // 히스토리, dispatch 선언
   const history = useHistory();
   const dispatch = useDispatch();
+  // 여러번 렌더되는 것을 막기위한 상태값
   const [isMounted, setIsMounted] = useState(false);
   // 모달창 출력 유무를 관리
   const [showModal, setShowModal] = useState(false);
@@ -48,9 +43,7 @@ export default function ProductManagement() {
   const displayId = 'display';
   const discountId = 'discount';
 
-  // axios할 쿼리url 생성
-  // const [queryUrl, setQueryUrl] = useState('');
-  // 쿼리스트링을 만들 상태를 따로 관리
+  // 전체 필터의 상태를 관리
   const [query, setQuery] = useState({
     from: null,
     until: null,
@@ -65,20 +58,12 @@ export default function ProductManagement() {
     offset: 0,
   });
 
-  // // store에서 유저타입과 토큰을 가져온다.
-  // const userType = useSelector(({ userInfo }) => userInfo);
-
-  // // store에 있는 마스터 or 셀러 필터를 가져온다.
-  // const { filter_list } = useSelector(({ filter }) => ({
-  //   filter_list: filter.filter_list,
-  //   // filter_list: filter.filter_list,
-  // }));
-
+  // store에 저장되어 있는 filter_list를 가져온다.
   const { filter_list } = useSelector(({ userInfo }) => ({
     filter_list: userInfo.filter_list,
   }));
 
-  // get을 통하여 들어오는 필터의 상태별로 각 버튼의 boolean 생성
+  // store에 저장되어있는 필터의 길이별로 각 버튼의 boolean 생성
   const createFilter = (data) => {
     const allFilter =
       data &&
@@ -94,12 +79,7 @@ export default function ProductManagement() {
     setFilterStatus(allFilter);
   };
 
-  ///public/Data/DataProductManage.json
-  ///http://10.58.7.141:5000/product
-
-  // Test : json형식 mock-data 생성
-  // axios get을 사용하여 데이터를 받아온다.
-
+  // 상품 리스트에 출력할 Data를 서버에서 요청하여 받아옵니다.
   const getData = async (param = null) => {
     const localToken = localStorage.getItem('token');
 
@@ -112,58 +92,75 @@ export default function ProductManagement() {
           'Content-Type': 'application/json',
           Authorization: localToken,
         },
+        // 상태 코드가 500 이상일 경우 거부. 나머지(500보다 작은)는 허용.
+        validateStatus: function (status) {
+          return status < 500;
+        },
       });
-      // 받아온 데이터를 비구조 할당하여 data에 저장한다.
-      const DataProductManage = result.data.success;
 
-      const masterData =
-        filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
+      // 통신에 성공했을 경우,
+      if (result.status === 200) {
+        // 마스터에서만 사용하는 데이터 분리
+        const masterData =
+          filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
 
-      const sellerData = {
-        filter_list: filter_list.filter((el) => el.id !== sellerNameId),
-      };
+        // 공통으로 사용하는 데이터
+        const sellerData = {
+          filter_list: filter_list.filter((el) => el.id !== sellerNameId),
+        };
 
-      // 각 필터의 상태를 관리하는 배열이 없다면 필터의 길이별로 배열 생성
-      if (!filterStatus) {
-        createFilter(sellerData);
+        // 상품리스트를 저장
+        const DataProductManage = result.data.success;
+
+        // 현재 필터를 관리하는 boolean이 없다면 생성
+        if (!filterStatus) {
+          createFilter(sellerData);
+        }
+
+        // 마스터에서만 사용하는 데이터 저장
+        setDifferentFilter(masterData);
+        // 상품 리스트에 보여줄 데이터를 저장
+        setProduct(DataProductManage);
+        // 공통으로 사용하는 데이터 저장
+        setFilters(sellerData);
       }
-
-      // 마스터에서만 사용하는 데이터 저장
-      setDifferentFilter(masterData);
-      // 상품 리스트에 보여줄 데이터를 저장
-      setProduct(DataProductManage);
-      // 공용으로 사용하는 데이터 저장
-      setFilters(sellerData);
+      // 응답이 실패하였다면,
+      else {
+        if (result.statusText === 'CONFLICT') {
+          alert(result.data.client_message);
+          history.push('/');
+        }
+      }
     } catch (err) {
       if (err.response) {
-        alert('서버 응답을 받았으나 성공하지 못했습니다.', err.response);
-        console.log('서버 응답을 받았으나 성공하지 못했습니다.');
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
+        // 토큰의 정보가 바뀌었다면, 백엔드에서 받은 message 팝업창 출력
+        if (err.response.statusText === 'UNAUTHORIZED') {
+          alert(err.response.data.client_message);
+          history.push('/');
+        }
+      } else if (err.request) {
         alert('서버에서 응답이 없습니다.', err.request);
-        console.log('서버 응답 실패');
-        console.log(error.request);
       } else {
         alert('메세지 에러', err.message);
-        console.log(error.message);
       }
-      alert('config 확인');
-      console.log(error.config);
     }
   };
 
-  useEffect(() => {
-    if (isMounted) {
-      getData();
-    }
-  }, [filter_list]);
-
-  // 페이지 마운트시 axios하여 상품관리 페이지에 필요한 데이터를 get
+  // 페이지 언마운트시 실행
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  // 페이지 언마운트 완료 후 실행
+  useEffect(() => {
+    if (isMounted) {
+      if (!filter_list[0]) {
+        alert('다시 로그인 해주세요.');
+        history.push('/');
+      }
+      getData();
+    }
+  }, [filter_list]);
 
   // 각 필터 선택시 true <-> false로 바꿔준다.
   const changeFilter = (id, idx, name, filterId) => {
