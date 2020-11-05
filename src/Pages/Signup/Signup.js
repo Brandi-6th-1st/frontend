@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 import styled, { css } from 'styled-components';
 import { ErrorMessage } from '@hookform/error-message';
 import { useForm } from 'react-hook-form';
@@ -15,13 +16,59 @@ import {
 import { AiOutlineWarning } from 'react-icons/ai';
 
 export default function Signup() {
+  const [inputValue, setInputValue] = useState({
+    idValue: '',
+    pwValue: '',
+    phone: '',
+    seller: 1,
+    sellerName: '',
+    engSellerName: '',
+    customerContact: '',
+  });
   const history = useHistory();
   const { register, errors, watch, handleSubmit } = useForm({ mode: 'all' });
 
-  const onSubmit = (data) => {
+  const handleInput = (e) => {
+    const nextInputValue = {
+      ...inputValue,
+      [e.target.name]: e.target.value,
+    };
+    setInputValue(nextInputValue);
+  };
+
+  const onSubmit = async (data) => {
+    const {
+      idValue,
+      pwValue,
+      phone,
+      seller,
+      sellerName,
+      engSellerName,
+      customerContact,
+    } = inputValue;
     console.log(data);
     if (confirm('입력하신 정보로 셀러신청을 하시겠습니까?') === true) {
-      history.push('/Login');
+      try {
+        const result = await axios.post(
+          `http://10.251.1.196:5000/account/signup`,
+
+          JSON.stringify({
+            identification: idValue,
+            password: pwValue,
+            account_type_id: 2,
+            contact: phone,
+            korean_name: sellerName,
+            english_name: engSellerName,
+            cs_contact: customerContact,
+            attribute_id: seller,
+          }),
+          { headers: { 'Content-Type': 'application/json' }, timeout: 3000 }
+        );
+        console.log(result);
+      } catch (err) {
+        console.log(err);
+      }
+      history.push('/');
     }
   };
 
@@ -32,6 +79,12 @@ export default function Signup() {
       return false;
     }
   }
+
+  //   function handleSeller (e) {
+  // if(e.target.value === '쇼핑몰'){
+  //   const nextInputValue
+  // }
+  //   }
 
   return (
     <Container>
@@ -48,7 +101,7 @@ export default function Signup() {
               {/* id에 에러가 발생할 경우, */}
               <TiUserOutline color={errors.id ? '#b94a48' : null} />
               <input
-                name='id'
+                name='idValue'
                 type='text'
                 placeholder='아이디'
                 ref={register({
@@ -58,13 +111,14 @@ export default function Signup() {
                     message: '아이디의 최소 길이는 5글자 입니다.',
                   },
                 })}
+                onChange={handleInput}
               />
             </IconInput>
             {errors.id && <p>{errors.id.message}</p>}
             <IconInput className={errors.password && 'ErrorInput'}>
               <TiLockClosedOutline color={errors.password ? '#b94a48' : null} />
               <input
-                name='password'
+                name='pwValue'
                 type='password'
                 placeholder='비밀번호'
                 ref={register({
@@ -76,6 +130,7 @@ export default function Signup() {
                       '비밀번호는 8~20글자의 영문대소문자, 숫자, 특수문자를 조합해야 합니다.',
                   },
                 })}
+                onChange={handleInput}
               />
             </IconInput>
             {errors.password && <p>{errors.password.message}</p>}
@@ -87,7 +142,7 @@ export default function Signup() {
                 placeholder='비밀번호 재입력'
                 ref={register({
                   validate: (value) =>
-                    value === watch('password') ||
+                    value === watch('pwValue') ||
                     '비밀번호가 일치하지 않습니다',
                 })}
               />
@@ -107,6 +162,7 @@ export default function Signup() {
                 ref={register({
                   required: '필수 입력항목입니다.',
                 })}
+                onChange={handleInput}
               />
             </IconInput>
             {errors.phone && <p>{errors.phone.message}</p>}
@@ -121,7 +177,7 @@ export default function Signup() {
               <label>
                 <input
                   name='seller'
-                  name='shoppingmall'
+                  value='1'
                   type='radio'
                   defaultChecked='checked'
                   ref={register()}
@@ -129,58 +185,8 @@ export default function Signup() {
                 쇼핑몰
               </label>
               <label>
-                <input
-                  name='seller'
-                  name='market'
-                  type='radio'
-                  ref={register()}
-                />
+                <input name='seller' value='2' type='radio' ref={register()} />
                 마켓
-              </label>
-              <label>
-                <input
-                  name='seller'
-                  name='roadshop'
-                  type='radio'
-                  ref={register()}
-                />
-                로드샵
-              </label>
-              <label>
-                <input
-                  name='seller'
-                  name='designer'
-                  type='radio'
-                  ref={register()}
-                />
-                디자이너브랜드
-              </label>
-              <label>
-                <input
-                  name='seller'
-                  name='general'
-                  type='radio'
-                  ref={register()}
-                />
-                제너럴브랜드
-              </label>
-              <label>
-                <input
-                  name='seller'
-                  name='national'
-                  type='radio'
-                  ref={register()}
-                />
-                내셔널브랜드
-              </label>
-              <label>
-                <input
-                  name='seller'
-                  name='beauty'
-                  type='radio'
-                  ref={register()}
-                />
-                뷰티
               </label>
             </IntputRadio>
             <IconInput className={errors.sellerName && 'ErrorInput'}>
@@ -197,6 +203,7 @@ export default function Signup() {
                     message: '한글,영문,숫자만 입력해주세요.',
                   },
                 })}
+                onChange={handleInput}
               />
             </IconInput>
             {errors.sellerName && <p>{errors.sellerName.message}</p>}
@@ -214,6 +221,7 @@ export default function Signup() {
                     message: '셀러 영문명은 소문자만 입력가능합니다.',
                   },
                 })}
+                onChange={handleInput}
               />
             </IconInput>
             {errors.engSellerName && <p>{errors.engSellerName.message}</p>}
@@ -227,6 +235,7 @@ export default function Signup() {
                 ref={register({
                   required: '필수 입력항목입니다.',
                 })}
+                onChange={handleInput}
               />
             </IconInput>
             {errors.customerContact && <p>{errors.customerContact.message}</p>}
@@ -374,7 +383,7 @@ const Button = styled.input`
   color: #fff;
   ${(props) =>
     props.primary &&
-    css`
+    css`g
       background-color: #5bc0de;
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;

@@ -70,7 +70,7 @@ export default function Login() {
           timeout: 3000,
         }
       );
-      console.log(result.data.success);
+      // console.log(result.data.success);
 
       const getIsMaster = await result.data.success.is_master;
       const getNavList = await result.data.success.nav_list;
