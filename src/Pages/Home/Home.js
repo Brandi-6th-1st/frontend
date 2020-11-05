@@ -1,8 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import regeneratorRuntime from 'regenerator-runtime';
-import Highcharts from 'highcharts';
+import Highcharts, { error } from 'highcharts';
 // import HighchartsReact from 'highcharts-react-official';
 // import { GoGraph } from 'react-icons/go';
 import ProductManage from './Components/ProductManage';
@@ -17,6 +18,7 @@ import Chart from './Components/Chart';
 import { API } from '../../config';
 
 export default function Home() {
+  const history = useHistory();
   // axios시 받은 data를 data 상태로 관리한다.
   const [sellerStatus, setSellerStatus] = useState();
 
@@ -34,11 +36,29 @@ export default function Home() {
         },
         timeout: 3000,
       });
-      // 받아온 데이터를 비구조 할당하여 data에 저장한다.
-      const DataHomeSeller = result.data.success;
-      setSellerStatus(DataHomeSeller);
+      if (result.status === 200) {
+        // 받아온 데이터를 비구조 할당하여 data에 저장한다.
+        const DataHomeSeller = result.data.success;
+        setSellerStatus(DataHomeSeller);
+      } else {
+        alert(result.data.client_message);
+        history.push('/');
+      }
     } catch (err) {
-      console.log(err);
+      if (err.response) {
+        if (err.response.statusText === 'CONFLICT') {
+          alert(err.response.data.client_message);
+          history.push('/');
+        }
+      } else if (error.request) {
+        // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+        // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
+        // Node.js의 http.ClientRequest 인스턴스입니다.
+        console.log(err.request);
+      } else {
+        // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+        console.log('Error', error.message);
+      }
     }
   };
 

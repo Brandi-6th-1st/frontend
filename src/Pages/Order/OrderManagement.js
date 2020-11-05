@@ -122,12 +122,33 @@ export default function OrderManagement() {
           timeout: 3000, //3초
         }
       );
-
-      const { DataProductManage } = result.data;
-      setOrderList(DataProductManage.productItem);
+      if (result.status === 200) {
+        const { DataProductManage } = result.data;
+        setOrderList(DataProductManage.productItem);
+      } else {
+        if (result.statusText === 'CONFLICT') {
+          alert(result.data.client_message);
+          history.push('/');
+        }
+      }
     } catch (err) {
-      //에러 처리 예정
-      console.log(err);
+      console.log('erer', err);
+      if (err.response) {
+        if (err.response.statusText === 'UNAUTHORIZED') {
+          alert(err.response.data.client_message);
+          history.push('/');
+        }
+      } else if (err.request) {
+        alert('서버에서 응답이 없습니다.', err.request);
+        console.log('서버 응답 실패');
+        console.log(err.request);
+      } else {
+        alert('메세지 에러', err.message);
+        console.log(err.message);
+        if (err.message === '[INVILD_MESSAGE]') {
+          alert('무슨 응답을 받았습니다.', err.message);
+        }
+      }
     }
   };
 

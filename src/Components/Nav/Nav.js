@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import NavList from './NavList';
 import { KeyboardArrowLeft } from '@styled-icons/material';
 
 export default function Nav() {
+  const history = useHistory();
   const [active, setActive] = useState([0, 0]);
   const [navData, setNavData] = useState([]);
   const [subActive, setSubActive] = useState(0);
@@ -17,6 +19,11 @@ export default function Nav() {
 
   //nav가 변경되면 nav 데이터를 최신화
   useEffect(() => {
+    if (!nav_list[0]) {
+      alert('다시 로그인 해주세요.');
+      history.push('/');
+    }
+
     setNavData(nav_list);
   }, [nav_list]);
 
