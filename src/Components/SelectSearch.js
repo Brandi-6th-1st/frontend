@@ -31,7 +31,7 @@ export default function SelectSearch({ query, setQuery }) {
 const SearchBox = styled.div`
   display: table;
   border: 1px solid #e5e5e5;
-  width: 68%;
+  width: 51%;
   margin: 0;
 
   @media only screen and (max-width: 934px) {

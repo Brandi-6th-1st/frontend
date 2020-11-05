@@ -4,19 +4,18 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import dateFormatChange from '../../Components/ChangeTimeFormat';
-import { ko } from 'date-fns/esm/locale';
-import DatePicker from 'react-datepicker';
-import '../../Styles/datepick.css';
+// import { ko } from 'date-fns/esm/locale';
+// import '../../Styles/datepick.css';
 import styled from 'styled-components';
 import ProductDetail from './Components/ProductDetail';
-import CallendarManage from '../../Components/CallendarManage';
+// import CallendarManage from '../../Components/CallendarManage';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import Purchase from '../../Components/Purchase';
-import SelectSearch from '../../Components/SelectSearch';
-import FilterBox from '../../Components/FilterBox';
-import SellerSearchFilter from '../../Components/SellerSearchFilter';
+// import SelectSearch from '../../Components/SelectSearch';
+// import FilterBox from '../../Components/FilterBox';
+// import SellerSearchFilter from '../../Components/SellerSearchFilter';
 import FiltersContainer from './Components/FiltersContainer';
 import { API } from '../../config';
 
@@ -105,8 +104,8 @@ export default function ProductManagement() {
     const localToken = localStorage.getItem('token');
 
     try {
-      const result = await axios.get(`/public/Data/DataProductManage.json`, {
-        // const result = await axios.get(`${API}/product`, {
+      // const result = await axios.get(`/public/Data/DataProductManage.json`, {
+      const result = await axios.get(`${API}/product`, {
         params: param,
         timeout: 3000, //3초,
         headers: {
@@ -412,50 +411,6 @@ export default function ProductManagement() {
             handleSearch={handleSearch}
             resetFilter={resetFilter}
           />
-          {/* <FilterContainer>
-            <FilterCategoryTitle>
-              <FilterTitle>조회 기간</FilterTitle>
-              시작일, 마감일을 출력하는 date picker 컴포넌트
-              <CallendarManage
-                currentDate={currentDate}
-                handleStartDate={handleStartDate}
-                handleEndDate={handleEndDate}
-              />
-            </FilterCategoryTitle>
-            <FiltersCategoryTitle>
-              마스터에만 있는 셀러명 필터 렌더
-              {differentFilter && differentFilter.id === sellerNameId && (
-                셀러명 필터를 출력하는 컴포넌트
-                <SellerSearchFilter
-                  differentFilter={differentFilter}
-                  setQuery={setQuery}
-                  query={query}
-                />
-              )}
-              <SelectFilterCategory>
-                상품카테고리 선택 후 검색하는 컴포넌트
-                <SelectSearch query={query} setQuery={setQuery} />
-              </SelectFilterCategory>
-            </FiltersCategoryTitle>
-            각 필터별로 다른 name을 가지기 때문에 각각 렌더
-            {filters.filter_list &&
-              filters.filter_list.map((cate, i) => {
-                return (
-                  <FilterBox
-                    key={i}
-                    cate={cate}
-                    i={i}
-                    changeFilter={changeFilter}
-                    filterStatus={filterStatus}
-                  />
-                );
-              })}
-            <SearchContainer>
-              <SearchBtn onClick={handleSearch}>검색</SearchBtn>
-              <CanclehBtn onClick={resetFilter}>초기화</CanclehBtn>
-            </SearchContainer>
-          </FilterContainer>
-           */}
           <ProductDetail
             product={product}
             setProduct={setProduct}
@@ -493,79 +448,5 @@ const Section = styled.div`
     margin-bottom: 15px;
     font-weight: 300;
     color: #666;
-  }
-`;
-
-const FilterContainer = styled.div`
-  width: 100%;
-  border: 3px solid #eee;
-  background-color: #fff;
-  margin-bottom: 20px;
-`;
-
-const FilterCategoryTitle = styled.div`
-  ${({ theme }) => theme.flex('', 'center')}
-  margin-top: 10px;
-  margin-bottom: 5px;
-  padding-right: 15px;
-
-  select {
-    ${({ theme }) => theme.flex('', 'center')}
-    width: 100px;
-    height: 30px;
-    margin-left: 15px;
-    border: 1px solid #e5e5e5;
-  }
-`;
-
-const FiltersCategoryTitle = styled(FilterCategoryTitle)`
-  @media only screen and (max-width: 934px) {
-    ${({ theme }) => theme.flex('', 'center', 'column')}
-  }
-`;
-
-const SelectFilterCategory = styled(FilterCategoryTitle)`
-  display: inline-flex;
-  width: ${({ cate }) => (cate > 5 ? '100%' : '50%')};
-
-  @media only screen and (max-width: 940px) {
-    width: 100%;
-  }
-`;
-
-const FilterTitle = styled.div`
-  ${({ theme }) => theme.flex('', 'center')}
-  width: 100px;
-  height: 25px;
-  padding-left: 15px;
-  color: #222222;
-  text-overflow: hidden;
-  white-space: nowrap;
-`;
-
-const SearchContainer = styled(FilterCategoryTitle)`
-  ${({ theme }) => theme.flex('center')}
-`;
-
-const CanclehBtn = styled.button`
-  padding: 6px 50px;
-  border: 1px solid #adadad;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #e6e6e6;
-  }
-`;
-
-const SearchBtn = styled.button`
-  padding: 6px 50px;
-  border: 1px solid #adadad;
-  margin-right: 4px;
-  background-color: #428bca;
-  color: white;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #3071a9;
   }
 `;

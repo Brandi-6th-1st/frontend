@@ -181,17 +181,18 @@ export default function ProductDetail({
         // {
         // ...product,
         // DataProductManage:
-        product.map((item) => {
-          if (checkProduct.includes(String(item.product_number))) {
-            return {
-              ...item,
-              is_on_sale: sales !== '' ? sales : item.is_on_sale,
-              is_displayed: display !== '' ? display : item.is_displayed,
-            };
-          } else {
-            return item;
-          }
-        })
+        product &&
+          product.map((item) => {
+            if (checkProduct.includes(String(item.product_number))) {
+              return {
+                ...item,
+                is_on_sale: sales !== '' ? sales : item.is_on_sale,
+                is_displayed: display !== '' ? display : item.is_displayed,
+              };
+            } else {
+              return item;
+            }
+          })
         // }
       );
       changeProduct();
@@ -400,7 +401,7 @@ export default function ProductDetail({
           activePage={activePage}
           itemsCountPerPage={Number(query.limit)}
           totalItemsCount={
-            product && product.total_product && product.total_product
+            product && product.total_product && Number(product.total_product)
           }
           pageRangeDisplayed={5}
           onChange={(pageNumber) => {

@@ -3,12 +3,12 @@ import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import './datepick.css';
 
-export default function DateFilter({ searchDate, setSearchDate }) {
+export default function DateFilter({ handleStartDate, handleEndDate }) {
   return (
     <InquiryperiodBox>
       <SelectPeriod
         selected={searchDate.startDate}
-        onChange={(date) => setSearchDate({ ...searchDate, startDate: date })}
+        onChange={(date) => handleStartDate(date)}
         dateFormat="yyyy-MM-dd"
         placeholderText="클릭해주세요."
         shouldCloseOnSelect={false}
@@ -16,7 +16,7 @@ export default function DateFilter({ searchDate, setSearchDate }) {
       <span>~</span>
       <SelectPeriod
         selected={searchDate.endDate}
-        onChange={(date) => setSearchDate({ ...searchDate, endDate: date })}
+        onChange={(date) => handleEndDate(date)}
         dateFormat="yyyy-MM-dd"
         placeholderText="클릭해주세요."
         shouldCloseOnSelect={false}

@@ -1,17 +1,20 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import DateFilter from './DateFilter';
+import CallendarManage from '../../Components/CallendarManage';
 
 export default function Filter({
   pagetext,
-  searchDate,
-  setSearchDate,
+  currentDate,
+  setCurrentDate,
   handleDate,
   selectDate,
   params,
   setParams,
   sendQuery,
   filterReset,
+  handleStartDate,
+  handleEndDate,
 }) {
   return (
     <FilterContainer>
@@ -84,7 +87,12 @@ export default function Filter({
             onClick={(e) => handleDate(e.target.value, 5)}
           />
         </FilterBox>
-        <DateFilter searchDate={searchDate} setSearchDate={setSearchDate} />
+        <CallendarManage
+          currentDate={currentDate}
+          setCurrentDate={setCurrentDate}
+          handleStartDate={handleStartDate}
+          handleEndDate={handleEndDate}
+        />
       </Divs>
       <Div>
         <Button search onClick={() => sendQuery()}>
@@ -114,8 +122,9 @@ const Div = styled.div`
     padding-right: 100px;
   }
   span {
-    width: 90px;
+    /* width: 90px; */
     margin-right: 35px;
+    text-align: center;
     font-size: 14px;
     color: #222;
   }

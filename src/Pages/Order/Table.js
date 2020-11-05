@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import regeneratorRuntime from 'regenerator-runtime';
 import axios from 'axios';
@@ -6,6 +7,8 @@ import { API } from '../../config';
 import ORDER_EXAMPLE from './DataOrder';
 
 export default function Table({ pagetext, orderList, setOrderList }) {
+  const history = useHistory();
+
   // 전체 버튼의 클릭 상태
   const [allCheck, setAllCheck] = useState(false);
 
@@ -70,7 +73,7 @@ export default function Table({ pagetext, orderList, setOrderList }) {
 
     try {
       const result = await axios.post(
-        `${API}/product`,
+        `${API}/order/change`,
         { ...changeData },
         {
           headers: {
@@ -80,9 +83,15 @@ export default function Table({ pagetext, orderList, setOrderList }) {
           timeout: 3000,
         }
       );
+
+      console.log(result.data);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const goToProductDetail = (code) => {
+    history.push(`/${code}`);
   };
 
   const changedApply = (e) => {
@@ -168,9 +177,22 @@ export default function Table({ pagetext, orderList, setOrderList }) {
                   </td>
                   {Object.values(order)
                     .slice(1)
-                    .map((el, index) => (
-                      <td key={index}>{el}</td>
-                    ))}
+                    .map((el, index) =>
+                      order.detail_order_number === el ? (
+                        <td
+                          key={index}
+                          onClick={(el) =>
+                            goToProductDetail(order.detail_order_number)
+                          }
+                        >
+                          {el}
+                        </td>
+                      ) : (
+                        order.order_status_id !== el && (
+                          <td key={index}>{el}</td>
+                        )
+                      )
+                    )}
                 </tr>
               ))}
           </tbody>
