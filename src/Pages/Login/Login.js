@@ -9,6 +9,8 @@ import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import LoginFooter from './LoginFooter';
+import API from '../../config';
+
 export default function Login() {
   const [inputValue, setInputValue] = useState({
     idValue: 'lovemono',
@@ -57,7 +59,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const result = await axios.post(
-        `http://192.168.7.47:5000/account/signin`,
+        `${API}/account/signin`,
         { identification: idValue, password: pwValue },
         {
           headers: {
