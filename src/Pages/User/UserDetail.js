@@ -1,17 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import regeneratorRuntime from 'regenerator-runtime';
 import Header from '../../Components/Header/Header';
 import Nav from '../../Components/Nav/Nav';
-import AccountManagementTitle from './AccountManagementTitle';
 import SellerInfoManagement from './SellerInfoManagement';
 import Footer from '../../Components/Footer/Footer';
-import { API } from '../../config';
+import API from '../../config';
 
-export default function User() {
-  //마스터,셀러 여부 담을 state
+function UserDetail() {
   const [masterType, setMasterType] = useState();
   //계정 관리 페이지 data 담을 state
   const [sellerList, setSellerList] = useState();
@@ -46,48 +41,17 @@ export default function User() {
 
   //셀러 계정 관리 페이지 초기 데이터
   const getSellerData = () => {
-    fetch(`http://10.58.4.26:5000/account/sellerlist`, {
-      headers: {
-        Authorization: localStorage.getItem('token'),
-      },
-    })
-      // fetch(`/public/Data/SellerList.json`)
+    // fetch(`http://192.168.7.8:5000/account/sellerlist`)
+    fetch(`/public/Data/SellerList.json`)
       .then((response) => response.json())
-      .then((result) => setSellerList(result));
+      // .then((result) => setSellerList(result));
+      .then((result) => setSellerList(result.seller_list));
   };
 
   //셀러 계정 관리 페이지 search 버튼 클릭 시 실행될 함수
   const handleSellerData = async () => {
-    const {
-      limit,
-      offset,
-      id,
-      identification,
-      english_name,
-      korean_name,
-      manager_name,
-      contact,
-      email,
-    } = filter;
-    const nextFilter = {
-      ...filter,
-      //input을 클릭했지만,값을 입력하지 않은 경우에는 빈 스트링으로 저장됨. 이 경우 값을 null로 바꿔주기
-
-      // limit이 10인 경우 querystring 보내지 않음
-      limit: limit !== '10' ? limit : null,
-      //1페이지의 경우 querystrign 보내지 않음
-      offset: currentPage !== 1 ? offset : null,
-      id: id ? id : null,
-      identification: identification ? identification : null,
-      english_name: english_name ? english_name : null,
-      korean_name: korean_name ? korean_name : null,
-      manager_name: manager_name ? manager_name : null,
-      contact: contact ? contact : null,
-      email: email ? email : null,
-    };
-    setFilter(nextFilter);
     const result = await axios.get(
-      `http://10.58.4.26:5000/account/sellerlist`,
+      `http://192.168.7.8:5000/account/sellerlist`,
       {
         params: filter,
       },
@@ -121,35 +85,43 @@ export default function User() {
     setMasterType(is_master);
   }, []);
 
-  console.log(filter);
+  //img upload
+  const [imgBase64, setImgBase64] = useState(''); // 업로드 될 이미지
+  const [imgFile, setImgFile] = useState(null); // 파일 전송을 위한 state
+
+  const handleChangeFile = (event) => {
+    let reader = new FileReader();
+
+    reader.onloadend = (e) => {
+      // 2. 읽기가 완료되면 아래 코드 실행
+      const base64 = reader.result;
+      if (base64) {
+        // 파일 base64 상태 업데이트
+        setImgBase64(base64.toString());
+      }
+    };
+    if (event.target.files[0]) {
+      // 1. 파일을 읽어 버퍼에 저장
+      reader.readAsDataURL(event.target.files[0]);
+      // 파일 상태 업데이트
+      setImgFile(event.target.files[0]);
+      console.log(imgFile);
+    }
+  };
   return (
     <Fragment>
       <Header />
       <Container>
         <Nav />
-        {is_master ? (
-          <AccountManagementTitle
-            sellerList={sellerList}
-            filter={filter}
-            setFilter={setFilter}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            handleSellerData={handleSellerData}
-            sellerPerPage={sellerPerPage}
-            handleRecordCount={handleRecordCount}
-            getSellerData={getSellerData}
-          />
-        ) : (
-          <SellerInfoManagement
-            sellerInfo={sellerInfo}
-            setSellerInfo={setSellerInfo}
-            handleChangeFile={handleChangeFile}
-            imgBase64={imgBase64}
-            setImgBase64={setImgBase64}
-            imgFile={imgFile}
-            setImgFile={setImgFile}
-          />
-        )}
+        <SellerInfoManagement
+          sellerInfo={sellerInfo}
+          setSellerInfo={setSellerInfo}
+          handleChangeFile={handleChangeFile}
+          imgBase64={imgBase64}
+          setImgBase64={setImgBase64}
+          imgFile={imgFile}
+          setImgFile={setImgFile}
+        />
       </Container>
       <Footer />
     </Fragment>
@@ -160,3 +132,5 @@ const Container = styled.div`
   width: 100%;
   display: flex;
 `;
+
+export default UserDetail;

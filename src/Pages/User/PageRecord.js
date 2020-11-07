@@ -4,18 +4,14 @@ import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
 
 function PageRecord({
-  sellerList,
   filter,
   setFilter,
+  sellerList,
   currentPage,
   setCurrentPage,
+  sellerPerPage,
+  handleRecordCount,
 }) {
-  // const { limit, offset } = filter;
-  // const [currentPage, setCurrentPage] = useState(1);
-
-  //limit: limt != 10 ? limit : null,
-  //   offset:
-  //     (currentPage - 1) * limit !== 0 ? (currentPage - 1) * limit : null,
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -27,14 +23,19 @@ function PageRecord({
     }
   };
 
-  const handleLimit = (e) => {
-    e.persist();
-    const nextFilter = {
-      ...filter,
-      limit: Number(e.target.value),
-    };
-    setFilter(nextFilter);
+  const hanleOffset = () => {
+    if (currentPage !== 1) {
+      const nextFilter = {
+        ...filter,
+        offset: currentPage * sellerPerPage,
+      };
+      setFilter(nextFilter);
+    }
   };
+
+  useEffect(() => {
+    hanleOffset();
+  }, [currentPage, sellerPerPage]);
 
   return (
     <Container>
@@ -45,21 +46,24 @@ function PageRecord({
         </PageButton>
         <PageInput
           type='text'
-          value={currentPage ? currentPage : ''}
+          value={currentPage ? currentPage : 1}
           min='1'
           readOnly
         />
         <PageButton onClick={handleNextPage}>
           <AiOutlineRight />
         </PageButton>
-        {/*계산계산*/}
         <p>
-          of <span>{sellerList && sellerList.length}</span>{' '}
+          of
+          <span>
+            {/* limit에 따른 보여질 페이지 수  */}
+            {sellerList && Math.floor(sellerList.length / filter.limit)}
+          </span>
         </p>
       </Page>
       <ViewRecords>
         <span>View</span>
-        <Select onChange={handleLimit}>
+        <Select value={sellerPerPage} onChange={handleRecordCount}>
           <option value='10'>10</option>
           <option value='20'>20</option>
           <option value='50'>50</option>

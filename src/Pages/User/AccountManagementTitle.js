@@ -12,6 +12,8 @@ function AccountManagementTitle({
   setCurrentPage,
   sellerPerPage,
   handleSellerData,
+  handleRecordCount,
+  getSellerData,
 }) {
   return (
     <Container>
@@ -35,6 +37,8 @@ function AccountManagementTitle({
           setCurrentPage={setCurrentPage}
           sellerPerPage={sellerPerPage}
           handleSellerData={handleSellerData}
+          handleRecordCount={handleRecordCount}
+          getSellerData={getSellerData}
         />
       </Fragment>
     </Container>

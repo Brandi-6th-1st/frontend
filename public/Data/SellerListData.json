@@ -11,7 +11,16 @@
       "manager_email": "aaaa@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 2,
@@ -24,7 +33,16 @@
       "manager_email": "chanel@gmail.com",
       "seller_attribute": "마켓",
       "created_at": "2020-12-27 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 3,
@@ -37,7 +55,16 @@
       "manager_email": "sample@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 4,
@@ -50,7 +77,16 @@
       "manager_email": "aaaa@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 5,
@@ -63,7 +99,16 @@
       "manager_email": "bear@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 6,
@@ -76,7 +121,16 @@
       "manager_email": "tears@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 7,
@@ -89,7 +143,16 @@
       "manager_email": "filtermask@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 8,
@@ -102,7 +165,16 @@
       "manager_email": "handcreame@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 9,
@@ -116,7 +188,16 @@
       "manager_email": "myhome@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 10,
@@ -129,7 +210,456 @@
       "manager_email": "disney@gmail.com",
       "seller_attribute": "쇼핑몰",
       "created_at": "2020-12-25 20:02:05",
-      "actions": ""
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "account": "juheetest",
+      "eng_name": "heeshop",
+      "kor_name": "heeshop",
+      "manager_name": "",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-27 13:24:11",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "account": "lestest",
+      "eng_name": "testtest",
+      "kor_name": "testtest",
+      "manager_name": "",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 17:11:58",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "account": "bt3333",
+      "eng_name": "bress123121321",
+      "kor_name": "비티3333",
+      "manager_name": "이정필",
+      "status_name": "입점",
+      "manager_phone_number": "010-8516-1399",
+      "manager_email": "leejp@brandi.co.kr",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 16:48:52",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "account": "dogiri",
+      "eng_name": "ddogil",
+      "kor_name": "또길",
+      "manager_name": "문도길",
+      "status_name": "입점",
+      "manager_phone_number": "999-9999-9999",
+      "manager_email": "dadk93@gmail.com",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 15:26:57",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "account": "bt1026",
+      "eng_name": "bt1026",
+      "kor_name": "비티1026",
+      "manager_name": "이정필",
+      "status_name": "입점",
+      "manager_phone_number": "010-8516-1399",
+      "manager_email": "leejp@brandi.co.kr",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 14:10:34",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "account": "test1026",
+      "eng_name": "test1026",
+      "kor_name": "테스트1026",
+      "manager_name": "이정필",
+      "status_name": "입점",
+      "manager_phone_number": "010-8516-1399",
+      "manager_email": "leejp@brandi.co.kr",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 11:25:51",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "account": "limeunsu",
+      "eng_name": "test1787",
+      "kor_name": "test1787",
+      "manager_name": "test",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 00:32:02",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "account": "brandtest1023",
+      "eng_name": "brandtest1023",
+      "kor_name": "브랜드테스트1023",
+      "manager_name": "이정필",
+      "status_name": "입점",
+      "manager_phone_number": "010-8516-1399",
+      "manager_email": "leejp@brandi.co.kr",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-23 16:21:51",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "account": "test1023",
+      "eng_name": "test1023",
+      "kor_name": "테스트1023",
+      "manager_name": "",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-23 09:33:49",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "account": "parkds2test001",
+      "eng_name": "parkds2shop4",
+      "kor_name": "대섭상점4",
+      "manager_name": "",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-21 10:16:23",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "account": "juheetest",
+      "eng_name": "heeshop",
+      "kor_name": "heeshop",
+      "manager_name": "",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-27 13:24:11",
+      "action": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "account": "lestest",
+      "eng_name": "testtest",
+      "kor_name": "testtest",
+      "manager_name": "",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 17:11:58",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "account": "bt3333",
+      "eng_name": "bress123121321",
+      "kor_name": "비티3333",
+      "manager_name": "이정필",
+      "status_name": "입점",
+      "manager_phone_number": "010-8516-1399",
+      "manager_email": "leejp@brandi.co.kr",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 16:48:52",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "account": "dogiri",
+      "eng_name": "ddogil",
+      "kor_name": "또길",
+      "manager_name": "문도길",
+      "status_name": "입점",
+      "manager_phone_number": "999-9999-9999",
+      "manager_email": "dadk93@gmail.com",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 15:26:57",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "account": "bt1026",
+      "eng_name": "bt1026",
+      "kor_name": "비티1026",
+      "manager_name": "이정필",
+      "status_name": "입점",
+      "manager_phone_number": "010-8516-1399",
+      "manager_email": "leejp@brandi.co.kr",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 14:10:34",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "account": "test1026",
+      "eng_name": "test1026",
+      "kor_name": "테스트1026",
+      "manager_name": "이정필",
+      "status_name": "입점",
+      "manager_phone_number": "010-8516-1399",
+      "manager_email": "leejp@brandi.co.kr",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 11:25:51",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "account": "limeunsu",
+      "eng_name": "test1787",
+      "kor_name": "test1787",
+      "manager_name": "test",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-26 00:32:02",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "account": "brandtest1023",
+      "eng_name": "brandtest1023",
+      "kor_name": "브랜드테스트1023",
+      "manager_name": "이정필",
+      "status_name": "입점",
+      "manager_phone_number": "010-8516-1399",
+      "manager_email": "leejp@brandi.co.kr",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-23 16:21:51",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "account": "test1023",
+      "eng_name": "test1023",
+      "kor_name": "테스트1023",
+      "manager_name": "",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-23 09:33:49",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "account": "parkds2test001",
+      "eng_name": "parkds2shop4",
+      "kor_name": "대섭상점4",
+      "manager_name": "",
+      "status_name": "입점",
+      "manager_phone_number": "010-0000-0000",
+      "manager_email": "",
+      "seller_category": "쇼핑몰",
+      "register_date": "2020-10-21 10:16:23",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     }
   ]
 }

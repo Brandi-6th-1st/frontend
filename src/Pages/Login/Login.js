@@ -9,6 +9,8 @@ import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import LoginFooter from './LoginFooter';
+import API from '../../config';
+
 export default function Login() {
   const [inputValue, setInputValue] = useState({
     idValue: 'lovemono',
@@ -40,24 +42,31 @@ export default function Login() {
   //pw:
   // PW1!soojsooj
 
+  //master2
+  //jieun1234
+  //Qweasd1234
+
+  //seller
   // lovemono
   // PW1!lovemono
 
-  //seller
+  //seller2
   // id: seller1
   //pw: PW1!seller1
 
+  //master type, filter, nav 정보 확인
   const { is_master, filter_list, nav_list } = useSelector(({ userInfo }) => ({
     is_master: userInfo.is_master,
     filter_list: userInfo.filter_list,
     nav_list: userInfo.nav_list,
   }));
 
+  //로그인 통신 함수
   const loggedIn = async (e) => {
     e.preventDefault();
     try {
       const result = await axios.post(
-        `http://10.251.1.47:5000/account/signin`,
+        'http://10.58.4.26:5000/account/signin',
         { identification: idValue, password: pwValue },
         {
           headers: {
@@ -66,11 +75,11 @@ export default function Login() {
           timeout: 3000,
         }
       );
-      // console.log(result.data.success);
 
+      //전역으로 관리할 마스터타입, filter, nav 저장
       const getIsMaster = await result.data.success.is_master;
-      const getNavList = await result.data.success.nav_list;
       const getFilterList = await result.data.success.filter_list;
+      const getNavList = await result.data.success.nav_list;
 
       if (!!result.data.success.Authorization) {
         localStorage.setItem('token', result.data.success.Authorization);
@@ -134,7 +143,6 @@ const Content = styled.div`
   ${({ theme }) => theme.flex('center', 'center', 'column')}
   height: 100vh;
   padding: 65px 0 50px;
-
   p {
     margin-top: 5px;
     font-size: 12px;
@@ -165,7 +173,6 @@ const Input = styled.input`
   padding: 13px 16px;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
-
   &.ErrorInput {
     border: 1px solid #b94a48;
   }
@@ -203,7 +210,6 @@ const Button = styled.button`
 const Join = styled.div`
   ${({ theme }) => theme.flex('center', 'center')}
   margin-top: 20px;
-
   p {
     margin-right: 5px;
     font-size: 12px;

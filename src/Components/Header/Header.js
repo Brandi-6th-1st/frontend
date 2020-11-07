@@ -7,13 +7,13 @@ export default function Header() {
     <HeaderContainer>
       <Contents>
         <div>
-          <img src="public/Images/logo.png" />
-          <KeyboardArrowDown size="16" color="#CCC" />
+          <img src='/public/Images/logo.png' />
+          <KeyboardArrowDown size='16' color='#CCC' />
         </div>
       </Contents>
       <StatusBtn>
         <span>intern_master</span>
-        <KeyboardArrowDown size="15" color="#999ba2" />
+        <KeyboardArrowDown size='15' color='#999ba2' />
       </StatusBtn>
     </HeaderContainer>
   );

@@ -10,7 +10,10 @@ function SellerList({
   setFilter,
   currentPage,
   setCurrentPage,
+  sellerPerPage,
   handleSellerData,
+  handleRecordCount,
+  getSellerData,
 }) {
   return (
     <ListBox>
@@ -25,6 +28,8 @@ function SellerList({
           setFilter={setFilter}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          sellerPerPage={sellerPerPage}
+          handleRecordCount={handleRecordCount}
         />
         <Table>
           <SellerTable
@@ -32,6 +37,7 @@ function SellerList({
             filter={filter}
             setFilter={setFilter}
             handleSellerData={handleSellerData}
+            getSellerData={getSellerData}
           />
         </Table>
         <PageRecord
@@ -39,6 +45,8 @@ function SellerList({
           setFilter={setFilter}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          sellerPerPage={sellerPerPage}
+          handleRecordCount={handleRecordCount}
         />
       </Body>
     </ListBox>

@@ -5,15 +5,32 @@ import ImgBox from '../../Components/ImgBox/ImgBox';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning } from 'react-icons/ai';
 
-function BasicInfo({
-  sellerInfo,
-  handleChangeFile,
-  imgBase64,
-  setImgBase64,
-  imgFile,
-  setImgFile,
-}) {
+function BasicInfo({ sellerInfo }) {
   const [modalVisible, setModalVisible] = useState(false);
+
+  //profile img upload
+  const [profileImgBase64, setProfileImgBase64] = useState(''); // 업로드 될 이미지
+  const [profileImgFile, setProfileImgFile] = useState(null); // 파일 전송을 위한 state
+
+  const handleChangeFile = (event) => {
+    let reader = new FileReader();
+
+    reader.onloadend = (e) => {
+      // 2. 읽기가 완료되면 아래 코드 실행
+      const base64 = reader.result;
+      if (base64) {
+        // 파일 base64 상태 업데이트
+        setProfileImgBase64(base64.toString());
+      }
+    };
+    if (event.target.files[0]) {
+      // 1. 파일을 읽어 버퍼에 저장
+      reader.readAsDataURL(event.target.files[0]);
+      // 파일 상태 업데이트
+      setProfileImgFile(event.target.files[0]);
+      console.log(imgFile);
+    }
+  };
 
   const openModal = () => {
     setModalVisible(true);
@@ -46,11 +63,6 @@ function BasicInfo({
                   boxHeight='100px'
                   imgWidth='90px'
                   imgHeight='90px'
-                  handleChangeFile={handleChangeFile}
-                  imgBase64={imgBase64}
-                  setImgBase64={setImgBase64}
-                  imgFile={imgFile}
-                  setImgFile={setImgFile}
                   imgId={imgId}
                 />
                 <ExtraInfo>

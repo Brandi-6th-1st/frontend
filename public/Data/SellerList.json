@@ -3,38 +3,117 @@
     {
       "id": 1,
       "created_at": "2020-10-11",
-      "identification": "test",
-      "english_name": "english",
+      "identification": "test1",
+      "english_name": "english1",
       "korean_name": "김김김",
-      "name": "김이름",
-      "s_name": "입점",
+      "manager_name": "김이름",
+      "status": "입점",
       "contact": "010-1111-1111",
       "email": "aaa@gmail.com",
-      "at_name": "쇼핑몰"
+      "attribute_id": "입점대기",
+      "at_name": "쇼핑몰",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 2,
-      "created_at": "wecode",
-      "identification": "test",
-      "english_name": "english",
-      "korean_name": "김김김",
-      "name": "김이름",
-      "s_name": "입점",
-      "contact": "010-1111-1111",
-      "email": "aaa@gmail.com",
-      "at_name": "쇼핑몰"
+      "created_at": "2020-09-20",
+      "identification": "test2",
+      "english_name": "english2",
+      "korean_name": "이이이",
+      "manager_name": "이이름",
+      "status": "입점",
+      "contact": "010-5555-5555",
+      "email": "bbb@gmail.com",
+      "attribute_id": "입점대기",
+      "at_name": "마켓",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     },
     {
       "id": 3,
-      "created_at": "wecode",
-      "identification": "test",
-      "english_name": "english",
-      "korean_name": "김김김",
-      "name": "김이름",
-      "s_name": "입점",
-      "contact": "010-1111-1111",
-      "email": "aaa@gmail.com",
-      "at_name": "쇼핑몰"
+      "created_at": "2020-10-01",
+      "identification": "test3",
+      "english_name": "english3",
+      "korean_name": "윤윤윤",
+      "manager_name": "윤이름",
+      "status": "입점",
+      "contact": "010-4444-4444",
+      "email": "ddd@gmail.com",
+      "attribute_id": "입점대기",
+      "at_name": "쇼핑몰",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "created_at": "2020-07-22",
+      "identification": "test4",
+      "english_name": "english4",
+      "korean_name": "박박박",
+      "manager_name": "박이름",
+      "status": "입점",
+      "contact": "010-3333-3333",
+      "email": "ccc@gmail.com",
+      "attribute_id": "입점대기",
+      "at_name": "마켓",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "created_at": "2020-02-11",
+      "identification": "test5",
+      "english_name": "english5",
+      "korean_name": "나나나",
+      "manager_name": "나이름",
+      "status": "입점",
+      "contact": "010-2222-2222",
+      "email": "aasb@gmail.com",
+      "attribute_id": "입점대기",
+      "at_name": "쇼핑몰",
+      "actions": [
+        {
+          "action_id": 1,
+          "action_name": "입점 승인"
+        },
+        {
+          "action_id": 2,
+          "action_name": "입점 거절"
+        }
+      ]
     }
   ]
 }

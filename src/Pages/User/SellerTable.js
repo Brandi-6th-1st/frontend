@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import dateFormatChange from '../../Components/ChangeTimeFormat';
 import { MdDateRange } from 'react-icons/md';
+import { BiSearchAlt2 } from 'react-icons/bi';
 import './react-datepicker.css';
 
-function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
+function SellerTable({
+  sellerList,
+  filter,
+  setFilter,
+  handleSellerData,
+  getSellerData,
+}) {
+  //필터 기간 정보 담을  state
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
+  const history = useHistory();
   const {
     id,
     identification,
     english_name,
     korean_name,
     manager_name,
-    status,
+    status_name,
     contact,
     email,
     attribute,
@@ -25,15 +35,17 @@ function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
     end_date,
   } = filter;
 
+  //입점 상태 값을 filter state에 담아줄 함수
   const handleSellerStatus = (e) => {
     e.persist();
     const nextFilter = {
       ...filter,
-      status: e.target.value,
+      status_name: e.target.value,
     };
     setFilter(nextFilter);
   };
 
+  //쇼핑몰 또는 마켓 정보를 filter state에 담아줄 함수
   const handleSellerAttribute = (e) => {
     e.persist();
     const nextFilter = {
@@ -43,6 +55,7 @@ function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
     setFilter(nextFilter);
   };
 
+  //번호, 셀러아이디, 영문이름, 한글이름,	담당자이름, 담당자연락처, 담당자이메일 값을 filter state에 담아줄 함수
   const handleInputChange = (e) => {
     e.persist();
     const nextFilter = {
@@ -52,6 +65,7 @@ function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
     setFilter(nextFilter);
   };
 
+  //시작~끝 날짜 정보를 filter state에 담아줄 함수
   const handleDate = () => {
     const nextFilter = {
       ...filter,
@@ -61,30 +75,15 @@ function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
     setFilter(nextFilter);
   };
 
-  // useEffect(() => {
-  //   handleSellerStatus();
-  //   handleSellerAttribute();
-  //   handleInputChange();
-  //   handleDate();
-  // }, [filter]);
-
-  // useEffect(() => {
-  //   handleSellerStatus();
-  // }, [seller_status]);
-
-  // useEffect(() => {
-  //   handleSellerAttribute();
-  // }, [seller_attribute]);
-
-  // useEffect(() => {
-  //   handleInputChange();
-  // }, []);
-
+  //시작 날짜, 끝 날짜가 변경될 때마다 handleDate함수가 실행되도록
   useEffect(() => {
     handleDate();
   }, [startDate, endDate]);
 
-  console.log('sellerTable_filter', filter);
+  //아이디 클릭시 상세페이지로 이동
+  const goToDetail = () => {
+    history.push('/userdetail');
+  };
 
   return (
     <Container>
@@ -140,7 +139,7 @@ function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
               />
             </td>
             <td>
-              <select value={status || ''} onChange={handleSellerStatus}>
+              <select value={status_name || ''} onChange={handleSellerStatus}>
                 <option value=''>Select</option>
                 <option value='1'>입점대기</option>
                 <option value='2'>입점</option>
@@ -159,7 +158,7 @@ function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
               <select value={attribute || ''} onChange={handleSellerAttribute}>
                 <option value='select'>Select</option>
                 <option value='1'>쇼핑몰</option>
-                <option value='2'>로드샵</option>
+                <option value='2'>마켓</option>
               </select>
             </td>
             <td>
@@ -195,44 +194,63 @@ function SellerTable({ sellerList, filter, setFilter, handleSellerData }) {
             <td>
               <ButtonGroup>
                 <Button onClick={(filter) => handleSellerData(filter)}>
+                  <BiSearchAlt2 />
                   Serarch
                 </Button>
-                <Button primary>Reset</Button>
+                <Button primary onClick={getSellerData}>
+                  Reset
+                </Button>
               </ButtonGroup>
             </td>
           </tr>
         </thead>
         <tbody>
           {sellerList &&
-            sellerList.map((seller) => {
+            sellerList.map((seller, i) => {
               const {
                 id,
-                identification,
-                english_name,
-                korean_name,
-                s_name,
-                status,
+                attribute_id,
                 contact,
-                email,
-                at_name,
                 created_at,
+                email,
+                english_name,
+                identification,
+                korean_name,
+                manager_name,
+                status_name,
+                actions,
               } = seller;
               return (
-                <tr key={id}>
+                <tr key={i}>
                   <td>
                     <input type='checkbox' />
                   </td>
                   <td>{id}</td>
-                  <td>{identification}</td>
+                  <td onClick={goToDetail}>{identification}</td>
                   <td>{english_name}</td>
                   <td>{korean_name}</td>
-                  <td>{s_name}</td>
-                  <td>{status}</td>
+                  <td>{manager_name}</td>
+                  <td>{status_name}</td>
                   <td>{contact}</td>
                   <td>{email}</td>
-                  <td>{at_name}</td>
+                  <td>{attribute_id}</td>
                   <td>{created_at}</td>
-                  <td></td>
+                  {/* 입점 상태에 따른 액션 버튼 개수(2개, 3개)가 달라서 map 함수 사용*/}
+                  <td>
+                    {actions &&
+                      actions.map((action, i) => {
+                        return (
+                          <ActionButton
+                            key={i}
+                            actionName={action.action_name}
+                            // 액션 타입에 따른 버튼 색 변경
+                            bgColor={ACTIONS[action.action_name]}
+                          >
+                            {action.action_name}
+                          </ActionButton>
+                        );
+                      })}
+                  </td>
                 </tr>
               );
             })}
@@ -318,7 +336,7 @@ const EndDateGroup = styled.div`
 `;
 
 const ButtonGroup = styled.div`
-  ${({ theme }) => theme.flex(null, null, 'column')}
+  ${({ theme }) => theme.flex('center', null, 'column')}
 `;
 const Button = styled.button`
   margin-bottom: 5px;
@@ -335,6 +353,24 @@ const Button = styled.button`
       background-color: #d9534f;
     `};
 `;
+
+const ActionButton = styled.button`
+  margin-right: 5px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background-color: ${({ bgColor }) => bgColor};
+  color: #fff;
+`;
+
+const ACTIONS = {
+  '입점 승인': '#5bc0de',
+  '입점 거절': '#d9534f',
+  '휴점 신청': '#f0ad4e',
+  '퇴점신청 처리': '#d9534f',
+  '휴점 해제': '#5cb85c',
+  '퇴점철회 처리': '#5cb85c',
+  '퇴점확정 처리': '#d9534f',
+};
 
 //Reducer
 // import React, { useReducer, useState, useEffect } from 'react';
