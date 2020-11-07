@@ -134,14 +134,14 @@ export default function ProductManagement() {
     } catch (err) {
       if (err.response) {
         // 토큰의 정보가 바뀌었다면, 백엔드에서 받은 message 팝업창 출력
-        if (err.response.statusText === 'UNAUTHORIZED') {
-          alert(err.response.data.client_message);
-          history.push('/');
-        }
-      } else if (err.request) {
-        alert('서버에서 응답이 없습니다.', err.request);
-      } else {
-        alert('메세지 에러', err.message);
+        //   if (err.response.statusText === 'UNAUTHORIZED') {
+        //     alert(err.response.data.client_message);
+        //     history.push('/');
+        //   }
+        // } else if (err.request) {
+        //   alert('서버에서 응답이 없습니다.', err.request);
+        // } else {
+        //   alert('메세지 에러', err.message);
       }
     }
   };
@@ -154,10 +154,10 @@ export default function ProductManagement() {
   // 페이지 언마운트 완료 후 실행
   useEffect(() => {
     if (isMounted) {
-      if (!filter_list[0]) {
-        alert('다시 로그인 해주세요.');
-        history.push('/');
-      }
+      // if (!filter_list[0]) {
+      //   alert('다시 로그인 해주세요.');
+      //   history.push('/');
+      // }
       getData();
     }
   }, [filter_list]);
