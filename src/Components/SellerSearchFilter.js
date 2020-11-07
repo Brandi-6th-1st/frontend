@@ -1,21 +1,15 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-export default function SellerSearchFilter({
-  differentFilter,
-  setQuery,
-  query,
-}) {
+export default function SellerSearchFilter({ sellerName, handleSellerName }) {
   return (
     <SelectFilterCategory>
-      <FilterTitle>
-        {differentFilter && differentFilter.filterTitle}
-      </FilterTitle>
+      <FilterTitle>셀러명</FilterTitle>
       <SellerSearchBox>
         <SellerSearch
-          name="셀러이름"
-          value={query.seller_name || ''}
-          onChange={(e) => setQuery({ ...query, seller_name: e.target.value })}
+          name="셀러명"
+          value={sellerName || ''}
+          onChange={(e) => handleSellerName(e)}
           type="text"
           placeholder="검색어를 입력하세요."
         ></SellerSearch>

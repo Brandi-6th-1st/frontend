@@ -1,7 +1,14 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-export default function FilterBox({ cate, i, changeFilter, filterStatus }) {
+export default function FilterBox({
+  cate,
+  i,
+  changeFilter,
+  filterStatus,
+  btnFilter,
+  handleBtnFilter,
+}) {
   return (
     <SelectFilterCategory cate={cate.category.length} key={i}>
       <SelectFilterTitle>{cate.filterTitle} :</SelectFilterTitle>
@@ -10,12 +17,10 @@ export default function FilterBox({ cate, i, changeFilter, filterStatus }) {
           return (
             <SelectBtn
               key={idx}
-              onClick={() =>
-                changeFilter(sub.category_id, idx, cate.filterTitle, cate.id)
-              }
+              onClick={() => handleBtnFilter(cate.id, sub.category_id, idx)}
               idx={idx}
-              filterStatus={filterStatus}
-              name={cate.filterTitle}
+              btnFilter={btnFilter}
+              name={cate.id}
             >
               {sub.category_title}
             </SelectBtn>
@@ -60,27 +65,19 @@ const FilterBtnBox = styled.div`
 `;
 
 const SelectBtn = styled.button`
-  background-color: ${({ name, filterStatus, idx }) =>
-    name &&
-    filterStatus &&
-    filterStatus.map((el) => !!el[name] && el[name][idx] && '#428bca')};
+  background-color: ${({ name, btnFilter, idx }) =>
+    btnFilter[`${name}Selected`][idx] && '#428bca'};
 
   &:hover {
-    background-color: ${({ name, filterStatus, idx }) =>
-      name &&
-      filterStatus &&
-      filterStatus.map((el) => !!el[name] && el[name][idx] && '#3071a9')};
+    background-color: ${({ name, btnFilter, idx }) =>
+      btnFilter[`${name}Selected`][idx] && '#3071a9'};
 
-    background-color: ${({ name, filterStatus, idx }) =>
-      name &&
-      filterStatus &&
-      filterStatus.map((el) => !!el[name] && !el[name][idx] && '#e6e6e6')};
+    background-color: ${({ name, btnFilter, idx }) =>
+      !btnFilter[`${name}Selected`][idx] && '#e6e6e6'};
   }
 
-  color: ${({ name, filterStatus, idx }) =>
-    name &&
-    filterStatus &&
-    filterStatus.map((el) => !!el[name] && el[name][idx] && 'white')};
+  color: ${({ name, btnFilter, idx }) =>
+    btnFilter[`${name}Selected`][idx] && 'white'};
 
   margin-right: 3px;
   padding: 6px 12px;

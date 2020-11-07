@@ -13,8 +13,8 @@ import {
 
 export default function ProductDetail({
   product,
-  setQuery,
-  query,
+  setLimit,
+  limit,
   setActivePage,
   activePage,
   setProduct,
@@ -31,7 +31,7 @@ export default function ProductDetail({
   );
   // 전체 상품 체크 상태
   const [allCheck, setAllCheck] = useState(false);
-  // 상품 디테일에서 체크된 id와 index를 관리하는 배열
+  // 상품 디테일에버 체크된 id와 index를 관리하는 배열
   const [checkProduct, setCheckProduct] = useState([]);
   // 상품의 판매, 진열 상태 변경하기 위한 상태
   const [changeStatus, setchangeStatus] = useState({
@@ -85,16 +85,14 @@ export default function ProductDetail({
   // limit 상태 업데이트
   const handleLimit = (e) => {
     setActivePage(1);
-    setQuery({
-      ...query,
-      limit: e.target.value,
-    });
+    setLimit(e.target.value);
   };
 
   // limit or page 변경시 쿼리스트링 변경하여 get
   useEffect(() => {
+    console.log(limit, activePage);
     sendData();
-  }, [query.limit, activePage]);
+  }, [limit, activePage]);
 
   // 상품의 갯수 변경시 해당 갯수만큼 불리언 배열 생성
   useEffect(() => {
@@ -230,7 +228,7 @@ export default function ProductDetail({
         </RootTitle>
         <LimitRange>
           <select
-            value={query.limit}
+            value={limit}
             onChange={(e) => {
               handleLimit(e);
             }}
@@ -399,7 +397,7 @@ export default function ProductDetail({
       <PaginationContainer>
         <Pagination
           activePage={activePage}
-          itemsCountPerPage={Number(query.limit)}
+          itemsCountPerPage={Number(limit)}
           totalItemsCount={
             product && product.total_product && Number(product.total_product)
           }
