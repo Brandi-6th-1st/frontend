@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import regeneratorRuntime from 'regenerator-runtime';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
-// import { saveNav } from '../../Store/Reducer/nav';
-// import { saveFilter } from '../../Store/Reducer/filter';
 import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
@@ -13,9 +11,10 @@ import { API } from '../../config';
 
 export default function Login() {
   const [inputValue, setInputValue] = useState({
-    idValue: 'lovemono',
-    pwValue: 'PW1!lovemono',
+    idValue: '',
+    pwValue: '',
   });
+
   // 구조화
   const { idValue, pwValue } = inputValue;
   const { register, handleSubmit, errors } = useForm();
@@ -41,25 +40,29 @@ export default function Login() {
   // soojsooj
   //pw:
   // PW1!soojsooj
-
+  //master2
+  //jieun1234
+  //Qweasd1234
+  //seller
   // lovemono
   // PW1!lovemono
-
-  //seller
+  //seller2
   // id: seller1
   //pw: PW1!seller1
 
+  //master type, filter, nav 정보 확인
   const { is_master, filter_list, nav_list } = useSelector(({ userInfo }) => ({
     is_master: userInfo.is_master,
     filter_list: userInfo.filter_list,
     nav_list: userInfo.nav_list,
   }));
 
+  //로그인 통신 함수
   const loggedIn = async (e) => {
     e.preventDefault();
     try {
       const result = await axios.post(
-        `${API}/account/signin`,
+        'http://10.58.4.26:5000/account/signin',
         { identification: idValue, password: pwValue },
         {
           headers: {
@@ -68,21 +71,40 @@ export default function Login() {
           timeout: 3000,
         }
       );
-      // console.log(result.data.success);
 
-      const getIsMaster = await result.data.success.is_master;
-      const getNavList = await result.data.success.nav_list;
-      const getFilterList = await result.data.success.filter_list;
+      //전역으로 관리할 마스터타입, filter, nav 저장
+      if (result.status === 200) {
+        const getIsMaster = await result.data.success.is_master;
+        const getNavList = await result.data.success.nav_list;
+        const getFilterList = await result.data.success.filter_list;
 
-      if (!!result.data.success.Authorization) {
-        localStorage.setItem('token', result.data.success.Authorization);
-        dispatch(saveFilter(getFilterList));
-        dispatch(saveNav(getNavList));
-        dispatch(isMaster(getIsMaster));
-        history.push('/home');
+        if (!!result.data.success.Authorization) {
+          localStorage.setItem('token', result.data.success.Authorization);
+          dispatch(saveFilter(getFilterList));
+          dispatch(saveNav(getNavList));
+          dispatch(isMaster(getIsMaster));
+          history.push('/home');
+        }
+      } else {
+        return alert(result.data.client_message);
       }
     } catch (err) {
-      err;
+      console.log('erer', err);
+      if (err.response) {
+        if (err.response.statusText === 'UNAUTHORIZED') {
+          alert(err.response.data.client_message);
+        }
+      } else if (error.request) {
+        alert('서버에서 응답이 없습니다.', err.request);
+        console.log('서버 응답 실패');
+        console.log(error.request);
+      } else {
+        alert('메세지 에러', err.message);
+        console.log(error.message);
+        if (error.message === '[INVILD_MESSAGE]') {
+          alert('무슨 응답을 받았습니다.', error.message);
+        }
+      }
     }
   };
 
@@ -111,7 +133,6 @@ export default function Login() {
             />
             {/* id와 password가 입력되지 않았을 때 나타날 오류 */}
             {errors.pwValue && <p>비밀번호를 입력해주세요</p>}
-
             <Button onClick={loggedIn}>로그인</Button>
             <Join>
               <p>아직 셀러가 아니신가요?</p>
@@ -160,7 +181,6 @@ const LoginBox = styled.div`
 const LoginTitle = styled.h3`
   margin: 0 0 25px 0;
 `;
-
 const Input = styled.input`
   width: 100%;
   margin: 5px 0;
@@ -171,25 +191,6 @@ const Input = styled.input`
   &.ErrorInput {
     border: 1px solid #b94a48;
   }
-`;
-
-const Check = styled.div`
-  ${({ theme }) => theme.flex('space-between', 'center')}
-  margin-top: 20px;
-`;
-
-const Label = styled.label`
-  ${({ theme }) => theme.flex(null, 'center')}
-  color: ${(props) => props.color};
-  font-weight: ${(props) => props.fontWeight};
-  font-size: 12px;
-`;
-
-const Checkbox = styled.input`
-  width: 15px;
-  height: 15px;
-  margin-right: 5px;
-  font-weight: 100;
 `;
 
 const Button = styled.button`

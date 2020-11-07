@@ -7,13 +7,19 @@ export default function Header() {
     <HeaderContainer>
       <Contents>
         <div>
-          <img src="public/Images/logo.png" />
-          <KeyboardArrowDown size="16" color="#CCC" />
+          <img src='/public/Images/logo.png' />
+          <KeyboardArrowDown size='16' color='#CCC' />
         </div>
       </Contents>
       <StatusBtn>
-        <span>intern_master</span>
-        <KeyboardArrowDown size="15" color="#999ba2" />
+        <LogoutBox>{is_master ? 'intern_master' : 'intern_seller'}</LogoutBox>
+        <KeyboardArrowDown size='15' color='#999ba2' />
+        <div>
+          <LogoutText onClick={logOut}>
+            <GoSignOut />
+            Log Out
+          </LogoutText>
+        </div>
       </StatusBtn>
     </HeaderContainer>
   );

@@ -186,16 +186,16 @@ const ArrowIcon = styled.span`
 `;
 
 const NAV_ICONS = {
-  홈: <VscHome size="20" />,
-  공지사항: <VscComment size="20" />,
-  통계: <VscGraph size="20" />,
-  주문관리: <AiOutlineShoppingCart size="20" />,
-  '취소/환불 관리': <VscPackage size="20" />,
-  상품관리: <VscJersey size="20" />,
-  고객응대관리: <AiOutlineSmile size="20" />,
-  정산관리: <AiOutlineCalculator size="20" />,
-  진열관리: <AiOutlineEye size="20" />,
-  '기획전/쿠폰관리': <VscGift size="20" />,
-  회원관리: <VscAccount size="20" />,
-  고객센터: <VscInfo size="20" />,
+  홈: <VscHome size='20' />,
+  공지사항: <VscComment size='20' />,
+  통계: <VscGraph size='20' />,
+  주문관리: <AiOutlineShoppingCart size='20' />,
+  '취소/환불 관리': <VscPackage size='20' />,
+  상품관리: <VscJersey size='20' />,
+  고객응대관리: <AiOutlineSmile size='20' />,
+  정산관리: <AiOutlineCalculator size='20' />,
+  진열관리: <AiOutlineEye size='20' />,
+  '기획전/쿠폰관리': <VscGift size='20' />,
+  '회원 관리': <VscAccount size='20' />,
+  고객센터: <VscInfo size='20' />,
 };

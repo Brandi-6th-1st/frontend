@@ -28,7 +28,11 @@ export default function SubList({
     ) {
       return history.push('/order/' + link);
     }
+    if (link === 'seller') {
+      return history.push('/account/' + link);
+    }
     // 여기에서 history push로 페이지 이동시켜주면 돼요!
+
     history.push(link);
   };
 
