@@ -12,8 +12,14 @@ export default function Header() {
         </div>
       </Contents>
       <StatusBtn>
-        <span>intern_master</span>
+        <LogoutBox>{is_master ? 'intern_master' : 'intern_seller'}</LogoutBox>
         <KeyboardArrowDown size='15' color='#999ba2' />
+        <div>
+          <LogoutText onClick={logOut}>
+            <GoSignOut />
+            Log Out
+          </LogoutText>
+        </div>
       </StatusBtn>
     </HeaderContainer>
   );
