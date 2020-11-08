@@ -39,7 +39,6 @@ export default function Home() {
       if (result.status === 200) {
         // 받아온 데이터를 비구조 할당하여 data에 저장한다.
         const DataHomeSeller = result.data.success;
-        console.log(DataHomeSeller);
         setSellerStatus(DataHomeSeller);
       } else {
         alert(result.data.client_message);
@@ -238,7 +237,6 @@ const Section = styled.div`
 
 const SalesContainer = styled.div`
   display: flex;
-
   @media only screen and (max-width: 750px) {
     ${({ theme }) => theme.flex('', '', 'column')}
   }
@@ -247,7 +245,6 @@ const SalesContainer = styled.div`
 const StaticsContainer = styled.div`
   display: flex;
   margin-bottom: 22px;
-
   @media only screen and (max-width: 750px) {
     ${({ theme }) => theme.flex('', '', 'column')}
   }

@@ -95,7 +95,7 @@ export default function ProductDetail({
 
   // 상품의 갯수 변경시 해당 갯수만큼 불리언 배열 생성
   useEffect(() => {
-    if (product && product.data) {
+    if (product && product.data && product.data) {
       setIsSelected(new Array(product.data.length).fill(false));
     }
   }, [product]);
@@ -105,9 +105,10 @@ export default function ProductDetail({
 
     const removeEl = () => {
       const changeDetail = {
-        sales: !!changeStatus.salesStatus.id
-          ? Number(changeStatus.salesStatus.id)
-          : null,
+        sales:
+          changeStatus.salesStatus.id && !!changeStatus.salesStatus.id
+            ? Number(changeStatus.salesStatus.id)
+            : null,
         displayed: !!changeStatus.displayStatus.id
           ? Number(changeStatus.displayStatus.id)
           : null,
@@ -139,10 +140,6 @@ export default function ProductDetail({
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    console.log(product);
-  }, [product]);
 
   // 상품 판매 진열 상태 적용 버튼이 눌렸을 때 실행하는 함수
   const changedApply = (e) => {
@@ -178,12 +175,10 @@ export default function ProductDetail({
         )[0].category_id;
 
       // 상품의 진열여부, 판매여부를 변경한다.
-      console.log('porudct', product);
-      setProduct(
-        // {
-        // ...product,
-        // DataProductManage:
-        product &&
+      setProduct({
+        ...product,
+        data:
+          product &&
           product.data.map((item) => {
             if (checkProduct.includes(String(item.product_number))) {
               return {
@@ -194,9 +189,9 @@ export default function ProductDetail({
             } else {
               return item;
             }
-          })
-        // }
-      );
+          }),
+      });
+
       changeProduct();
 
       // 적용 후 모든 상태를 초기화시킨다.

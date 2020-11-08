@@ -57,6 +57,8 @@ export default function ProductManagement() {
     filter_list: userInfo.filter_list,
   }));
 
+  console.log(filter_list);
+
   // 조회기간 시작 날짜 필터
   const handleEndDate = (date) => {
     setCurrentDate({ ...currentDate, endDate: date });
@@ -109,10 +111,6 @@ export default function ProductManagement() {
         })
     );
   };
-
-  useEffect(() => {
-    console.log(btnFilter);
-  }, [btnFilter]);
 
   // 버튼 필터가 선택되었을 때,
   const handleBtnFilter = (mainId, subId, idx) => {
