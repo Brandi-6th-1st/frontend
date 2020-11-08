@@ -90,7 +90,6 @@ export default function ProductDetail({
 
   // limit or page 변경시 쿼리스트링 변경하여 get
   useEffect(() => {
-    console.log(limit, activePage);
     sendData();
   }, [limit, activePage]);
 
@@ -141,6 +140,10 @@ export default function ProductDetail({
     }
   };
 
+  useEffect(() => {
+    console.log(product);
+  }, [product]);
+
   // 상품 판매 진열 상태 적용 버튼이 눌렸을 때 실행하는 함수
   const changedApply = (e) => {
     // 판매 or 진열 상태를 입력하지 않았을 경우,
@@ -175,12 +178,13 @@ export default function ProductDetail({
         )[0].category_id;
 
       // 상품의 진열여부, 판매여부를 변경한다.
+      console.log('porudct', product);
       setProduct(
         // {
         // ...product,
         // DataProductManage:
         product &&
-          product.map((item) => {
+          product.data.map((item) => {
             if (checkProduct.includes(String(item.product_number))) {
               return {
                 ...item,

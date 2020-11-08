@@ -15,7 +15,7 @@ import { API } from '../../config';
 import { localToken } from '../../config';
 
 export default function ProductManagement() {
-  // 히스토리, dispatch 선언
+  // 히스토리 선언
   const history = useHistory();
   // 여러번 렌더되는 것을 막기위한 상태값
   const [isMounted, setIsMounted] = useState(false);
@@ -33,8 +33,10 @@ export default function ProductManagement() {
   // 현재 페이지 관리
   const [activePage, setActivePage] = useState(1);
 
+  // 셀러명 검색
   const [sellerName, setSellerName] = useState(null);
 
+  // 상품검색 필터 설정 후 검색
   const [selectBox, setSelectBox] = useState({
     select: null,
     search: null,
@@ -108,6 +110,10 @@ export default function ProductManagement() {
     );
   };
 
+  useEffect(() => {
+    console.log(btnFilter);
+  }, [btnFilter]);
+
   // 버튼 필터가 선택되었을 때,
   const handleBtnFilter = (mainId, subId, idx) => {
     const chnageSelected = (mainId) => {
@@ -150,6 +156,7 @@ export default function ProductManagement() {
       }
     };
 
+    console.log('어디수정해ㅑㅇ되니', chnageSelected(mainId));
     // 모든 버튼이 눌렸을 경우,
     const allSelected = chnageSelected(mainId)
       .selected.slice(1)
@@ -165,7 +172,15 @@ export default function ProductManagement() {
       });
 
     // 전체 버튼 선택
-    if (chnageSelected(mainId)[0] || !!allSelected || !!allNotSelected) {
+    if (
+      chnageSelected(mainId).selected[0] ||
+      !!allSelected ||
+      !!allNotSelected
+    ) {
+      console.log(
+        'asdasdas',
+        createBoolean(btnFilter[`${mainId}Selected`].length)
+      );
       return changeBtnFilter(
         mainId,
         null,
@@ -206,8 +221,8 @@ export default function ProductManagement() {
   // 상품 리스트에 출력할 Data를 서버에서 요청하여 받아옵니다.
   const getData = async (param = null) => {
     try {
-      const result = await axios.get(`/public/Data/DataProductManage.json`, {
-        // const result = await axios.get(`${API}/product`, {
+      // const result = await axios.get(`/public/Data/DataProductManage.json`, {
+      const result = await axios.get(`${API}/product`, {
         params: param,
         timeout: 3000,
         headers: {
@@ -232,8 +247,8 @@ export default function ProductManagement() {
       };
 
       // 상품리스트를 저장
-      // const DataProductManage = result.data.success;
-      const DataProductManage = result.data.DataProductManage;
+      const DataProductManage = result.data.success;
+      // const DataProductManage = result.data.DataProductManage;
 
       setProduct(DataProductManage);
       setFilters(filterList);
@@ -285,13 +300,11 @@ export default function ProductManagement() {
             return acc ? acc + ',' + el : acc + el;
           })) ||
         null,
-      sale: btnFilter && btnFilter['sale'] !== null ? btnFilter['sale'] : null,
+      sale: btnFilter && btnFilter['sale'] !== '' ? btnFilter['sale'] : null,
       displayed:
-        btnFilter && btnFilter['display'] !== null
-          ? btnFilter['display']
-          : null,
+        btnFilter && btnFilter['display'] !== '' ? btnFilter['display'] : null,
       discount:
-        btnFilter && btnFilter['discount'] !== null
+        btnFilter && btnFilter['discount'] !== ''
           ? btnFilter['discount']
           : null,
       offset: (activePage - 1) * limit !== 0 ? (activePage - 1) * limit : null,

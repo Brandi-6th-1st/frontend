@@ -39,6 +39,7 @@ export default function Home() {
       if (result.status === 200) {
         // 받아온 데이터를 비구조 할당하여 data에 저장한다.
         const DataHomeSeller = result.data.success;
+        console.log(DataHomeSeller);
         setSellerStatus(DataHomeSeller);
       } else {
         alert(result.data.client_message);

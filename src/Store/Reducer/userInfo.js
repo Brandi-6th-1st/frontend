@@ -28,8 +28,8 @@ export const isClear = () => ({
 
 // 기본값
 const initialState = {
-  is_master: true,
-  // filter_list: [],
+  is_master: false,
+  filter_list: [],
   nav_list: [],
   //   attribute: "쇼핑몰"
   // created_at: "Sun, 25 Oct 2020 21:54:53 GMT"
@@ -42,88 +42,110 @@ const initialState = {
   // product_name: "[대박예쁨/2C] 보카시 크롭 어깨 퍼프 숏 니트 _ 러브모노"
   // product_number: 1
   // seller_name: "러브모노"
-  filter_list: [
-    {
-      filterTitle: '판매여부',
-      id: 'sale',
-      category: [
-        {
-          category_id: '',
-          category_title: '전체',
-        },
-        {
-          category_id: 1,
-          category_title: '판매',
-        },
-        {
-          category_id: 0,
-          category_title: '미판매',
-        },
-      ],
-    },
-    {
-      filterTitle: '진열여부',
-      id: 'display',
-      category: [
-        {
-          category_id: '',
-          category_title: '전체',
-        },
-        {
-          category_id: 1,
-          category_title: '진열',
-        },
-        {
-          category_id: 0,
-          category_title: '미진열',
-        },
-      ],
-    },
-    {
-      filterTitle: '할인여부',
-      id: 'discount',
-      category: [
-        {
-          category_id: '',
-          category_title: '전체',
-        },
-        {
-          category_id: 1,
-          category_title: '할인',
-        },
-        {
-          category_id: 0,
-          category_title: '미할인',
-        },
-      ],
-    },
-    {
-      filterTitle: '셀러명',
-      id: 'seller_name',
-    },
-    {
-      filterTitle: '셀러속성',
-      id: 'attribute',
-      category: [
-        {
-          category_id: 0,
-          category_title: '전체',
-        },
-        {
-          category_id: 1,
-          category_title: '마켓',
-        },
-        {
-          category_id: 2,
-          category_title: '쇼핑몰',
-        },
-        {
-          category_id: 3,
-          category_title: '그랜드마켓',
-        },
-      ],
-    },
-  ],
+  // filter_list: [
+  //   {
+  //     filterTitle: '판매여부',
+  //     id: 'sale',
+  //     category: [
+  //       {
+  //         category_id: '',
+  //         category_title: '전체',
+  //       },
+  //       {
+  //         category_id: 1,
+  //         category_title: '판매',
+  //       },
+  //       {
+  //         category_id: 0,
+  //         category_title: '미판매',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     filterTitle: '진열여부',
+  //     id: 'display',
+  //     category: [
+  //       {
+  //         category_id: '',
+  //         category_title: '전체',
+  //       },
+  //       {
+  //         category_id: 1,
+  //         category_title: '진열',
+  //       },
+  //       {
+  //         category_id: 0,
+  //         category_title: '미진열',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     filterTitle: '할인여부',
+  //     id: 'discount',
+  //     category: [
+  //       {
+  //         category_id: '',
+  //         category_title: '전체',
+  //       },
+  //       {
+  //         category_id: 1,
+  //         category_title: '할인',
+  //       },
+  //       {
+  //         category_id: 0,
+  //         category_title: '미할인',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     filterTitle: '셀러명',
+  //     id: 'seller_name',
+  //   },
+  //   {
+  //     filterTitle: '셀러속성',
+  //     id: 'attribute',
+  //     category: [
+  //       {
+  //         category_id: 0,
+  //         category_title: '전체',
+  //       },
+  //       {
+  //         category_id: 1,
+  //         category_title: '마켓',
+  //       },
+  //       {
+  //         category_id: 2,
+  //         category_title: '쇼핑몰',
+  //       },
+  //       {
+  //         category_id: 3,
+  //         category_title: '그랜드마켓',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     filterTitle: 'test',
+  //     id: 'test',
+  //     category: [
+  //       {
+  //         category_id: 0,
+  //         category_title: '전체',
+  //       },
+  //       {
+  //         category_id: 1,
+  //         category_title: '마켓',
+  //       },
+  //       {
+  //         category_id: 2,
+  //         category_title: '쇼핑몰',
+  //       },
+  //       {
+  //         category_id: 3,
+  //         category_title: '그랜드마켓',
+  //       },
+  //     ],
+  //   },
+  // ],
   // nav_list: [
   //   {
   //     id: 1,
