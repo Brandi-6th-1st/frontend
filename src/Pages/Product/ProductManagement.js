@@ -57,8 +57,6 @@ export default function ProductManagement() {
     filter_list: userInfo.filter_list,
   }));
 
-  console.log(filter_list);
-
   // 조회기간 시작 날짜 필터
   const handleEndDate = (date) => {
     setCurrentDate({ ...currentDate, endDate: date });
@@ -154,7 +152,6 @@ export default function ProductManagement() {
       }
     };
 
-    console.log('어디수정해ㅑㅇ되니', chnageSelected(mainId));
     // 모든 버튼이 눌렸을 경우,
     const allSelected = chnageSelected(mainId)
       .selected.slice(1)
@@ -175,10 +172,6 @@ export default function ProductManagement() {
       !!allSelected ||
       !!allNotSelected
     ) {
-      console.log(
-        'asdasdas',
-        createBoolean(btnFilter[`${mainId}Selected`].length)
-      );
       return changeBtnFilter(
         mainId,
         null,
@@ -218,8 +211,9 @@ export default function ProductManagement() {
 
   // 상품 리스트에 출력할 Data를 서버에서 요청하여 받아옵니다.
   const getData = async (param = null) => {
+    const localToken = localStorage.getItem('token');
+
     try {
-      // const result = await axios.get(`/public/Data/DataProductManage.json`, {
       const result = await axios.get(`${API}/product`, {
         params: param,
         timeout: 3000,
@@ -234,22 +228,21 @@ export default function ProductManagement() {
       });
 
       // 통신에 성공했을 경우,
-      // if (result.status === 200) {
-      // 마스터에서만 사용하는 데이터 분리
-      // const masterData =
-      //   filter_list && filter_list.filter((el) => el.id === sellerNameId)[0];
+      if (result.status === 200) {
+        // 공통으로 사용하는 데이터
+        const filterList = {
+          filter_list: filter_list.filter((el) => el.id !== sellerNameId),
+        };
+        setFilters(filterList);
 
-      // 공통으로 사용하는 데이터
-      const filterList = {
-        filter_list: filter_list.filter((el) => el.id !== sellerNameId),
-      };
+        // 상품리스트를 저장
+        const DataProductManage = result.data.success;
+        // const DataProductManage = result.data.DataProductManage;
 
-      // 상품리스트를 저장
-      const DataProductManage = result.data.success;
-      // const DataProductManage = result.data.DataProductManage;
-
-      setProduct(DataProductManage);
-      setFilters(filterList);
+        setProduct(DataProductManage);
+      } else {
+        alert(result.data.client_message);
+      }
     } catch (err) {
       if (err.response) {
         // 토큰의 정보가 바뀌었다면, 백엔드에서 받은 message 팝업창 출력
