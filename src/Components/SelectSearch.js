@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-export default function SelectSearch({ query, setQuery }) {
+export default function SelectSearch({ selectBox, hadleSelectSearch }) {
   return (
     <Fragment>
       <select
-        value={query.sellerDetail || ''}
-        onChange={(e) => setQuery({ ...query, sellerDetail: e.target.value })}
+        name="select"
+        value={selectBox.select || ''}
+        onChange={(e) => hadleSelectSearch(e)}
       >
         <option>Select</option>
         <option value="product_name">상품명</option>
@@ -15,11 +16,9 @@ export default function SelectSearch({ query, setQuery }) {
       </select>
       <SearchBox>
         <ProductSearch
-          name="productDetail"
-          value={query.productDetail || ''}
-          onChange={(e) =>
-            setQuery({ ...query, productDetail: e.target.value })
-          }
+          name="search"
+          value={selectBox.search || ''}
+          onChange={(e) => hadleSelectSearch(e)}
           placeholder="검색어를 입력하세요."
           type="text"
         ></ProductSearch>

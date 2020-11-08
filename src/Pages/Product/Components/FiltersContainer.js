@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CallendarManage from '../../../Components/CallendarManage';
 import SelectSearch from '../../../Components/SelectSearch';
@@ -11,19 +12,29 @@ export default function FiltersContainer({
   handleStartDate,
   handleEndDate,
   differentFilter,
-  setQuery,
-  query,
   filters,
-  changeFilter,
-  filterStatus,
+  handleSellerName,
+  sellerName,
+  hadleSelectSearch,
+  selectBox,
   handleSearch,
   resetFilter,
+  btnFilter,
+  handleBtnFilter,
 }) {
   const sellerNameId = 'seller_name';
   const attributeId = 'attribute';
   const salesId = 'sale';
   const displayId = 'display';
   const discountId = 'discount';
+
+  // store에 저장되어 있는 filter_list를 가져온다.
+  const { is_master } = useSelector(({ userInfo }) => ({
+    is_master: userInfo.is_master,
+  }));
+
+  console.log(is_master, '이거이거');
+
   return (
     <FilterContainer>
       <FilterCategoryTitle>
@@ -37,17 +48,20 @@ export default function FiltersContainer({
       </FilterCategoryTitle>
       <FiltersCategoryTitle>
         {/* 마스터에만 있는 셀러명 필터 렌더 */}
-        {differentFilter && differentFilter.id === sellerNameId && (
+        {is_master && (
           // 셀러명 필터를 출력하는 컴포넌트
           <SellerSearchFilter
+            sellerName={sellerName}
             differentFilter={differentFilter}
-            setQuery={setQuery}
-            query={query}
+            handleSellerName={handleSellerName}
           />
         )}
         <SelectFilterCategory>
           {/* 상품카테고리 선택 후 검색하는 컴포넌트 */}
-          <SelectSearch query={query} setQuery={setQuery} />
+          <SelectSearch
+            selectBox={selectBox}
+            hadleSelectSearch={hadleSelectSearch}
+          />
         </SelectFilterCategory>
       </FiltersCategoryTitle>
       {/* 각 필터별로 다른 name을 가지기 때문에 각각 렌더 */}
@@ -58,8 +72,8 @@ export default function FiltersContainer({
               key={i}
               cate={cate}
               i={i}
-              changeFilter={changeFilter}
-              filterStatus={filterStatus}
+              handleBtnFilter={handleBtnFilter}
+              btnFilter={btnFilter}
             />
           );
         })}

@@ -13,8 +13,8 @@ import {
 
 export default function ProductDetail({
   product,
-  setQuery,
-  query,
+  setLimit,
+  limit,
   setActivePage,
   activePage,
   setProduct,
@@ -31,7 +31,7 @@ export default function ProductDetail({
   );
   // 전체 상품 체크 상태
   const [allCheck, setAllCheck] = useState(false);
-  // 상품 디테일에서 체크된 id와 index를 관리하는 배열
+  // 상품 디테일에버 체크된 id와 index를 관리하는 배열
   const [checkProduct, setCheckProduct] = useState([]);
   // 상품의 판매, 진열 상태 변경하기 위한 상태
   const [changeStatus, setchangeStatus] = useState({
@@ -85,20 +85,17 @@ export default function ProductDetail({
   // limit 상태 업데이트
   const handleLimit = (e) => {
     setActivePage(1);
-    setQuery({
-      ...query,
-      limit: e.target.value,
-    });
+    setLimit(e.target.value);
   };
 
   // limit or page 변경시 쿼리스트링 변경하여 get
   useEffect(() => {
     sendData();
-  }, [query.limit, activePage]);
+  }, [limit, activePage]);
 
   // 상품의 갯수 변경시 해당 갯수만큼 불리언 배열 생성
   useEffect(() => {
-    if (product && product.data) {
+    if (product && product.data && product.data) {
       setIsSelected(new Array(product.data.length).fill(false));
     }
   }, [product]);
@@ -108,9 +105,10 @@ export default function ProductDetail({
 
     const removeEl = () => {
       const changeDetail = {
-        sales: !!changeStatus.salesStatus.id
-          ? Number(changeStatus.salesStatus.id)
-          : null,
+        sales:
+          changeStatus.salesStatus.id && !!changeStatus.salesStatus.id
+            ? Number(changeStatus.salesStatus.id)
+            : null,
         displayed: !!changeStatus.displayStatus.id
           ? Number(changeStatus.displayStatus.id)
           : null,
@@ -177,12 +175,11 @@ export default function ProductDetail({
         )[0].category_id;
 
       // 상품의 진열여부, 판매여부를 변경한다.
-      setProduct(
-        // {
-        // ...product,
-        // DataProductManage:
-        product &&
-          product.map((item) => {
+      setProduct({
+        ...product,
+        data:
+          product &&
+          product.data.map((item) => {
             if (checkProduct.includes(String(item.product_number))) {
               return {
                 ...item,
@@ -192,9 +189,9 @@ export default function ProductDetail({
             } else {
               return item;
             }
-          })
-        // }
-      );
+          }),
+      });
+
       changeProduct();
 
       // 적용 후 모든 상태를 초기화시킨다.
@@ -230,7 +227,7 @@ export default function ProductDetail({
         </RootTitle>
         <LimitRange>
           <select
-            value={query.limit}
+            value={limit}
             onChange={(e) => {
               handleLimit(e);
             }}
@@ -399,7 +396,7 @@ export default function ProductDetail({
       <PaginationContainer>
         <Pagination
           activePage={activePage}
-          itemsCountPerPage={Number(query.limit)}
+          itemsCountPerPage={Number(limit)}
           totalItemsCount={
             product && product.total_product && Number(product.total_product)
           }

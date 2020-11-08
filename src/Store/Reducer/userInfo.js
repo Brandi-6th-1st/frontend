@@ -28,7 +28,7 @@ export const isClear = () => ({
 
 // 기본값
 const initialState = {
-  is_master: null,
+  is_master: false,
   filter_list: [],
   nav_list: [],
   //   attribute: "쇼핑몰"
@@ -116,6 +116,32 @@ const initialState = {
   //       {
   //         category_id: 2,
   //         category_title: '쇼핑몰',
+  //       },
+  //       {
+  //         category_id: 3,
+  //         category_title: '그랜드마켓',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     filterTitle: 'test',
+  //     id: 'test',
+  //     category: [
+  //       {
+  //         category_id: 0,
+  //         category_title: '전체',
+  //       },
+  //       {
+  //         category_id: 1,
+  //         category_title: '마켓',
+  //       },
+  //       {
+  //         category_id: 2,
+  //         category_title: '쇼핑몰',
+  //       },
+  //       {
+  //         category_id: 3,
+  //         category_title: '그랜드마켓',
   //       },
   //     ],
   //   },

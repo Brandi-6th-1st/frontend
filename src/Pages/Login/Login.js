@@ -13,10 +13,10 @@ import { API } from '../../config';
 
 export default function Login() {
   const [inputValue, setInputValue] = useState({
-    // idValue: 'soojsooj',
-    // pwValue: 'PW1!soojsooj',
-    idValue: 'lovemono',
-    pwValue: 'PW1!lovemono',
+    idValue: 'soojsooj',
+    pwValue: 'PW1!soojsooj',
+    // idValue: 'lovemono',
+    // pwValue: 'PW1!lovemono',
   });
   // 구조화
   const { idValue, pwValue } = inputValue;
@@ -58,6 +58,7 @@ export default function Login() {
   }));
 
   const loggedIn = async (e) => {
+    console.log(API + '/account/signin');
     e.preventDefault();
     try {
       const result = await axios.post(
@@ -70,7 +71,7 @@ export default function Login() {
           timeout: 3000,
         }
       );
-      console.log(result);
+      console.log('결과', result);
       console.log(result.data.success);
 
       if (result.status === 200) {

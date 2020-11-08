@@ -237,7 +237,6 @@ const Section = styled.div`
 
 const SalesContainer = styled.div`
   display: flex;
-
   @media only screen and (max-width: 750px) {
     ${({ theme }) => theme.flex('', '', 'column')}
   }
@@ -246,7 +245,6 @@ const SalesContainer = styled.div`
 const StaticsContainer = styled.div`
   display: flex;
   margin-bottom: 22px;
-
   @media only screen and (max-width: 750px) {
     ${({ theme }) => theme.flex('', '', 'column')}
   }
