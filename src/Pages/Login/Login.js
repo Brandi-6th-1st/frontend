@@ -126,6 +126,7 @@ export default function Login() {
             {errors.idValue && errors.pwValue && <p>아이디를 입력해주세요</p>}
             <Input
               name='pwValue'
+              type='password'
               ref={register({ required: true })}
               placeholder='셀러 비밀번호'
               className={errors.pwValue && 'ErrorInput'}
