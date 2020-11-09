@@ -4,8 +4,8 @@ import styled from 'styled-components';
 export default function Purchase({ showModal, setShowModal }) {
   return (
     <Fragment>
-      <ModalOverlay showModal={showModal} />
-      <ModalWrapper showModal={showModal} onClick={() => setShowModal(false)}>
+      <ModalOverlay showModal={showModal} onClick={() => setShowModal(false)} />
+      <ModalWrapper showModal={showModal}>
         <ModalInner>123123123</ModalInner>
       </ModalWrapper>
     </Fragment>
@@ -30,6 +30,10 @@ const ModalWrapper = styled.div`
   opacity: ${({ showModal }) => (showModal ? 1 : 0)};
   transition: all 0.25s ease-in;
   position: fixed;
+  margin: 0 auto;
+  height: 90vh;
+  width: 70%;
+
   top: 0;
   right: 0;
   bottom: 0;
@@ -44,10 +48,9 @@ const ModalInner = styled.div`
   box-shadow: 0 0 6px #ebebeb;
   background-color: white;
   border-radius: 10px;
-  width: 70%;
+  width: 100%;
   top: 50%;
   transform: translateY(-50%);
-  margin: 0 auto;
   padding: 20px;
   height: 90vh;
 `;

@@ -50,7 +50,7 @@ const FilterTitle = styled.div`
 const SellerSearchBox = styled.div`
   display: table;
   border: 1px solid #e5e5e5;
-  width: 68%;
+  width: 51%;
   margin: 0 0 0 15px;
 
   @media only screen and (max-width: 934px) {

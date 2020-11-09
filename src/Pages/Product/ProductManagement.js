@@ -12,7 +12,6 @@ import Footer from '../../Components/Footer/Footer';
 import Purchase from '../../Components/Purchase';
 import FiltersContainer from './Components/FiltersContainer';
 import { API } from '../../config';
-import { localToken } from '../../config';
 
 export default function ProductManagement() {
   // 히스토리 선언
@@ -25,7 +24,7 @@ export default function ProductManagement() {
   const [product, setProduct] = useState();
   // 리덕스에서 가져온 필터를 상태로 관리
   const [filters, setFilters] = useState({});
-  // 현재 페이지 관리
+  // 현재 선택 날짜
   const [currentDate, setCurrentDate] = useState({
     startDate: '',
     endDate: '',
@@ -50,7 +49,6 @@ export default function ProductManagement() {
   const attributeId = 'attribute';
   const salesId = 'sale';
   const displayId = 'display';
-  const discountId = 'discount';
 
   // store에 저장되어 있는 filter_list를 가져온다.
   const { filter_list } = useSelector(({ userInfo }) => ({
@@ -72,7 +70,7 @@ export default function ProductManagement() {
     setSellerName(e.target.value);
   };
 
-  // 상품검색 종류 선택 후 검색하는 필터
+  // 상품검색 필터
   const hadleSelectSearch = (e) => {
     const { name, value } = e.target;
 
@@ -196,6 +194,7 @@ export default function ProductManagement() {
     });
   };
 
+  // 리셋시 상태 초기화
   const resetFilter = () => {
     createFilter(filter_list);
     setCurrentDate({
@@ -271,7 +270,6 @@ export default function ProductManagement() {
         alert('다시 로그인 해주세요.');
         history.push('/');
       }
-
       getData();
     }
   }, [filter_list]);
