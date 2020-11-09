@@ -6,6 +6,7 @@ import { AiOutlineUnorderedList } from 'react-icons/ai';
 
 function SellerList({
   sellerList,
+  setSellerList,
   filter,
   setFilter,
   currentPage,
@@ -24,6 +25,7 @@ function SellerList({
       <Body>
         <PageRecord
           sellerList={sellerList}
+          setSellerList={setSellerList}
           filter={filter}
           setFilter={setFilter}
           currentPage={currentPage}
@@ -69,6 +71,7 @@ const Title = styled.div`
   padding: 10px 10px 2px 10px;
   background-color: #eee;
   font-size: 13px;
+
   svg {
     margin-right: 5px;
     width: 13px;

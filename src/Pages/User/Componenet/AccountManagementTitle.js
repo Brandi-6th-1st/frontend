@@ -6,6 +6,7 @@ import { AiOutlineRight } from 'react-icons/ai';
 
 function AccountManagementTitle({
   sellerList,
+  setSellerList,
   filter,
   setFilter,
   currentPage,
@@ -31,6 +32,7 @@ function AccountManagementTitle({
       <Fragment>
         <SellerList
           sellerList={sellerList}
+          setSellerList={setSellerList}
           filter={filter}
           setFilter={setFilter}
           currentPage={currentPage}
@@ -48,7 +50,6 @@ function AccountManagementTitle({
 export default AccountManagementTitle;
 
 const Container = styled.div`
-  /* width: 100%; */
   margin-top: 50px;
   padding: 25px 20px 20px 20px;
   background-color: #fafafa;
@@ -70,6 +71,7 @@ const PageBar = styled.div`
   background-color: #eee;
   font-size: 13px;
   line-height: 1.5;
+
   p {
     margin-left: 5px;
   }

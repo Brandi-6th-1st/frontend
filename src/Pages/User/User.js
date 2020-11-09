@@ -1,12 +1,11 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import regeneratorRuntime from 'regenerator-runtime';
 import Header from '../../Components/Header/Header';
 import Nav from '../../Components/Nav/Nav';
-import AccountManagementTitle from './AccountManagementTitle';
-import SellerInfoManagement from './SellerInfoManagement';
+import AccountManagementTitle from './Componenet/AccountManagementTitle';
 import Footer from '../../Components/Footer/Footer';
 import { API } from '../../config';
 
@@ -46,7 +45,7 @@ export default function User() {
 
   //셀러 계정 관리 페이지 초기 데이터
   const getSellerData = () => {
-    fetch(`http://10.58.4.26:5000/account/sellerlist`, {
+    fetch(`${API}5000/account/seller`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },
@@ -74,9 +73,9 @@ export default function User() {
       //input을 클릭했지만,값을 입력하지 않은 경우에는 빈 스트링으로 저장됨. 이 경우 값을 null로 바꿔주기
 
       // limit이 10인 경우 querystring 보내지 않음
-      limit: limit !== '10' ? limit : null,
+      limit: limit ? limit : null,
       //1페이지의 경우 querystrign 보내지 않음
-      offset: currentPage !== 1 ? offset : null,
+      offset: offset ? offset : null,
       id: id ? id : null,
       identification: identification ? identification : null,
       english_name: english_name ? english_name : null,
@@ -87,7 +86,7 @@ export default function User() {
     };
     setFilter(nextFilter);
     const result = await axios.get(
-      `http://10.58.4.26:5000/account/sellerlist`,
+      `${API}5000/account/seller`,
       {
         params: filter,
       },
@@ -127,29 +126,18 @@ export default function User() {
       <Header />
       <Container>
         <Nav />
-        {is_master ? (
-          <AccountManagementTitle
-            sellerList={sellerList}
-            filter={filter}
-            setFilter={setFilter}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            handleSellerData={handleSellerData}
-            sellerPerPage={sellerPerPage}
-            handleRecordCount={handleRecordCount}
-            getSellerData={getSellerData}
-          />
-        ) : (
-          <SellerInfoManagement
-            sellerInfo={sellerInfo}
-            setSellerInfo={setSellerInfo}
-            handleChangeFile={handleChangeFile}
-            imgBase64={imgBase64}
-            setImgBase64={setImgBase64}
-            imgFile={imgFile}
-            setImgFile={setImgFile}
-          />
-        )}
+        <AccountManagementTitle
+          sellerList={sellerList}
+          setSellerList={setSellerList}
+          filter={filter}
+          setFilter={setFilter}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          handleSellerData={handleSellerData}
+          sellerPerPage={sellerPerPage}
+          handleRecordCount={handleRecordCount}
+          getSellerData={getSellerData}
+        />
       </Container>
       <Footer />
     </Fragment>

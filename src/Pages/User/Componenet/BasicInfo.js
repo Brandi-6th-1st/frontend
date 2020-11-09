@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import PasswordModal from './PasswordModal';
-import ImgBox from '../../Components/ImgBox/ImgBox';
+import ImgBox from '../../../Components/ImgBox/ImgBox';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning } from 'react-icons/ai';
 

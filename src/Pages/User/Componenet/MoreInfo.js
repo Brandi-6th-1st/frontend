@@ -2,12 +2,10 @@ import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
 import InputMask from 'react-input-mask';
 import { useForm } from 'react-hook-form';
-import ImgBox from '../../Components/ImgBox/ImgBox';
-// import PostCode from './PostCode';
+import ImgBox from '../../../Components/ImgBox/ImgBox';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineWarning, AiOutlineMail } from 'react-icons/ai';
 import { ImPhone } from 'react-icons/im';
-// import IconInput from '../../Components/IconInput/IconInput';
 
 function MoreInfo({
   sellerInfo,

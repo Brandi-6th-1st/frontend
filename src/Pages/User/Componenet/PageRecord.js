@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
+import { API } from '../../../config';
 
 function PageRecord({
   filter,
   setFilter,
   sellerList,
+  setSellerList,
   currentPage,
   setCurrentPage,
   sellerPerPage,
   handleRecordCount,
 }) {
+  //현재 페이지 +/- 카운트
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -23,6 +27,7 @@ function PageRecord({
     }
   };
 
+  //현재 페이지 * 한 페이지당 보이는 셀러 수(limit) = offset
   const hanleOffset = () => {
     if (currentPage !== 1) {
       const nextFilter = {
@@ -33,9 +38,12 @@ function PageRecord({
     }
   };
 
+  //currentPage, sellerPerPage가 바뀔 때마다 handleOffset 함수 실행
   useEffect(() => {
     hanleOffset();
   }, [currentPage, sellerPerPage]);
+
+  console.log('pagerecord', filter);
 
   return (
     <Container>
@@ -74,7 +82,7 @@ function PageRecord({
       </ViewRecords>
       <FoundRecords>
         <span>Found Total</span>
-        {/*total 계산*/}
+        {/*total seller 수 */}
         <span>{sellerList && sellerList.length}</span>
         <span>records</span>
       </FoundRecords>

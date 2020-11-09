@@ -9,7 +9,7 @@ import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import LoginFooter from './LoginFooter';
-import API from '../../config';
+import { API } from '../../config';
 
 export default function Login() {
   const [inputValue, setInputValue] = useState({
@@ -66,7 +66,8 @@ export default function Login() {
     e.preventDefault();
     try {
       const result = await axios.post(
-        'http://10.58.4.26:5000/account/signin',
+        // `${API}5000/account/signin`,
+        `${API}5000/account/signin`,
         { identification: idValue, password: pwValue },
         {
           headers: {
@@ -77,19 +78,38 @@ export default function Login() {
       );
 
       //전역으로 관리할 마스터타입, filter, nav 저장
-      const getIsMaster = await result.data.success.is_master;
-      const getFilterList = await result.data.success.filter_list;
-      const getNavList = await result.data.success.nav_list;
+      if (result.status === 200) {
+        const getIsMaster = await result.data.success.is_master;
+        const getNavList = await result.data.success.nav_list;
+        const getFilterList = await result.data.success.filter_list;
 
-      if (!!result.data.success.Authorization) {
-        localStorage.setItem('token', result.data.success.Authorization);
-        dispatch(saveFilter(getFilterList));
-        dispatch(saveNav(getNavList));
-        dispatch(isMaster(getIsMaster));
-        history.push('/home');
+        if (!!result.data.success.Authorization) {
+          localStorage.setItem('token', result.data.success.Authorization);
+          dispatch(saveFilter(getFilterList));
+          dispatch(saveNav(getNavList));
+          dispatch(isMaster(getIsMaster));
+          history.push('/home');
+        }
+      } else {
+        return alert(result.data.client_message);
       }
     } catch (err) {
-      err;
+      console.log('erer', err);
+      if (err.response) {
+        if (err.response.statusText === 'UNAUTHORIZED') {
+          alert(err.response.data.client_message);
+        }
+      } else if (error.request) {
+        alert('서버에서 응답이 없습니다.', err.request);
+        console.log('서버 응답 실패');
+        console.log(error.request);
+      } else {
+        alert('메세지 에러', err.message);
+        console.log(error.message);
+        if (error.message === '[INVILD_MESSAGE]') {
+          alert('무슨 응답을 받았습니다.', error.message);
+        }
+      }
     }
   };
 
