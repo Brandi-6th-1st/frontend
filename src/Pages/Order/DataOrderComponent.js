@@ -68,5 +68,23 @@ const COMPONENT_ORDER = [
       '주문상태',
     ],
   },
+  {
+    id: 5,
+    title: '전체주문',
+    filter_date: '전체주문',
+    table_header: [
+      '주문일자',
+      '주문번호',
+      '주문상세번호',
+      '배송 구분',
+      '상품명',
+      '옵션정보',
+      '수량',
+      '주문자명',
+      '핸드폰번호',
+      '결제수단',
+      '주문상태',
+    ],
+  },
 ];
 export default COMPONENT_ORDER;

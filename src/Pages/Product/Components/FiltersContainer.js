@@ -33,8 +33,6 @@ export default function FiltersContainer({
     is_master: userInfo.is_master,
   }));
 
-  console.log(is_master, '이거이거');
-
   return (
     <FilterContainer>
       <FilterCategoryTitle>

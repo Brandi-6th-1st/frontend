@@ -24,7 +24,8 @@ export default function SubList({
       link === 'deliveryPrepareList' ||
       link === 'deliveryList' ||
       link === 'deliveryCompleteList' ||
-      link === 'orderConfirmList'
+      link === 'orderConfirmList' ||
+      link === 'allOrderList'
     ) {
       return history.push('/order/' + link);
     }

@@ -12,9 +12,10 @@ import Footer from '../../Components/Footer/Footer';
 import Purchase from '../../Components/Purchase';
 import FiltersContainer from './Components/FiltersContainer';
 import { API } from '../../config';
-import { localToken } from '../../config';
 
 export default function ProductManagement() {
+  // 로딩창 상태
+  const [isLoading, setIsLoading] = useState(true);
   // 히스토리 선언
   const history = useHistory();
   // 여러번 렌더되는 것을 막기위한 상태값
@@ -25,7 +26,7 @@ export default function ProductManagement() {
   const [product, setProduct] = useState();
   // 리덕스에서 가져온 필터를 상태로 관리
   const [filters, setFilters] = useState({});
-  // 현재 페이지 관리
+  // 현재 선택 날짜
   const [currentDate, setCurrentDate] = useState({
     startDate: '',
     endDate: '',
@@ -50,7 +51,6 @@ export default function ProductManagement() {
   const attributeId = 'attribute';
   const salesId = 'sale';
   const displayId = 'display';
-  const discountId = 'discount';
 
   // store에 저장되어 있는 filter_list를 가져온다.
   const { filter_list } = useSelector(({ userInfo }) => ({
@@ -72,7 +72,7 @@ export default function ProductManagement() {
     setSellerName(e.target.value);
   };
 
-  // 상품검색 종류 선택 후 검색하는 필터
+  // 상품검색 필터
   const hadleSelectSearch = (e) => {
     const { name, value } = e.target;
 
@@ -196,6 +196,7 @@ export default function ProductManagement() {
     });
   };
 
+  // 리셋시 상태 초기화
   const resetFilter = () => {
     createFilter(filter_list);
     setCurrentDate({
@@ -207,11 +208,18 @@ export default function ProductManagement() {
       select: null,
       search: null,
     });
+    getData();
   };
 
   // 상품 리스트에 출력할 Data를 서버에서 요청하여 받아옵니다.
   const getData = async (param = null) => {
     const localToken = localStorage.getItem('token');
+    setIsLoading(true);
+    // setInterval(() => {
+    //   setIsLoading(false);
+    // }, 2000);
+
+    let stime = new Date().getTime();
 
     try {
       const result = await axios.get(`${API}/product`, {
@@ -229,6 +237,10 @@ export default function ProductManagement() {
 
       // 통신에 성공했을 경우,
       if (result.status === 200) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300 - (new Date().getTime() - stime));
+
         // 공통으로 사용하는 데이터
         const filterList = {
           filter_list: filter_list.filter((el) => el.id !== sellerNameId),
@@ -237,9 +249,13 @@ export default function ProductManagement() {
 
         // 상품리스트를 저장
         const DataProductManage = result.data.success;
-        // const DataProductManage = result.data.DataProductManage;
 
         setProduct(DataProductManage);
+
+        if (DataProductManage.total_product === 0) {
+          alert('검색 결과가 없습니다.');
+          resetFilter();
+        }
       } else {
         alert(result.data.client_message);
       }
@@ -272,7 +288,9 @@ export default function ProductManagement() {
         history.push('/');
       }
 
-      getData();
+      setTimeout(() => {
+        getData();
+      }, 3000);
     }
   }, [filter_list]);
 
@@ -304,6 +322,7 @@ export default function ProductManagement() {
 
     console.log('전송된 파람스', queryString);
     //변경된 form을 param에 넣어 get Data
+    setIsLoading(false);
     getData(queryString);
   };
 
@@ -336,6 +355,8 @@ export default function ProductManagement() {
             resetFilter={resetFilter}
           />
           <ProductDetail
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
             product={product}
             setProduct={setProduct}
             setLimit={setLimit}
