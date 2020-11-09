@@ -14,6 +14,8 @@ import FiltersContainer from './Components/FiltersContainer';
 import { API } from '../../config';
 
 export default function ProductManagement() {
+  // 로딩창 상태
+  const [isLoading, setIsLoading] = useState(true);
   // 히스토리 선언
   const history = useHistory();
   // 여러번 렌더되는 것을 막기위한 상태값
@@ -206,11 +208,18 @@ export default function ProductManagement() {
       select: null,
       search: null,
     });
+    getData();
   };
 
   // 상품 리스트에 출력할 Data를 서버에서 요청하여 받아옵니다.
   const getData = async (param = null) => {
     const localToken = localStorage.getItem('token');
+    setIsLoading(true);
+    // setInterval(() => {
+    //   setIsLoading(false);
+    // }, 2000);
+
+    let stime = new Date().getTime();
 
     try {
       const result = await axios.get(`${API}/product`, {
@@ -228,6 +237,10 @@ export default function ProductManagement() {
 
       // 통신에 성공했을 경우,
       if (result.status === 200) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300 - (new Date().getTime() - stime));
+
         // 공통으로 사용하는 데이터
         const filterList = {
           filter_list: filter_list.filter((el) => el.id !== sellerNameId),
@@ -236,9 +249,13 @@ export default function ProductManagement() {
 
         // 상품리스트를 저장
         const DataProductManage = result.data.success;
-        // const DataProductManage = result.data.DataProductManage;
 
         setProduct(DataProductManage);
+
+        if (DataProductManage.total_product === 0) {
+          alert('검색 결과가 없습니다.');
+          resetFilter();
+        }
       } else {
         alert(result.data.client_message);
       }
@@ -270,7 +287,10 @@ export default function ProductManagement() {
         alert('다시 로그인 해주세요.');
         history.push('/');
       }
-      getData();
+
+      setTimeout(() => {
+        getData();
+      }, 3000);
     }
   }, [filter_list]);
 
@@ -302,6 +322,7 @@ export default function ProductManagement() {
 
     console.log('전송된 파람스', queryString);
     //변경된 form을 param에 넣어 get Data
+    setIsLoading(false);
     getData(queryString);
   };
 
@@ -334,6 +355,8 @@ export default function ProductManagement() {
             resetFilter={resetFilter}
           />
           <ProductDetail
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
             product={product}
             setProduct={setProduct}
             setLimit={setLimit}

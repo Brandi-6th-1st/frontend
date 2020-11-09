@@ -12,6 +12,8 @@ import {
 } from 'react-icons/go';
 
 export default function ProductDetail({
+  isLoading,
+  setIsLoading,
   product,
   setLimit,
   limit,
@@ -102,8 +104,14 @@ export default function ProductDetail({
 
   const changeProduct = async () => {
     const localToken = localStorage.getItem('token');
+    let stime = new Date().getTime();
 
     const removeEl = () => {
+      setIsLoading(true);
+      setInterval(() => {
+        setIsLoading(false);
+      }, 300 - (new Date().getTime() - stime));
+
       const changeDetail = {
         sales:
           changeStatus.salesStatus.id && !!changeStatus.salesStatus.id
@@ -137,7 +145,17 @@ export default function ProductDetail({
         }
       );
     } catch (err) {
-      console.log(err);
+      if (err.response) {
+        // 토큰의 정보가 바뀌었다면, 백엔드에서 받은 message 팝업창 출력
+        if (err.response.statusText === 'UNAUTHORIZED') {
+          alert(err.response.data.client_message);
+          history.push('/');
+        }
+      } else if (err.request) {
+        alert('서버에서 응답이 없습니다.', err.request);
+      } else {
+        alert('메세지 에러', err.message);
+      }
     }
   };
 
@@ -191,6 +209,8 @@ export default function ProductDetail({
             }
           }),
       });
+
+      alert('해당 상품의 현재 상태가 변경되었습니다.');
 
       changeProduct();
 
@@ -320,6 +340,10 @@ export default function ProductDetail({
         </span>
       </AllProductView>
       <TableBox>
+        <Loading isLoading={isLoading}>
+          {/* <LoadingOverlay isLoading={isLoading} /> */}
+          <img src="/public/Images/ico_brandi_loading.png" />
+        </Loading>
         <table>
           <ProductHead>
             <tr>
@@ -366,13 +390,15 @@ export default function ProductDetail({
                       <a href="">{cate.product_code}</a>
                     </ProductItem>
                     <ProductItem>{cate.product_number}</ProductItem>
-                    <ProductItem>{cate.price}</ProductItem>
+                    <ProductItem>{cate.price.toLocaleString()}</ProductItem>
                     <ProductItem>
-                      {cate.price}
+                      {cate.price.toLocaleString()}
                       <DiscountPrice>
                         {cate.discount_rate &&
-                          Number(cate.price) *
-                            ((100 - Number(cate.discount_rate)) / 100)}
+                          (
+                            Number(cate.price) *
+                            ((100 - Number(cate.discount_rate)) / 100)
+                          ).toLocaleString()}
                       </DiscountPrice>
                     </ProductItem>
                     <ProductItem>
@@ -381,7 +407,9 @@ export default function ProductDetail({
                     <ProductItem>
                       {cate.is_displayed ? '진열' : '미진열 '}
                     </ProductItem>
-                    <ProductItem>{cate.discount_rate}</ProductItem>
+                    <ProductItem>
+                      {cate.discount_rate ? '할인' : '미할인'}
+                    </ProductItem>
                     <ProductItem>
                       <BuyBtn onClick={() => setShowModal(true)}>
                         구매하기
@@ -410,6 +438,7 @@ export default function ProductDetail({
   );
 }
 const TableBox = styled.div`
+  position: relative;
   overflow-x: scroll;
   white-space: nowrap;
 
@@ -610,3 +639,31 @@ const PaginationContainer = styled.div`
     border-bottom-right-radius: 4px;
   }
 `;
+
+const Loading = styled.div`
+  opacity: ${({ isLoading }) => (isLoading ? 1 : 0)};
+  z-index: ${({ isLoading }) => (isLoading ? 1 : -1)};
+  transition: all 0.25s ease-in;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  img {
+    width: 100px;
+    height: 125px;
+    margin-top: 120px;
+  }
+`;
+
+// const LoadingOverlay = styled.div`
+//   pointer-events: ${({ isLoading }) => (isLoading ? 'initial' : 'none')};
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   bottom: 0;
+//   right: 0;
+//   z-index: 999;
+// `;

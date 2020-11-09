@@ -28,6 +28,9 @@ export default function OrderManagement() {
     if (match.id === 'orderConfirmList') {
       return 4;
     }
+    if (match.id === 'allOrderList') {
+      return 4;
+    }
     return match.id;
   };
 
@@ -99,16 +102,29 @@ export default function OrderManagement() {
     try {
       const url = () => {
         if (categoryId() === 1) {
-          return `/public/Data/DataProductPreManage.json`;
+          return `http://10.58.4.190:5000/order/prepareList`;
+          // return `${API}/product`;
+          // return `/public/Data/DataProductPreManage.json`;
         }
         if (categoryId() === 2) {
-          return `/public/Data/DataShippingMansge.json`;
+          return `http://10.58.4.190:5000/order/deliveryPrepareList`;
+          // return `/public/Data/DataShippingMansge.json`;
+          // return `/public/Data/DataShippingMansge.json`;
         }
         if (categoryId() === 3) {
-          return `/public/Data/DataDeliveryComplitedManage.json`;
+          return `http://10.58.4.190:5000/order/deliveryList`;
+          // return `/public/Data/DataDeliveryComplitedManage.json`;
+          // return `/public/Data/DataDeliveryComplitedManage.json`;
         }
         if (categoryId() === 4) {
-          return `/public/Data/DataConfirmPurchase.json`;
+          return `http://10.58.4.190:5000/order/deliveryCompleteList`;
+          // return `/public/Data/DataConfirmPurchase.json`;
+          // return `/public/Data/DataConfirmPurchase.json`;
+        }
+        if (categoryId() === 5) {
+          return `http://10.58.4.190:5000/order/prepareList`;
+          // return `/public/Data/DataConfirmPurchase.json`;
+          // return `/public/Data/DataConfirmPurchase.json`;
         }
       };
       const result = await axios.get(
@@ -123,8 +139,9 @@ export default function OrderManagement() {
         }
       );
       if (result.status === 200) {
-        const { DataProductManage } = result.data;
-        setOrderList(DataProductManage.productItem);
+        console.log(result.data.success);
+        // const { DataProductManage } = result.data;
+        setOrderList(result.data.success);
       } else {
         if (result.statusText === 'CONFLICT') {
           alert(result.data.client_message);
@@ -132,7 +149,6 @@ export default function OrderManagement() {
         }
       }
     } catch (err) {
-      console.log('erer', err);
       if (err.response) {
         if (err.response.statusText === 'UNAUTHORIZED') {
           alert(err.response.data.client_message);

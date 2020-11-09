@@ -22,10 +22,6 @@ export default function Table({ pagetext, orderList, setOrderList }) {
 
   const [changeId, setChangeId] = useState();
 
-  useEffect(() => {
-    console.log(checkOrder);
-  }, [checkOrder]);
-
   // 전체 주문 리스트가 변경하게 되면 배열 새로 생성
   useEffect(() => {
     setIsSelected(new Array(orderList && orderList.length).fill(false));
@@ -69,7 +65,6 @@ export default function Table({ pagetext, orderList, setOrderList }) {
 
   const sendChangeProduct = async (changeData) => {
     const localToken = localStorage.getItem('token');
-    console.log('보내즌ㄴ 데이터', changeData);
 
     try {
       const result = await axios.post(
@@ -83,15 +78,23 @@ export default function Table({ pagetext, orderList, setOrderList }) {
           timeout: 3000,
         }
       );
-
-      console.log(result.data);
     } catch (err) {
-      console.log(err);
+      if (err.response) {
+        // 토큰의 정보가 바뀌었다면, 백엔드에서 받은 message 팝업창 출력
+        if (err.response.statusText === 'UNAUTHORIZED') {
+          alert(err.response.data.client_message);
+          history.push('/');
+        }
+      } else if (err.request) {
+        alert('서버에서 응답이 없습니다.', err.request);
+      } else {
+        alert('메세지 에러', err.message);
+      }
     }
   };
 
   const goToProductDetail = (code) => {
-    history.push(`/${code}`);
+    history.push(`/order/prepareList/${code}`);
   };
 
   const changedApply = (e) => {
@@ -114,7 +117,6 @@ export default function Table({ pagetext, orderList, setOrderList }) {
         })
       );
 
-      console.log('123123123123', changeId, checkOrder);
       const changeQuery = {
         id: checkOrder.map((el) => Number(el)),
         status_id: changeId,
@@ -175,24 +177,20 @@ export default function Table({ pagetext, orderList, setOrderList }) {
                       }
                     />
                   </td>
-                  {Object.values(order)
-                    .slice(1)
-                    .map((el, index) =>
-                      order.detail_order_number === el ? (
-                        <td
-                          key={index}
-                          onClick={(el) =>
-                            goToProductDetail(order.detail_order_number)
-                          }
-                        >
-                          {el}
-                        </td>
-                      ) : (
-                        order.order_status_id !== el && (
-                          <td key={index}>{el}</td>
-                        )
-                      )
-                    )}
+                  {Object.values(order).map((el, index) =>
+                    order.c_detail_order_id === el ? (
+                      <td
+                        key={index}
+                        onClick={(el) =>
+                          goToProductDetail(order.c_detail_order_id)
+                        }
+                      >
+                        {el}
+                      </td>
+                    ) : (
+                      order.order_status_id !== el && <td key={index}>{el}</td>
+                    )
+                  )}
                 </tr>
               ))}
           </tbody>
