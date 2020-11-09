@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import styled from 'styled-components';
 import Pagination from 'react-js-pagination';
+import Loading from '../../../Components/Loading';
 import axios from 'axios';
 import { API } from '../../../config';
 import {
@@ -340,10 +341,7 @@ export default function ProductDetail({
         </span>
       </AllProductView>
       <TableBox>
-        <Loading isLoading={isLoading}>
-          {/* <LoadingOverlay isLoading={isLoading} /> */}
-          <img src="/public/Images/ico_brandi_loading.png" />
-        </Loading>
+        <Loading isLoading={isLoading} />
         <table>
           <ProductHead>
             <tr>
@@ -639,31 +637,3 @@ const PaginationContainer = styled.div`
     border-bottom-right-radius: 4px;
   }
 `;
-
-const Loading = styled.div`
-  opacity: ${({ isLoading }) => (isLoading ? 1 : 0)};
-  z-index: ${({ isLoading }) => (isLoading ? 1 : -1)};
-  transition: all 0.25s ease-in;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.6);
-
-  img {
-    width: 100px;
-    height: 125px;
-    margin-top: 120px;
-  }
-`;
-
-// const LoadingOverlay = styled.div`
-//   pointer-events: ${({ isLoading }) => (isLoading ? 'initial' : 'none')};
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   bottom: 0;
-//   right: 0;
-//   z-index: 999;
-// `;
