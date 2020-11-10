@@ -94,11 +94,6 @@ function SellerTable({
   //   });
   // };
 
-  //아이디 클릭시 상세페이지로 이동
-  // const goToDetail = () => {
-  //   history.push('/userdetail');
-  // };
-
   console.log(sellerList);
 
   return (
@@ -244,7 +239,9 @@ function SellerTable({
                   </td>
                   <td>{id}</td>
                   {/* <td onClick={() => history.push(`/userDetail/${id}`)}> */}
-                  <td>{identification}</td>
+                  <td onClick={() => history.push(`/userdetail/${id}`)}>
+                    {identification}
+                  </td>
                   <td>{english_name}</td>
                   <td>{korean_name}</td>
                   <td>{manager_name}</td>
