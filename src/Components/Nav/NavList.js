@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import styled, { css } from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import SubList from './SubList';
-import { KeyboardArrowLeft, KeyboardArrowDown } from '@styled-icons/material';
+import { KeyboardArrowLeft } from '@styled-icons/material';
 import {
   VscHome,
   VscGraph,

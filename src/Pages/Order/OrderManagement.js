@@ -1,14 +1,17 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import Filter from './Filter';
 import OrderList from './OrderList';
 import dateFormatChange from '../../Components/ChangeTimeFormat';
 import COMPONENT_ORDER from './DataOrderComponent';
+import { API } from '../../config';
 
 export default function OrderManagement() {
+  // 히스토리 선언
+  const history = useHistory();
   // 주소에 있는 id 파라미터로 동일한 컴포넌트에서 다른 데이터를 사용하여 각 주문 상태에 따른 내용을 가져옵니다.
   const match = useParams();
   // 해당 주소가 담겨 오면 숫자로 리턴한다.
@@ -102,42 +105,30 @@ export default function OrderManagement() {
     try {
       const url = () => {
         if (categoryId() === 1) {
-          return `http://10.58.4.190:5000/order/prepareList`;
-          // return `${API}/product`;
+          return `${API}/order/prepareList`;
           // return `/public/Data/DataProductPreManage.json`;
         }
         if (categoryId() === 2) {
-          return `http://10.58.4.190:5000/order/deliveryPrepareList`;
-          // return `/public/Data/DataShippingMansge.json`;
+          return `${API}/order/deliveryPrepareList`;
           // return `/public/Data/DataShippingMansge.json`;
         }
         if (categoryId() === 3) {
-          return `http://10.58.4.190:5000/order/deliveryList`;
-          // return `/public/Data/DataDeliveryComplitedManage.json`;
+          return `${API}/order/deliveryList`;
           // return `/public/Data/DataDeliveryComplitedManage.json`;
         }
         if (categoryId() === 4) {
-          return `http://10.58.4.190:5000/order/deliveryCompleteList`;
-          // return `/public/Data/DataConfirmPurchase.json`;
+          return `${API}/order/deliveryCompleteList`;
           // return `/public/Data/DataConfirmPurchase.json`;
         }
         if (categoryId() === 5) {
-          return `http://10.58.4.190:5000/order/prepareList`;
-          // return `/public/Data/DataConfirmPurchase.json`;
+          return `${API}/order/prepareList`;
           // return `/public/Data/DataConfirmPurchase.json`;
         }
       };
-      const result = await axios.get(
-        url(),
-        // `/public/Data/DataProductPreManage.json`,
-        // `/public/Data/DataShippingMansge.json`,
-        // `/public/Data/DataDeliveryComplitedManage.json`,
-        // `/public/Data/DataConfirmPurchase.json`,
-        {
-          params: params,
-          timeout: 3000, //3초
-        }
-      );
+      const result = await axios.get(url(), {
+        params: params,
+        timeout: 3000, //3초
+      });
       if (result.status === 200) {
         console.log(result.data.success);
         // const { DataProductManage } = result.data;
@@ -155,15 +146,8 @@ export default function OrderManagement() {
           history.push('/');
         }
       } else if (err.request) {
-        alert('서버에서 응답이 없습니다.', err.request);
-        console.log('서버 응답 실패');
-        console.log(err.request);
-      } else {
-        alert('메세지 에러', err.message);
-        console.log(err.message);
-        if (err.message === '[INVILD_MESSAGE]') {
-          alert('무슨 응답을 받았습니다.', err.message);
-        }
+        history.push('/');
+        return alert('서버에서 응답이 없습니다.', err.request);
       }
     }
   };

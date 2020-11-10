@@ -2,7 +2,9 @@ import React, { Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import regeneratorRuntime from 'regenerator-runtime';
+import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import Highcharts, { error } from 'highcharts';
 // import HighchartsReact from 'highcharts-react-official';
 // import { GoGraph } from 'react-icons/go';
@@ -16,11 +18,20 @@ import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import Chart from './Components/Chart';
 import { API } from '../../config';
+import baseInfo from '../../Components/BaseInfo';
 
 export default function Home() {
+  // 디스패치, 히스토리 선언
+  const dispatch = useDispatch();
   const history = useHistory();
   // axios시 받은 data를 data 상태로 관리한다.
   const [sellerStatus, setSellerStatus] = useState();
+
+  const { is_master, filter_list, nav_list } = useSelector(({ userInfo }) => ({
+    is_master: userInfo.is_master,
+    filter_list: userInfo.filter_list,
+    nav_list: userInfo.nav_list,
+  }));
 
   // Test : json형식 mock-data 생성
   // axios get을 사용하여 데이터를 받아온다.
@@ -36,6 +47,13 @@ export default function Home() {
         },
         timeout: 3000,
       });
+      if (!filter_list[0]) {
+        const response = await baseInfo();
+
+        dispatch(saveFilter(response.filter_list));
+        dispatch(saveNav(response.nav_list));
+        dispatch(isMaster(response.is_master));
+      }
       if (result.status === 200) {
         // 받아온 데이터를 비구조 할당하여 data에 저장한다.
         const DataHomeSeller = result.data.success;
@@ -173,41 +191,6 @@ export default function Home() {
             {/* 매출 통계 건수 차트 생성하여 컴포넌트 분리 예정 */}
             <Chart highcharts={Highcharts} options={numChart()} />
             <Chart highcharts={Highcharts} options={priceChart()} />
-            {/* <StaticsBox>
-              <StaticsStatus>
-                <StaticsTitle>
-                  <GoGraph />
-                  <span>
-                    매출 통계[최근 30일간의 결제완료된 주문 건수의 합계]
-                  </span>
-                </StaticsTitle>
-                <StaticsGraph>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={numChart()}
-                  />
-                </StaticsGraph>
-              </StaticsStatus>
-            </StaticsBox>
-             */}
-            {/* 매출 통계 금액 차트 생성하여 컴포넌트 분리 예정 */}
-            {/* <StaticsBox>
-              <StaticsStatus>
-                <StaticsTitle>
-                  <GoGraph />
-                  <span>
-                    매출 통계[최근 30일간의 결제완료된 주문 금액의 합계]
-                  </span>
-                </StaticsTitle>
-                <StaticsGraph>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={priceChart()}
-                  />
-                </StaticsGraph>
-              </StaticsStatus>
-            </StaticsBox>
-           */}
           </StaticsContainer>
           <StaticsContainer>
             {/* Q&A 차트 컴포넌트 */}
@@ -249,39 +232,3 @@ const StaticsContainer = styled.div`
     ${({ theme }) => theme.flex('', '', 'column')}
   }
 `;
-
-// const StaticsBox = styled.div`
-//   display: inline-block;
-//   width: 50%;
-//   min-height: 1px;
-//   padding: 0px 10px;
-
-//   @media only screen and (max-width: 750px) {
-//     width: 100%;
-//   }
-// `;
-
-// const StaticsStatus = styled.div`
-//   border: 1px solid #dddddd;
-// `;
-
-// const StaticsTitle = styled.div`
-//   padding: 10px 15px;
-//   background-color: #f5f5f5;
-//   border-bottom: 1px solid #dddddd;
-
-//   svg {
-//     vertical-align: bottom;
-//     color: gray;
-//   }
-
-//   span {
-//     padding-left: 5px;
-//     font-size: 13px;
-//     color: gray;
-//   }
-// `;
-
-// const StaticsGraph = styled.div`
-//   padding: 10px;
-// `;

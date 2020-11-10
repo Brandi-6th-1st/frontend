@@ -39,6 +39,10 @@ const InquiryperiodBox = styled.div`
   width: 25%;
   margin: 0 15px;
 
+  span {
+    text-align: center;
+  }
+
   @media only screen and (max-width: 934px) {
     width: 100%;
   }

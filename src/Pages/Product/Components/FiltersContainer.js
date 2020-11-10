@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';

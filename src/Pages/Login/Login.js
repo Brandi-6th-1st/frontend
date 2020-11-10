@@ -13,10 +13,10 @@ import { API } from '../../config';
 
 export default function Login() {
   const [inputValue, setInputValue] = useState({
-    // idValue: 'soojsooj',
-    // pwValue: 'PW1!soojsooj',
-    idValue: 'lovemono',
-    pwValue: 'PW1!lovemono',
+    idValue: 'soojsooj',
+    pwValue: 'PW1!soojsooj',
+    // idValue: 'lovemono',
+    // pwValue: 'PW1!lovemono',
   });
   // 구조화
   const { idValue, pwValue } = inputValue;

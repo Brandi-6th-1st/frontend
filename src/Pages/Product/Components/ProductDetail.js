@@ -103,6 +103,7 @@ export default function ProductDetail({
     }
   }, [product]);
 
+  // 상품의 현재 상태 변경
   const changeProduct = async () => {
     const localToken = localStorage.getItem('token');
     let stime = new Date().getTime();
@@ -212,7 +213,6 @@ export default function ProductDetail({
       });
 
       alert('해당 상품의 현재 상태가 변경되었습니다.');
-
       changeProduct();
 
       // 적용 후 모든 상태를 초기화시킨다.

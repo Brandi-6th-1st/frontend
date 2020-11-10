@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { isClear } from '../../Store/Reducer/userInfo';
@@ -56,7 +56,6 @@ const HeaderContainer = styled.div`
     margin-right: 3px;
   }
   span {
-    /* color: white; */
     font-size: 13px;
     font-weight: 400;
     margin: 0 0 2px 10px;
@@ -79,7 +78,6 @@ const StatusBtn = styled.div`
   margin-right: 20px;
   border-left: 1px solid white;
   span {
-    /* color: #cecfd3; */
     margin-right: 3px;
     margin-left: 16px;
   }

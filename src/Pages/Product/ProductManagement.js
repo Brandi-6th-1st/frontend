@@ -2,8 +2,10 @@ import React, { Fragment, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import dateFormatChange from '../../Components/ChangeTimeFormat';
+import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
+import baseInfo from '../../Components/BaseInfo';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ProductDetail from './Components/ProductDetail';
 import Nav from '../../Components/Nav/Nav';
@@ -16,7 +18,8 @@ import { API } from '../../config';
 export default function ProductManagement() {
   // 로딩창 상태
   const [isLoading, setIsLoading] = useState(true);
-  // 히스토리 선언
+  // 디스패치, 히스토리 선언
+  const dispatch = useDispatch();
   const history = useHistory();
   // 여러번 렌더되는 것을 막기위한 상태값
   const [isMounted, setIsMounted] = useState(false);
@@ -43,8 +46,10 @@ export default function ProductManagement() {
     search: null,
   });
 
+  // limit 관리
   const [limit, setLimit] = useState(10);
 
+  // 현재 눌린 버튼, 눌린 버튼의 id 상태
   const [btnFilter, setBtnFilter] = useState();
 
   const sellerNameId = 'seller_name';
@@ -53,8 +58,9 @@ export default function ProductManagement() {
   const displayId = 'display';
 
   // store에 저장되어 있는 filter_list를 가져온다.
-  const { filter_list } = useSelector(({ userInfo }) => ({
+  const { filter_list, nav_list } = useSelector(({ userInfo }) => ({
     filter_list: userInfo.filter_list,
+    nav_list: userInfo.nav_list,
   }));
 
   // 조회기간 시작 날짜 필터
@@ -106,7 +112,7 @@ export default function ProductManagement() {
             ...acc,
             ...filter,
           };
-        })
+        }, '')
     );
   };
 
@@ -215,9 +221,6 @@ export default function ProductManagement() {
   const getData = async (param = null) => {
     const localToken = localStorage.getItem('token');
     setIsLoading(true);
-    // setInterval(() => {
-    //   setIsLoading(false);
-    // }, 2000);
 
     let stime = new Date().getTime();
 
@@ -234,6 +237,15 @@ export default function ProductManagement() {
           return status < 500;
         },
       });
+
+      // 리덕스에 필터 정보가 없을 경우,
+      if (!filter_list[0]) {
+        const response = await baseInfo();
+
+        dispatch(saveFilter(response.filter_list));
+        dispatch(saveNav(response.nav_list));
+        dispatch(isMaster(response.is_master));
+      }
 
       // 통신에 성공했을 경우,
       if (result.status === 200) {
@@ -258,6 +270,7 @@ export default function ProductManagement() {
         }
       } else {
         alert(result.data.client_message);
+        history.push('/');
       }
     } catch (err) {
       if (err.response) {
@@ -268,8 +281,7 @@ export default function ProductManagement() {
         }
       } else if (err.request) {
         alert('서버에서 응답이 없습니다.', err.request);
-      } else {
-        alert('메세지 에러', err.message);
+        history.push('/');
       }
     }
   };
@@ -283,16 +295,9 @@ export default function ProductManagement() {
   useEffect(() => {
     createFilter(filter_list);
     if (isMounted) {
-      if (!filter_list[0]) {
-        alert('다시 로그인 해주세요.');
-        history.push('/');
-      }
-
-      setTimeout(() => {
-        getData();
-      }, 3000);
+      getData();
     }
-  }, [filter_list]);
+  }, [filter_list, nav_list]);
 
   // 검색 버튼일 눌리게 되면 동작할 함수.
   const sendData = () => {

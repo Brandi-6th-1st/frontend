@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import DateFilter from './DateFilter';
 import CallendarManage from '../../Components/CallendarManage';
 
 export default function Filter({
@@ -122,7 +121,6 @@ const Div = styled.div`
     padding-right: 100px;
   }
   span {
-    /* width: 90px; */
     margin-right: 35px;
     text-align: center;
     font-size: 14px;
