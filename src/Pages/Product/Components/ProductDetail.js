@@ -3,6 +3,7 @@ import regeneratorRuntime from 'regenerator-runtime';
 import styled from 'styled-components';
 import Pagination from 'react-js-pagination';
 import Loading from '../../../Components/Loading';
+import Purchase from '../../../Components/Purchase';
 import axios from 'axios';
 import { API } from '../../../config';
 import {
@@ -22,11 +23,13 @@ export default function ProductDetail({
   activePage,
   setProduct,
   filters,
-  setShowModal,
   sendData,
   salesId,
   displayId,
 }) {
+  // 모달창 출력 유무
+  const [showModal, setShowModal] = useState(false);
+  // 여러번 마운트 되는 것을 방지하기 위한  상태
   const [isMounted, setIsMounted] = useState(0);
   // 버튼의 클릭 상태를 나타내는 배열 생성
   const [isSelected, setIsSelected] = useState(
@@ -48,6 +51,11 @@ export default function ProductDetail({
       // 진열여부가 담긴 필터 id
       filterId: displayId,
     },
+  });
+  // 구매하기 컴포넌트에 넘겨줄 상품의 id, name
+  const [isProduct, setIsProduct] = useState({
+    productId: null,
+    productName: null,
   });
 
   // 전체 버튼을 클릭했을 경우 실행
@@ -108,7 +116,8 @@ export default function ProductDetail({
     const localToken = localStorage.getItem('token');
     let stime = new Date().getTime();
 
-    const removeEl = () => {
+    // 변경하고자 하는 제품의 상태 ( 판매상태, 진열상태 )
+    const changeType = () => {
       setIsLoading(true);
       setInterval(() => {
         setIsLoading(false);
@@ -137,7 +146,7 @@ export default function ProductDetail({
     try {
       const result = await axios.post(
         `${API}/product`,
-        { ...removeEl() },
+        { ...changeType() },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -146,6 +155,11 @@ export default function ProductDetail({
           timeout: 3000,
         }
       );
+      if (result.status === 200) {
+        alert('해당 상품의 현재 상태가 변경되었습니다.');
+      } else {
+        alert('서버 연결 상태를 확인하세요.');
+      }
     } catch (err) {
       if (err.response) {
         // 토큰의 정보가 바뀌었다면, 백엔드에서 받은 message 팝업창 출력
@@ -212,7 +226,6 @@ export default function ProductDetail({
           }),
       });
 
-      alert('해당 상품의 현재 상태가 변경되었습니다.');
       changeProduct();
 
       // 적용 후 모든 상태를 초기화시킨다.
@@ -233,6 +246,11 @@ export default function ProductDetail({
 
   return (
     <ProductContainer>
+      <Purchase
+        showModal={showModal}
+        setShowModal={setShowModal}
+        product={isProduct && isProduct}
+      />
       <TitleContainer>
         <RootTitle>
           <li>
@@ -369,7 +387,6 @@ export default function ProductDetail({
             {product &&
               product.data &&
               product.data.map((cate, idx) => {
-                console.log(cate);
                 return (
                   <ProductLine idx={idx} key={idx}>
                     <ProductItem>
@@ -411,8 +428,14 @@ export default function ProductDetail({
                     </ProductItem>
                     <ProductItem>
                       <BuyBtn
-                        onClick={() => setShowModal(true)}
-                        productId={cate.product_number}
+                        onClick={() => {
+                          setShowModal(true);
+                          setIsProduct({
+                            ...isProduct,
+                            productId: cate.product_number,
+                            productName: cate.product_name,
+                          });
+                        }}
                       >
                         구매하기
                       </BuyBtn>
