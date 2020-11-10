@@ -19,11 +19,6 @@ export default function Nav() {
 
   //nav가 변경되면 nav 데이터를 최신화
   useEffect(() => {
-    // if (!nav_list[0]) {
-    //   alert('다시 로그인 해주세요.');
-    //   history.push('/');
-    // }
-
     setNavData(nav_list);
   }, [nav_list]);
 

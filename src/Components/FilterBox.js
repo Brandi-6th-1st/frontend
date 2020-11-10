@@ -1,14 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-export default function FilterBox({
-  cate,
-  i,
-  changeFilter,
-  filterStatus,
-  btnFilter,
-  handleBtnFilter,
-}) {
+export default function FilterBox({ cate, i, btnFilter, handleBtnFilter }) {
   return (
     <SelectFilterCategory cate={cate.category.length} key={i}>
       <SelectFilterTitle>{cate.filterTitle} :</SelectFilterTitle>

@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import regeneratorRuntime from 'regenerator-runtime';
 import axios from 'axios';
 import { API } from '../../config';
-import ORDER_EXAMPLE from './DataOrder';
+// import ORDER_EXAMPLE from './DataOrder';
 
 export default function Table({ pagetext, orderList, setOrderList }) {
   const history = useHistory();
