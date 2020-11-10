@@ -15,6 +15,9 @@ function AccountManagementTitle({
   handleSellerData,
   handleRecordCount,
   getSellerData,
+  handleActionInfo,
+  handleNextPage,
+  handlePrevPage,
 }) {
   return (
     <Container>
@@ -41,6 +44,9 @@ function AccountManagementTitle({
           handleSellerData={handleSellerData}
           handleRecordCount={handleRecordCount}
           getSellerData={getSellerData}
+          handleActionInfo={handleActionInfo}
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
         />
       </Fragment>
     </Container>

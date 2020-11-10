@@ -37,6 +37,26 @@ export default function User() {
   //테이블에서 페이지네이션을 위한 현재페이지 상태
   const [currentPage, setCurrentPage] = useState(1);
   const [sellerPerPage, setSellerPerPage] = useState(10);
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+    fetch(`${API}/account/seller?limit=${sellerPerPage}&offset=${offset}`)
+      .then((response) => response.json())
+      .then((response) => {
+        setSellerListCount(response.count), setSellerList(response.data);
+      });
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+    fetch(`${API}/account/seller?limit=${sellerPerPage}&offset=${offset}`)
+      .then((response) => response.json())
+      .then((response) => {
+        setSellerListCount(response.count), setSellerList(response.data);
+      });
+  };
 
   //로그인할 때 받았던 master type 정보 확인
   const { is_master } = useSelector(({ userInfo }) => ({
@@ -45,14 +65,20 @@ export default function User() {
 
   //셀러 계정 관리 페이지 초기 데이터
   const getSellerData = () => {
+    // fetch(
+    // `/public/Data/SellerList.json`,
     fetch(`${API}5000/account/seller`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },
     })
-      // fetch(`/public/Data/SellerList.json`)
       .then((response) => response.json())
-      .then((result) => setSellerList(result));
+      .then(
+        (result) => setSellerList(result.success)
+        // setTotalSeller(result.seccess.total_seller_number[0])
+      );
+    // .then((result) => console.log(result.success.total_seller_number[0]))
+    // );
   };
 
   //셀러 계정 관리 페이지 search 버튼 클릭 시 실행될 함수
@@ -65,6 +91,7 @@ export default function User() {
       english_name,
       korean_name,
       manager_name,
+      attribute,
       contact,
       email,
     } = filter;
@@ -81,6 +108,7 @@ export default function User() {
       english_name: english_name ? english_name : null,
       korean_name: korean_name ? korean_name : null,
       manager_name: manager_name ? manager_name : null,
+      attribute: attribute ? attribute : null,
       contact: contact ? contact : null,
       email: email ? email : null,
     };
@@ -94,7 +122,8 @@ export default function User() {
         headers: { Authorization: localStorage.getItem('token') },
       }
     );
-    setSellerList(result.data);
+    console.log('gfdhgfß', result.data.success);
+    setSellerList(result.data.success);
   };
 
   //계정 관리 페이지 record
@@ -114,13 +143,36 @@ export default function User() {
       .then((result) => setSellerInfo(result.seller_status_record[0]));
   };
 
+  //액션 버튼 클릭시 action_id, seller_id
+  const handleActionInfo = async (e) => {
+    setActionInfo({
+      ...actionInfo,
+      action_id: e.target.value,
+      seller_id: identification,
+    });
+    const result = await axios.post(
+      `${API}5000/`,
+      {
+        action_id: action_id,
+        seller_id: seller_id,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  };
+
   useEffect(() => {
     getData();
     getSellerData();
     setMasterType(is_master);
   }, []);
 
-  console.log(filter);
+  console.log('sellerList', sellerList);
+
+  console.log('filter', filter);
   return (
     <Fragment>
       <Header />
@@ -137,6 +189,9 @@ export default function User() {
           sellerPerPage={sellerPerPage}
           handleRecordCount={handleRecordCount}
           getSellerData={getSellerData}
+          handleActionInfo={handleActionInfo}
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
         />
       </Container>
       <Footer />

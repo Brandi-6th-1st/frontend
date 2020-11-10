@@ -87,7 +87,7 @@ function BasicInfo({ sellerInfo }) {
               <td>
                 {identification}
                 <button onClick={openModal}>비밀번호 변경하기</button>
-                <PasswordModal visible={modalVisible} onClose={closeModal} />
+                {/* <PasswordModal visible={modalVisible} onClose={closeModal} /> */}
               </td>
             </tr>
           </tbody>

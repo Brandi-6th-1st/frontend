@@ -15,6 +15,9 @@ function SellerList({
   handleSellerData,
   handleRecordCount,
   getSellerData,
+  handleActionInfo,
+  handleNextPage,
+  handlePrevPage,
 }) {
   return (
     <ListBox>
@@ -32,6 +35,8 @@ function SellerList({
           setCurrentPage={setCurrentPage}
           sellerPerPage={sellerPerPage}
           handleRecordCount={handleRecordCount}
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
         />
         <Table>
           <SellerTable
@@ -40,15 +45,20 @@ function SellerList({
             setFilter={setFilter}
             handleSellerData={handleSellerData}
             getSellerData={getSellerData}
+            handleActionInfo={handleActionInfo}
           />
         </Table>
         <PageRecord
+          sellerList={sellerList}
+          setSellerList={setSellerList}
           filter={filter}
           setFilter={setFilter}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           sellerPerPage={sellerPerPage}
           handleRecordCount={handleRecordCount}
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
         />
       </Body>
     </ListBox>

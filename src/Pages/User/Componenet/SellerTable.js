@@ -13,26 +13,32 @@ function SellerTable({
   setFilter,
   handleSellerData,
   getSellerData,
+  handleActionInfo,
 }) {
   //필터 기간 정보 담을  state
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
+  const [actionInfo, setActionInfo] = useState({
+    action_id: '',
+    seller_id: '',
+  });
+
   const history = useHistory();
   const {
-    // id,
-    // identification,
-    // english_name,
-    // korean_name,
-    // manager_name,
+    id,
+    identification,
+    english_name,
+    korean_name,
+    manager_name,
     status_name,
-    // contact,
-    // email,
+    contact,
+    email,
     attribute,
-    // limit,
-    // offset,
-    // start_date,
-    // end_date,
+    limit,
+    offset,
+    start_date,
+    end_date,
   } = filter;
 
   //입점 상태 값을 filter state에 담아줄 함수
@@ -80,10 +86,20 @@ function SellerTable({
     handleDate();
   }, [startDate, endDate]);
 
+  // const handleActionInfo = (e) => {
+  //   setActionInfo({
+  //     ...actionInfo,
+  //     action_id: e.target.value,
+  //     seller_id: identification,
+  //   });
+  // };
+
   //아이디 클릭시 상세페이지로 이동
   // const goToDetail = () => {
   //   history.push('/userdetail');
   // };
+
+  console.log(sellerList);
 
   return (
     <Container>
@@ -157,8 +173,8 @@ function SellerTable({
             <td>
               <select value={attribute || ''} onChange={handleSellerAttribute}>
                 <option value='select'>Select</option>
-                <option value='1'>쇼핑몰</option>
-                <option value='2'>마켓</option>
+                <option value='쇼핑몰'>쇼핑몰</option>
+                <option value='마켓'>마켓</option>
               </select>
             </td>
             <td>
@@ -207,10 +223,10 @@ function SellerTable({
         <tbody>
           {/*통신으로 get한 샐러 정보 */}
           {sellerList &&
-            sellerList.map((seller, i) => {
+            sellerList.data.map((seller, i) => {
               const {
                 id,
-                attribute_id,
+                attribute,
                 contact,
                 created_at,
                 email,
@@ -227,6 +243,7 @@ function SellerTable({
                     <input type='checkbox' />
                   </td>
                   <td>{id}</td>
+                  {/* <td onClick={() => history.push(`/userDetail/${id}`)}> */}
                   <td>{identification}</td>
                   <td>{english_name}</td>
                   <td>{korean_name}</td>
@@ -234,7 +251,7 @@ function SellerTable({
                   <td>{status_name}</td>
                   <td>{contact}</td>
                   <td>{email}</td>
-                  <td>{attribute_id}</td>
+                  <td>{attribute}</td>
                   <td>{created_at}</td>
                   {/* 입점 상태에 따른 액션 버튼 개수(2개, 3개)가 달라서 map 함수 사용*/}
                   <td>
@@ -246,6 +263,8 @@ function SellerTable({
                             actionName={action.action_name}
                             // 액션 타입에 따른 버튼 색 변경
                             bgColor={ACTIONS[action.action_name]}
+                            value={ACTION_VALUE[action.action_name]}
+                            onClick={handleActionInfo}
                           >
                             {action.action_name}
                           </ActionButton>
@@ -373,3 +392,21 @@ const ACTIONS = {
   '퇴점철회 처리': '#5cb85c',
   '퇴점확정 처리': '#d9534f',
 };
+
+//입점 상태에 따른 value
+const ACTION_VALUE = {
+  '입점 승인': 1,
+  '입점 거절': 2,
+  '휴점 신청': 3,
+  '퇴점신청 처리': 4,
+  '휴점 해제': 5,
+  '퇴점철회 처리': 6,
+  '퇴점확정 처리': 7,
+};
+
+//action_id
+//seller_id
+
+// 셀러의 입점을 승인하시겠습니까?
+
+// 정상처리되었습니다.

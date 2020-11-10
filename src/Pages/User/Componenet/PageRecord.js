@@ -14,18 +14,37 @@ function PageRecord({
   setCurrentPage,
   sellerPerPage,
   handleRecordCount,
+  handleNextPage,
+  handlePrevPage,
 }) {
   //현재 페이지 +/- 카운트
-  const handleNextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  // const handleNextPage = () => {
+  //   setCurrentPage(currentPage + 1);
+  //   paginate();
 
-  const handlePrevPage = () => {
-    setCurrentPage(currentPage - 1);
-    if (currentPage <= 1) {
-      setCurrentPage(1);
-    }
-  };
+  //   // fetch(`${API}5000/account/seller?limit=${sellerPerPage}&offset=${offset}`, {
+  //   //   headers: {
+  //   //     Authorization: localStorage.getItem('token'),
+  //   //   },
+  //   // })
+  //   //   .then((response) => response.json())
+  //   //   .then((result) => setSellerList(result.success));
+  // };
+
+  // const handlePrevPage = () => {
+  //   setCurrentPage(currentPage - 1);
+  //   paginate();
+  //   // if (currentPage <= 1) {
+  //   //   setCurrentPage(1);
+  //   // }
+  //   // fetch(`${API}5000/account/seller?limit=${sellerPerPage}&offset=${offset}`, {
+  //   //   headers: {
+  //   //     Authorization: localStorage.getItem('token'),
+  //   //   },
+  //   // })
+  //   //   .then((response) => response.json())
+  //   //   .then((result) => setSellerList(result.success));
+  // };
 
   //현재 페이지 * 한 페이지당 보이는 셀러 수(limit) = offset
   const hanleOffset = () => {
@@ -38,10 +57,39 @@ function PageRecord({
     }
   };
 
+  // ?limit=${limit}&offset=${offset}
+
+  // const handleLimitOffset = async () => {
+  //   const { limit, offset } = filter;
+  //   const nextFilter = {
+  //     ...filter,
+  //     //input을 클릭했지만,값을 입력하지 않은 경우에는 빈 스트링으로 저장됨. 이 경우 값을 null로 바꿔주기
+
+  //     // limit이 10인 경우 querystring 보내지 않음
+  //     limit: limit ? limit : null,
+  //     //1페이지의 경우 querystrign 보내지 않음
+  //     offset: offset ? offset : null,
+  //   };
+  //   setFilter(nextFilter);
+  //   const result = await axios.get(
+  //     `${API}5000/account/seller`,
+  //     {
+  //       limit: limit,
+  //       offset: offset,
+  //     },
+  //     {
+  //       headers: { Authorization: localStorage.getItem('token') },
+  //     }
+  //   );
+  //   setSellerList(result.data);
+  // };
+
   //currentPage, sellerPerPage가 바뀔 때마다 handleOffset 함수 실행
   useEffect(() => {
     hanleOffset();
-  }, [currentPage, sellerPerPage]);
+  }, [sellerPerPage]);
+
+  console.log('offset', filter.offset);
 
   console.log('pagerecord', filter);
 
@@ -65,7 +113,15 @@ function PageRecord({
           of
           <span>
             {/* limit에 따른 보여질 페이지 수  */}
-            {sellerList && Math.floor(sellerList.length / filter.limit)}
+            {filter.limit === null
+              ? sellerList &&
+                Math.ceil(
+                  sellerList.total_seller_number[0].total_seller_count / 10
+                )
+              : Math.ceil(
+                  sellerList.total_seller_number[0].total_seller_count /
+                    filter.limit
+                )}
           </span>
         </p>
       </Page>
@@ -83,7 +139,9 @@ function PageRecord({
       <FoundRecords>
         <span>Found Total</span>
         {/*total seller 수 */}
-        <span>{sellerList && sellerList.length}</span>
+        <span>
+          {sellerList && sellerList.total_seller_number[0].total_seller_count}
+        </span>
         <span>records</span>
       </FoundRecords>
     </Container>
@@ -107,7 +165,7 @@ const Page = styled.div`
 
   span {
     font-size: 13px;
-    margin-right: 5px;
+    margin: 0 5px;
   }
 
   &:after {

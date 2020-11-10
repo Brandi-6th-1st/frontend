@@ -50,7 +50,7 @@ export default function Signup() {
     if (confirm('입력하신 정보로 셀러신청을 하시겠습니까?') === true) {
       try {
         const result = await axios.post(
-          `http://10.58.6.192:5000/account/signup`,
+          `http://10.58.0.227:5000/account/signup`,
 
           JSON.stringify({
             identification: idValue,
