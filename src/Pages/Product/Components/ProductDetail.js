@@ -369,6 +369,7 @@ export default function ProductDetail({
             {product &&
               product.data &&
               product.data.map((cate, idx) => {
+                console.log(cate);
                 return (
                   <ProductLine idx={idx} key={idx}>
                     <ProductItem>
@@ -409,7 +410,10 @@ export default function ProductDetail({
                       {cate.discount_rate ? '할인' : '미할인'}
                     </ProductItem>
                     <ProductItem>
-                      <BuyBtn onClick={() => setShowModal(true)}>
+                      <BuyBtn
+                        onClick={() => setShowModal(true)}
+                        productId={cate.product_number}
+                      >
                         구매하기
                       </BuyBtn>
                     </ProductItem>
