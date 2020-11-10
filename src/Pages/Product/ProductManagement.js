@@ -11,20 +11,17 @@ import ProductDetail from './Components/ProductDetail';
 import Nav from '../../Components/Nav/Nav';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-import Purchase from '../../Components/Purchase';
 import FiltersContainer from './Components/FiltersContainer';
 import { API } from '../../config';
 
 export default function ProductManagement() {
-  // 로딩창 상태
+  // 로딩창 관리
   const [isLoading, setIsLoading] = useState(true);
   // 디스패치, 히스토리 선언
   const dispatch = useDispatch();
   const history = useHistory();
   // 여러번 렌더되는 것을 막기위한 상태값
   const [isMounted, setIsMounted] = useState(false);
-  // 모달창 출력 유무를 관리
-  const [showModal, setShowModal] = useState(false);
   // 공통으로 사용되는 데이터를 관리
   const [product, setProduct] = useState();
   // 리덕스에서 가져온 필터를 상태로 관리
@@ -36,19 +33,15 @@ export default function ProductManagement() {
   });
   // 현재 페이지 관리
   const [activePage, setActivePage] = useState(1);
-
   // 셀러명 검색
   const [sellerName, setSellerName] = useState(null);
-
   // 상품검색 필터 설정 후 검색
   const [selectBox, setSelectBox] = useState({
     select: null,
     search: null,
   });
-
   // limit 관리
   const [limit, setLimit] = useState(10);
-
   // 현재 눌린 버튼, 눌린 버튼의 id 상태
   const [btnFilter, setBtnFilter] = useState();
 
@@ -220,9 +213,9 @@ export default function ProductManagement() {
   // 상품 리스트에 출력할 Data를 서버에서 요청하여 받아옵니다.
   const getData = async (param = null) => {
     const localToken = localStorage.getItem('token');
-    setIsLoading(true);
-
     let stime = new Date().getTime();
+
+    setIsLoading(true);
 
     try {
       const result = await axios.get(`${API}/product`, {
@@ -294,6 +287,7 @@ export default function ProductManagement() {
   // 페이지 언마운트 완료 후 실행
   useEffect(() => {
     createFilter(filter_list);
+
     if (isMounted) {
       getData();
     }
@@ -325,7 +319,6 @@ export default function ProductManagement() {
       limit: Number(limit) !== 10 ? limit : null,
     };
 
-    console.log('전송된 파람스', queryString);
     //변경된 form을 param에 넣어 get Data
     setIsLoading(false);
     getData(queryString);
@@ -343,7 +336,6 @@ export default function ProductManagement() {
       <Main>
         <Nav />
         <Section>
-          <Purchase showModal={showModal} setShowModal={setShowModal} />
           <h3>상품 관리</h3>
           <FiltersContainer
             currentDate={currentDate}
@@ -370,7 +362,6 @@ export default function ProductManagement() {
             setActivePage={setActivePage}
             filters={filters}
             sendData={sendData}
-            setShowModal={setShowModal}
             salesId={salesId}
             displayId={displayId}
           />

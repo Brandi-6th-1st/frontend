@@ -10,10 +10,12 @@ export default function Header() {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  // 리덕스에 유저 타입을 가져와 로그인시 헤더에 타입 출력
   const { is_master } = useSelector(({ userInfo }) => ({
     is_master: userInfo.is_master,
   }));
 
+  //로그아웃시 리덕스 클리어
   const logOut = () => {
     history.push('/');
     localStorage.removeItem('token');

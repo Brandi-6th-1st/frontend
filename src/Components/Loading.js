@@ -22,7 +22,7 @@ const Loading = styled.div`
 
   img {
     width: 100px;
-    height: 125px;
+    height: 70px;
     margin-top: 120px;
   }
 `;

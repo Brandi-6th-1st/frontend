@@ -82,7 +82,11 @@ export default function Home() {
 
   // 페이지 마운트시 fetch 하여 배송, 즐겨찾기, 차트 데이터 등을 받아온다.
   useEffect(() => {
-    getData();
+    if (is_master) {
+      history.push('/product');
+    } else {
+      getData();
+    }
   }, []);
 
   // 매출 금액 차트에 들어가는 일별 Price

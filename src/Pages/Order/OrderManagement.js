@@ -10,6 +10,8 @@ import COMPONENT_ORDER from './DataOrderComponent';
 import { API } from '../../config';
 
 export default function OrderManagement() {
+  // 여러번 렌더되는 것을 막기위한 상태값
+  const [isMounted, setIsMounted] = useState(false);
   // 히스토리 선언
   const history = useHistory();
   // 주소에 있는 id 파라미터로 동일한 컴포넌트에서 다른 데이터를 사용하여 각 주문 상태에 따른 내용을 가져옵니다.
@@ -130,8 +132,6 @@ export default function OrderManagement() {
         timeout: 3000, //3초
       });
       if (result.status === 200) {
-        console.log(result.data.success);
-        // const { DataProductManage } = result.data;
         setOrderList(result.data.success);
       } else {
         if (result.statusText === 'CONFLICT') {
@@ -154,12 +154,16 @@ export default function OrderManagement() {
 
   // 언마운트시 axios.get
   useEffect(() => {
+    setIsMounted(true);
     getProductInfo();
   }, []);
 
+  // 언마운트 완료 후
   useEffect(() => {
-    getProductInfo();
-    filterReset();
+    if (isMounted) {
+      getProductInfo();
+      filterReset();
+    }
   }, [categoryId()]);
 
   // 현재 클릭된 버튼에 따라 동작한다.
