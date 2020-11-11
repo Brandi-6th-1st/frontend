@@ -111,7 +111,7 @@ export default function ProductManagement() {
 
   // 버튼 필터가 선택되었을 때,
   const handleBtnFilter = (mainId, subId, idx) => {
-    const chnageSelected = (mainId) => {
+    const changeSelected = (mainId) => {
       // 다중 선택 필터인 경우,
       if (mainId === attributeId) {
         const result = btnFilter[`${mainId}Selected`].map((el, index) => {
@@ -152,14 +152,14 @@ export default function ProductManagement() {
     };
 
     // 모든 버튼이 눌렸을 경우,
-    const allSelected = chnageSelected(mainId)
+    const allSelected = changeSelected(mainId)
       .selected.slice(1)
       .every((item) => {
         return item;
       });
 
     // 모든 버튼이 눌리지 않았을 때,
-    const allNotSelected = chnageSelected(mainId)
+    const allNotSelected = changeSelected(mainId)
       .selected.slice(1)
       .every((item) => {
         return !item;
@@ -167,7 +167,7 @@ export default function ProductManagement() {
 
     // 전체 버튼 선택
     if (
-      chnageSelected(mainId).selected[0] ||
+      changeSelected(mainId).selected[0] ||
       !!allSelected ||
       !!allNotSelected
     ) {
@@ -181,8 +181,8 @@ export default function ProductManagement() {
     // 상태를 변경할, 필터 이름, id, 현재 선택한 boolean값을 인자로 넣어서 현재 필터의 상태 변경
     changeBtnFilter(
       mainId,
-      chnageSelected(mainId).id,
-      chnageSelected(mainId).selected
+      changeSelected(mainId).id,
+      changeSelected(mainId).selected
     );
   };
 

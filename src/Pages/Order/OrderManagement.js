@@ -127,11 +127,13 @@ export default function OrderManagement() {
           // return `/public/Data/DataConfirmPurchase.json`;
         }
       };
+      console.log(url());
       const result = await axios.get(url(), {
         params: params,
         timeout: 3000, //3초
       });
       if (result.status === 200) {
+        // setOrderList(result.data.data.success.productItem);
         setOrderList(result.data.success);
       } else {
         if (result.statusText === 'CONFLICT') {
@@ -140,6 +142,7 @@ export default function OrderManagement() {
         }
       }
     } catch (err) {
+      console.log(err);
       if (err.response) {
         if (err.response.statusText === 'UNAUTHORIZED') {
           alert(err.response.data.client_message);

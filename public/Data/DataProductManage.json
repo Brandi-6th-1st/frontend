@@ -1,5 +1,6 @@
 { 
-  "DataProductManage" : [
+  "data" : {
+    "success" : [
       {
         "product_id" : 10,
         "created_at": "2020-10-21 10:16:40",
@@ -141,4 +142,5 @@
         "actions": "할인"
       }  
     ]
+  }
   }

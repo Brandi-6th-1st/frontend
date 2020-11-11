@@ -8,6 +8,9 @@ import { isMaster, saveNav, saveFilter } from '../../Store/Reducer/userInfo';
 import Highcharts, { error } from 'highcharts';
 // import HighchartsReact from 'highcharts-react-official';
 // import { GoGraph } from 'react-icons/go';
+import DataHome from './Data/DataHome';
+
+import ProductInfo from './Components/ProductInfo';
 import ProductManage from './Components/ProductManage';
 import RefundManage from './Components/RefundManage';
 import Bookmark from './Components/Bookmark';
@@ -110,14 +113,6 @@ export default function Home() {
       return item.datetime;
     });
 
-  // 매출 금액에 들어가는 차트 데이터
-  const priceChart = () =>
-    chartForm(priceOfSales, dateBySales, null, '결제 금액', '원');
-
-  // 매출 건수에 들어가는 차트 데이터
-  const numChart = () =>
-    chartForm(numOfSales, dateBySales, '#AA4643', '결제 건수', '건');
-
   const chartForm = (series, date, color, tooltipTitle, tooltipUnit) => {
     const options = {
       title: {
@@ -145,7 +140,7 @@ export default function Home() {
         // X축에 표시되는 Data
         categories: date,
         labels: {
-          // 차트에 월,일만 표기되도록 앞에 년도를 짤라서 출력 (데이터에 따른 수정 예정)
+          // 차트에 월,일만 표기되도록 앞에 년도를 짤라서 출력
           formatter: function () {
             return this.value;
           },
@@ -177,29 +172,44 @@ export default function Home() {
     return options;
   };
 
+  // 매출 금액에 들어가는 차트 데이터
+  const priceChart = () =>
+    chartForm(priceOfSales, dateBySales, null, '결제 금액', '원');
+
+  // 매출 건수에 들어가는 차트 데이터
+  const numChart = () =>
+    chartForm(numOfSales, dateBySales, '#AA4643', '결제 건수', '건');
+
+  const chartData = [numChart(), priceChart()];
+
   return (
     <Fragment>
       <Header />
       <Main>
         <Nav />
         <Section>
+          {/* 상품 준비,배송 상, 즐겨찾기 수 등을 나타내는 컴포넌트 */}
           <SalesContainer>
-            {/* 상품, 배송 상태 차트 컴포넌트 */}
-            <ProductManage sellerStatus={sellerStatus} />
-            {/* 환불, 반품 상태 차트 컴포넌트 */}
-            <RefundManage />
-            {/* 즐겨찾기, 전체 상품수 등 상태 차트 컴포넌트 */}
-            <Bookmark sellerStatus={sellerStatus} />
+            {DataHome.map((el, idx) => {
+              return (
+                <ProductInfo
+                  sellerStatus={sellerStatus}
+                  textInfo={el}
+                  idx={idx}
+                  key={idx}
+                />
+              );
+            })}
           </SalesContainer>
+          {/* 매출 통계 건수, 금액 차트 */}
           <StaticsContainer>
-            {/* 매출 통계 건수 차트 생성하여 컴포넌트 분리 예정 */}
-            <Chart highcharts={Highcharts} options={numChart()} />
-            <Chart highcharts={Highcharts} options={priceChart()} />
+            {chartData.map((el, idx) => {
+              return <Chart highcharts={Highcharts} options={el} key={idx} />;
+            })}
           </StaticsContainer>
+          {/* Q&A, 공지사항 차트 */}
           <StaticsContainer>
-            {/* Q&A 차트 컴포넌트 */}
             <QnA />
-            {/* 공지사항 컴포넌트 */}
             <Notice />
           </StaticsContainer>
         </Section>
