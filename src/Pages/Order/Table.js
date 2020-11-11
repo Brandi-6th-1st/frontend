@@ -94,7 +94,7 @@ export default function Table({ pagetext, orderList, setOrderList }) {
   };
 
   const goToProductDetail = (code) => {
-    history.push(`/order/prepareList/${code}`);
+    history.push(`/order/order_detail/${code}`);
   };
 
   const changedApply = (e) => {
@@ -181,6 +181,7 @@ export default function Table({ pagetext, orderList, setOrderList }) {
                     order.c_detail_order_id === el ? (
                       <td
                         key={index}
+                        style={{ color: '##0d638f', cursor: 'pointer' }}
                         onClick={(el) =>
                           goToProductDetail(order.c_detail_order_id)
                         }

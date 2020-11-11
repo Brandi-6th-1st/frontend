@@ -8,35 +8,35 @@ export default function ProductInfo({ sellerStatus, textInfo, idx }) {
         {textInfo.category.map((el, index) => {
           if (idx === 0 && index === 0) {
             return (
-              <SalesCategory>
+              <SalesCategory key={index}>
                 <span>{el.sub_title} : </span>
                 <b>{sellerStatus && sellerStatus.order_preparing} 건 </b>
               </SalesCategory>
             );
           } else if (idx === 0 && index === 3) {
             return (
-              <SalesCategory>
+              <SalesCategory key={index}>
                 <span>{el.sub_title} : </span>
                 <b>{sellerStatus && sellerStatus.order_delivered} 건 </b>
               </SalesCategory>
             );
           } else if (idx === 2 && index === 1) {
             return (
-              <SalesCategory>
+              <SalesCategory key={index}>
                 <span>{el.sub_title} : </span>
                 <b>{sellerStatus && sellerStatus.total_product} 건 </b>
               </SalesCategory>
             );
           } else if (idx === 2 && index === 2) {
             return (
-              <SalesCategory>
+              <SalesCategory key={index}>
                 <span>{el.sub_title} : </span>
                 <b>{sellerStatus && sellerStatus.products_on_sale} 건 </b>
               </SalesCategory>
             );
           }
           return (
-            <SalesCategory>
+            <SalesCategory key={index}>
               <span>{el.sub_title} : </span>
               <b>{el.sub_number} 건 </b>
             </SalesCategory>

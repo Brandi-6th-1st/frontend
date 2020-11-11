@@ -191,20 +191,20 @@ export default function Home() {
           {/* 상품 준비,배송 상, 즐겨찾기 수 등을 나타내는 컴포넌트 */}
           <SalesContainer>
             {DataHome.map((el, idx) => {
-              console.log(el);
               return (
                 <ProductInfo
                   sellerStatus={sellerStatus}
                   textInfo={el}
                   idx={idx}
+                  key={idx}
                 />
               );
             })}
           </SalesContainer>
           {/* 매출 통계 건수, 금액 차트 */}
           <StaticsContainer>
-            {chartData.map((el) => {
-              return <Chart highcharts={Highcharts} options={el} />;
+            {chartData.map((el, idx) => {
+              return <Chart highcharts={Highcharts} options={el} key={idx} />;
             })}
           </StaticsContainer>
           {/* Q&A, 공지사항 차트 */}

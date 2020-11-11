@@ -330,8 +330,6 @@ export default function ProductManagement() {
     setActivePage(1);
   };
 
-  console.log(filter_list);
-
   return (
     <Fragment>
       <Header />

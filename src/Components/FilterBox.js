@@ -56,22 +56,17 @@ const SelectFilterTitle = styled.div`
 const FilterBtnBox = styled.div`
   margin: 0px 15px;
 `;
-
 const SelectBtn = styled.button`
   background-color: ${({ name, btnFilter, idx }) =>
     btnFilter[`${name}Selected`][idx] && '#428bca'};
-
   &:hover {
     background-color: ${({ name, btnFilter, idx }) =>
       btnFilter[`${name}Selected`][idx] && '#3071a9'};
-
     background-color: ${({ name, btnFilter, idx }) =>
       !btnFilter[`${name}Selected`][idx] && '#e6e6e6'};
   }
-
   color: ${({ name, btnFilter, idx }) =>
     btnFilter[`${name}Selected`][idx] && 'white'};
-
   margin-right: 3px;
   padding: 6px 12px;
   border: 1px solid #adadad;
