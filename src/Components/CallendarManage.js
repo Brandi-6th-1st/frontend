@@ -20,6 +20,7 @@ export default function CallendarManage({
         }}
         placeholderText="클릭해주세요."
         shouldCloseOnSelect={false}
+        maxDate={currentDate.endDate}
       />
       <span>~</span>
       <SelectPeriod
@@ -28,7 +29,7 @@ export default function CallendarManage({
         dateFormat="yyyy-MM-dd"
         onChange={(date) => handleEndDate(date)}
         placeholderText="클릭해주세요."
-        shouldCloseOnSelect={false}
+        minDate={currentDate.startDate}
       />
     </InquiryperiodBox>
   );

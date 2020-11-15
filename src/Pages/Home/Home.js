@@ -92,27 +92,6 @@ export default function Home() {
     }
   }, []);
 
-  // 매출 금액 차트에 들어가는 일별 Price
-  const priceOfSales =
-    sellerStatus &&
-    sellerStatus.statistics.map((item) => {
-      return item.sales;
-    });
-
-  // 매출 건수 차트에 들어가는 일별 건수
-  const numOfSales =
-    sellerStatus &&
-    sellerStatus.statistics.map((item) => {
-      return item.count;
-    });
-
-  // 매출 차트에 공통으로 사용되는 금액, 건수의 날짜
-  const dateBySales =
-    sellerStatus &&
-    sellerStatus.statistics.map((item) => {
-      return item.datetime;
-    });
-
   const chartForm = (series, date, color, tooltipTitle, tooltipUnit) => {
     const options = {
       title: {
@@ -171,6 +150,27 @@ export default function Home() {
     };
     return options;
   };
+
+  // 매출 금액 차트에 들어가는 일별 Price
+  const priceOfSales =
+    sellerStatus &&
+    sellerStatus.statistics.map((item) => {
+      return item.sales;
+    });
+
+  // 매출 건수 차트에 들어가는 일별 건수
+  const numOfSales =
+    sellerStatus &&
+    sellerStatus.statistics.map((item) => {
+      return item.count;
+    });
+
+  // 매출 차트에 공통으로 사용되는 금액, 건수의 날짜
+  const dateBySales =
+    sellerStatus &&
+    sellerStatus.statistics.map((item) => {
+      return item.datetime;
+    });
 
   // 매출 금액에 들어가는 차트 데이터
   const priceChart = () =>
