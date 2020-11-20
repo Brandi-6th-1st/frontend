@@ -42,7 +42,6 @@ export default function Home() {
     const localToken = localStorage.getItem('token');
 
     try {
-      // const result = await axios.get(`/public/Data/DataHomeSeller.json`);
       const result = await axios.get(`${API}/home`, {
         headers: {
           'Content-Type': 'application/json',
