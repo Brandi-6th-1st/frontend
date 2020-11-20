@@ -9,11 +9,7 @@ import Highcharts, { error } from 'highcharts';
 // import HighchartsReact from 'highcharts-react-official';
 // import { GoGraph } from 'react-icons/go';
 import DataHome from './Data/DataHome';
-
 import ProductInfo from './Components/ProductInfo';
-import ProductManage from './Components/ProductManage';
-import RefundManage from './Components/RefundManage';
-import Bookmark from './Components/Bookmark';
 import QnA from './Components/QnA';
 import Notice from './Components/Notice';
 import Nav from '../../Components/Nav/Nav';
